@@ -1,0 +1,5 @@
+d:\Code\jamescms\tests_jamescms\bin\Debug\tests_jamescms.dll
+d:\Code\jamescms\tests_jamescms\bin\Debug\tests_jamescms.pdb
+d:\Code\jamescms\tests_jamescms\obj\Debug\tests_jamescms.csprojResolveAssemblyReference.cache
+d:\Code\jamescms\tests_jamescms\obj\Debug\tests_jamescms.dll
+d:\Code\jamescms\tests_jamescms\obj\Debug\tests_jamescms.pdb
