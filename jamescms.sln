@@ -4,8 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jamescms", "jamescms\jamescms.csproj", "{B170B7EA-44AA-446C-83CF-2536621D543F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{51AEE9D1-E117-43CC-A8AA-5583162D0971}"
+	ProjectSection(SolutionItems) = preProject
+		ScratchNotes.md = ScratchNotes.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests_jamescms", "tests_jamescms\tests_jamescms.csproj", "{F1E80F4D-0326-4FE6-B53B-15F7FFD33588}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9E51F899-BED2-4534-BC98-75B839401A8A}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

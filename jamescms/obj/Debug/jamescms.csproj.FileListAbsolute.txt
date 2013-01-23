@@ -50,3 +50,12 @@ d:\Code\jamescms\jamescms\obj\Debug\jamescms.pdb
 d:\Code\jamescms\jamescms\bin\NLog.config
 d:\Code\jamescms\jamescms\bin\NLog.dll
 d:\Code\jamescms\jamescms\bin\NLog.xml
+D:\Code\jamescms\jamescms\bin\Growl.Connector.dll
+D:\Code\jamescms\jamescms\bin\Growl.CoreLibrary.dll
+D:\Code\jamescms\jamescms\bin\Mono.Math.dll
+D:\Code\jamescms\jamescms\bin\NLog.Targets.GrowlNotify.dll
+D:\Code\jamescms\jamescms\bin\nunit.framework.dll
+D:\Code\jamescms\jamescms\bin\Org.Mentalis.Security.Cryptography.dll
+D:\Code\jamescms\jamescms\bin\Mono.Math.xml
+D:\Code\jamescms\jamescms\bin\nunit.framework.xml
+D:\Code\jamescms\jamescms\bin\Org.Mentalis.Security.Cryptography.xml
