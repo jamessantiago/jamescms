@@ -13,6 +13,8 @@ TestResults
 *.user
 *.sln.docstates
 NLog.config
+humans.txt
+robots.txt
 
 # Build results
 [Dd]ebug/

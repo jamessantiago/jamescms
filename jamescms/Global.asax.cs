@@ -6,23 +6,47 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Configuration;
+using NLog;
 
 namespace jamescms
 {
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class jcms: System.Web.HttpApplication
     {
-        protected void Application_Start()
-        {
-            AreaRegistration.RegisterAllAreas();
+        #region Private Properties
 
+        private Logger logger = LogManager.GetLogger("MvcApplication");
+        private static string _facebookAppId { get; set; }
+        private static string _facebookAppSecret { get; set; }
+
+        #endregion Private Properties
+
+        #region Public Properties
+
+        public static string FacebookAppId { 
+            get { if (_facebookAppId == null) { _facebookAppId = WebConfigurationManager.AppSettings["FacebookAppId"] ?? ""; }
+                  return _facebookAppId;}
+        }
+
+        public static string FacebookAppSecret
+        { 
+            get { if (_facebookAppSecret == null) { _facebookAppSecret = WebConfigurationManager.AppSettings["FacebookAppSecret"] ?? ""; }
+                  return _facebookAppSecret;}
+        }
+
+        #endregion Public Properties
+
+        protected void Application_Start()
+        {            
+            AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            logger.Info("jamescms has started");
+            BundleTable.EnableOptimizations = true;
         }
-    }
+    }    
 }
