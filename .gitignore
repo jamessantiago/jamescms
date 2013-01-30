@@ -17,6 +17,7 @@ humans.txt
 robots.txt
 *.mdf
 *.ldf
+Web.config
 
 # Build results
 [Dd]ebug/
