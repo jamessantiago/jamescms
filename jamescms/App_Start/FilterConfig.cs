@@ -7,7 +7,18 @@ namespace jamescms
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            //filters.Add(new HandleErrorAttribute());
+            filters.Add(new NLogHandleErrorAttribute());
+        }
+    }
+
+    public class NLogHandleErrorAttribute : HandleErrorAttribute
+    {
+        public override void OnException(ExceptionContext filterContext)
+        {
+            var logger = NLog.LogManager.GetLogger("Global");
+            logger.FatalException(filterContext.Exception.Message, filterContext.Exception);
+            base.OnException(filterContext);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace jamescms.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your app description page.";
-
+            throw new Exception("A fake error occurred");
             return View();
         }
 

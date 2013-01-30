@@ -37,16 +37,67 @@ namespace jamescms
 
         #endregion Public Properties
 
+        #region Application Start
+
         protected void Application_Start()
-        {            
+        {
+            logger.Debug("Registering application settings");
+            NLogConfig.RegisterLayouts();
             AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
-            logger.Info("jamescms has started");
             BundleTable.EnableOptimizations = true;
+            logger.Debug("jamescms has started");
+        }
+
+        #endregion Application Start
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception exception = Server.GetLastError();
+            logger.FatalException(exception.Message, exception);
+
+            Response.Clear();
+
+            HttpException httpException = exception as HttpException;
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("controller", "Error");
+
+            if (httpException == null)
+            {
+                Response.StatusCode = 500;
+                routeData.Values.Add("action", "Index");
+            }
+            else
+            {
+                var statusCode = httpException.GetHttpCode();
+                Response.StatusCode = statusCode;
+
+                if (System.Web.Mvc.AjaxRequestExtensions.IsAjaxRequest(HttpContext.Current.Request.RequestContext.HttpContext.Request))
+                {
+                    //redirect to ajax
+                    routeData.Values.Add("action", "Err");
+                }
+                else
+                {
+                    //redirect to page
+                    routeData.Values.Add("action", "Err2");
+                }
+            }
+
+            routeData.Values.Add("error", exception);
+
+            Server.ClearError();
+
+            Response.TrySkipIisCustomErrors = true;
+
+            IController errorController = new Controllers.ErrorController();
+            errorController.Execute(new RequestContext(
+                 new HttpContextWrapper(Context), routeData));
         }
     }    
 }
