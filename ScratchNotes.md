@@ -14,3 +14,5 @@ Scratch Notes
 * HTML5 all over the place
 
 * figure out the mvc 4 changes and incorporate some better view management than santiavodevelopment had
+
+* Source control for posts and other content would be nice

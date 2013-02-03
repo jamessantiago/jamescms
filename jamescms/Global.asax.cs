@@ -55,6 +55,8 @@ namespace jamescms
 
         #endregion Application Start
 
+        #region Application Error
+
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
@@ -64,8 +66,8 @@ namespace jamescms
 
             HttpException httpException = exception as HttpException;
 
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("controller", "Error");
+            RouteData routeData = new RouteData();            
+            bool isAjax = false;
 
             if (httpException == null)
             {
@@ -74,18 +76,21 @@ namespace jamescms
             }
             else
             {
+                //TODO: perform some security actions here
+
                 var statusCode = httpException.GetHttpCode();
                 Response.StatusCode = statusCode;
 
                 if (System.Web.Mvc.AjaxRequestExtensions.IsAjaxRequest(HttpContext.Current.Request.RequestContext.HttpContext.Request))
                 {
                     //redirect to ajax
-                    routeData.Values.Add("action", "Err");
+                    isAjax = true;
+                    routeData.Values.Add("action", "Ajax");
                 }
                 else
                 {
                     //redirect to page
-                    routeData.Values.Add("action", "Err2");
+                    routeData.Values.Add("action", "Index");
                 }
             }
 
@@ -95,9 +100,24 @@ namespace jamescms
 
             Response.TrySkipIisCustomErrors = true;
 
-            IController errorController = new Controllers.ErrorController();
-            errorController.Execute(new RequestContext(
-                 new HttpContextWrapper(Context), routeData));
+            //if url is the frontpage or if ajax is used redirect to error controller
+            if (System.Text.RegularExpressions.Regex.Match(Request.RawUrl, @"\.com/?(\/Home/?(Index)?)?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase).Success
+                || isAjax)
+            {
+                routeData.Values.Add("controller", "Error");
+                IController errorController = new Controllers.ErrorController();
+                errorController.Execute(new RequestContext(
+                     new HttpContextWrapper(Context), routeData));
+            }
+            else
+            {
+                routeData.Values.Add("controller", "sd");
+                IController sdController = new Controllers.sdController();
+                sdController.Execute(new RequestContext(
+                     new HttpContextWrapper(Context), routeData));
+            }
         }
+
+        #endregion Application Error
     }    
 }
