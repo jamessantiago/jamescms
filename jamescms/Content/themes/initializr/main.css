@@ -161,15 +161,105 @@ nav a:hover {
    ========================================================================== */
 
 
+#loginForm {
+    width: 40%;
+    float: left;
+}
+
+#socialLoginForm {
+    background-color:#454643;
+	padding:20px;
+	margin: 10px;	
+	border: 6px solid #8FB5C1;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	border-radius:15px;
+	position:relative;
+    float: left;
+}
 
 
 
+#login-form {
+	background-color:#454643;
+	padding:20px;
+	margin: 10px;	
+	border: 6px solid #8FB5C1;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	border-radius:15px;
+	position:relative;
+    float: left;
+}
 
+#login-form h1 {
+	font-size:42px;
+}
 
+#login-form h2 {
+	margin-bottom:15px;
+	font-style:italic;
+	font-weight:normal;
+}
 
+#login-form input, 
+#login-form select, 
+#login-form textarea, 
+#login-form label {
+	font-size:15px;
+	margin-bottom:2px;
+}
 
+#login-form input, 
+#login-form select, 
+#login-form textarea {
+	width:200px;
+	border: 1px solid #CEE1E8;
+	margin-bottom:20px;
+	padding:4px;
+}
 
+#login-form input:focus, 
+#login-form select:focus, 
+#login-form textarea:focus {
+	border: 1px solid #AFCDD8;
+}
 
+#login-form textarea {
+	height:150px;
+	resize: none;
+}
+
+#login-form label {
+	display:block;
+}
+
+#login-form .required {
+	font-weight:bold;
+	color:#F00;	
+}
+
+#login-form #submit-button {
+	width: 100px;
+	background-color:#333;
+	color:#FFF;
+	border:none;
+	display:block;
+	float:right;
+	margin-bottom:0px;
+	margin-right:6px;
+	background-color:#8FB5C1;
+	-moz-border-radius:8px;
+}
+
+#login-form #submit-button:hover {
+	background-color: #A6CFDD;
+}
+
+#login-form #submit-button:active {
+	position:relative;
+	top:1px;
+}
 
 
 
