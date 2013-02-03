@@ -239,18 +239,19 @@ nav a:hover {
 	color:#F00;	
 }
 
-#login-form #submit-button {
-	width: 100px;
-	background-color:#333;
-	color:#FFF;
-	border:none;
-	display:block;
-	float:right;
-	margin-bottom:0px;
-	margin-right:6px;
-	background-color:#8FB5C1;
-	-moz-border-radius:8px;
-}
+    #login-form #submit-button
+    {
+        width: 100px;
+        background-color: #333;
+        color: #FFF;
+        border: none;
+        display: block;
+        margin-bottom: 0px;
+        margin-right: 6px;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        border-radius: 8px;
+    }
 
 #login-form #submit-button:hover {
 	background-color: #A6CFDD;
