@@ -161,15 +161,11 @@ nav a:hover {
    ========================================================================== */
 
 
-#loginForm {
-    width: 40%;
-    float: left;
-}
-
 #socialLoginForm {
+    width: 80%;
+    margin: 2%;
     background-color:#454643;
 	padding:20px;
-	margin: 10px;	
 	border: 6px solid #8FB5C1;
 	-moz-border-radius:15px;
 	-webkit-border-radius:15px;
@@ -181,25 +177,16 @@ nav a:hover {
 
 
 #login-form {
+    width: 80%;
+    margin: 2%;
 	background-color:#454643;
 	padding:20px;
-	margin: 10px;	
 	border: 6px solid #8FB5C1;
 	-moz-border-radius:15px;
 	-webkit-border-radius:15px;
 	border-radius:15px;
 	position:relative;
     float: left;
-}
-
-#login-form h1 {
-	font-size:42px;
-}
-
-#login-form h2 {
-	margin-bottom:15px;
-	font-style:italic;
-	font-weight:normal;
 }
 
 #login-form input, 
@@ -234,25 +221,40 @@ nav a:hover {
 	display:block;
 }
 
+#login-form input[type="checkbox"] {
+    width: auto;
+}
+
 #login-form .required {
 	font-weight:bold;
 	color:#F00;	
 }
 
-    #login-form #submit-button
-    {
-        width: 100px;
-        background-color: #333;
-        color: #FFF;
-        border: none;
-        display: block;
-        margin-bottom: 0px;
-        margin-right: 6px;
-        -moz-border-radius: 8px;
-        -webkit-border-radius: 8px;
-        border-radius: 8px;
-    }
+#login-form #submit-button
+{
+    background-color: #333;
+    color: #FFF;
+    border: none;
+    display: block;
+    margin:auto;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
 
+.form-button
+{
+    background-color: #333;
+    color: #FFF;
+    border: none;
+    padding: 20px;
+    margin: 10px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.form-button:hover,
 #login-form #submit-button:hover {
 	background-color: #A6CFDD;
 }
@@ -289,6 +291,10 @@ nav a:hover {
 
     nav li:last-child a {
         margin-right: 0;
+    }
+
+    #login-form, #socialLoginForm {
+        width: 90%;
     }
 
 /* ========================
@@ -330,6 +336,10 @@ nav a:hover {
         width: 38%;
     }
 
+    #login-form, #socialLoginForm {
+        width: 90%;
+    }
+
 /* ============
     WIDE: Main
    ============ */
@@ -354,6 +364,10 @@ nav a:hover {
     .wrapper {
         width: 1026px; /* 1140px - 10% for margins */
         margin: 0 auto;
+    }
+
+    #login-form, #socialLoginForm {
+        width: 40%;
     }
 }
 
