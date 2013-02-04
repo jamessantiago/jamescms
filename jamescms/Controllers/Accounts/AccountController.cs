@@ -54,7 +54,7 @@ namespace jamescms.Controllers
         {
             WebSecurity.Logout();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "sd");
         }
 
         //
@@ -81,7 +81,7 @@ namespace jamescms.Controllers
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
                     WebSecurity.Login(model.UserName, model.Password);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "sd");
                 }
                 catch (MembershipCreateUserException e)
                 {
@@ -337,7 +337,7 @@ namespace jamescms.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "sd");
             }
         }
 

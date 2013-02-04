@@ -193,7 +193,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Accounts\AccountController.cs" />
     <Compile Include="Controllers\Management\ErrorController.cs" />
-    <Compile Include="Controllers\News Wall\nController.cs" />
+    <Compile Include="Controllers\Text Wall\tController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -347,6 +347,7 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\Ajax.cshtml" />
     <Content Include="Views\Shared\_LoginFooter.cshtml" />
+    <Content Include="Views\t\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
