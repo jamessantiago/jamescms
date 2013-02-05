@@ -8,7 +8,7 @@ using System.Web.Security;
 
 namespace jamescms.Models
 {
-    public class TextContext : DbContext
+    public class TextContext : DbContext, ITextContext
     {
         public TextContext() :
             base("DefaultConnection")
@@ -16,7 +16,17 @@ namespace jamescms.Models
             
         }
 
-        public DbSet<TextWall> TextWalls { get; set; }
+        public virtual IDbSet<TextWall> TextWalls { get; set; }
+        public virtual IDbSet<Text> Texts { get; set; }
+        public virtual IDbSet<Tag> Tags { get; set; }
+
+    }
+
+    public interface ITextContext
+    {
+        public IDbSet<TextWall> TextWalls { get; set; }
+        public IDbSet<Text> Texts { get; set; }
+        public IDbSet<Tag> Tags{ get; set; }
     }
 
     [Table("TextWalls")]
@@ -36,7 +46,7 @@ namespace jamescms.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int TextId { get; set; }            
         public string Title { get; set; }
-        public string Text { get; set; }
+        public string Article { get; set; }
         public DateTime Posted { get; set; }
         public DateTime Updated { get; set; }
     }
@@ -48,5 +58,13 @@ namespace jamescms.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int TagId { get; set; }
         public string Name { get; set; }
+    }
+
+    public class Comment
+    {
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public int CommentId { get; set; }
+        public string 
     }
 }

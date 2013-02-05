@@ -8,14 +8,19 @@ using System.Web.Security;
 
 namespace jamescms.Models
 {
-    public class UsersContext : DbContext
+    public class UsersContext : DbContext, IUsersContext
     {
         public UsersContext()
             : base("DefaultConnection")
         {
         }
 
-        public DbSet<UserProfile> UserProfiles { get; set; }
+        public virtual IDbSet<UserProfile> UserProfiles { get; set; }
+    }
+
+    public interface IUsersContext
+    {
+        IDbSet<UserProfile> UserProfiles { get; set; }
     }
 
     [Table("UserProfile")]
