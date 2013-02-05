@@ -8,6 +8,15 @@ using System.Web.Security;
 
 namespace jamescms.Models
 {
+    public interface ITextContext
+    {
+        public IDbSet<TextWall> TextWalls { get; set; }
+        public IDbSet<Text> Texts { get; set; }
+        public IDbSet<Tag> Tags { get; set; }
+        public IDbSet<Comment> Comments { get; set; }
+    }
+
+
     public class TextContext : DbContext, ITextContext
     {
         public TextContext() :
@@ -19,14 +28,8 @@ namespace jamescms.Models
         public virtual IDbSet<TextWall> TextWalls { get; set; }
         public virtual IDbSet<Text> Texts { get; set; }
         public virtual IDbSet<Tag> Tags { get; set; }
+        public virtual IDbSet<Comment> Comments { get; set; }
 
-    }
-
-    public interface ITextContext
-    {
-        public IDbSet<TextWall> TextWalls { get; set; }
-        public IDbSet<Text> Texts { get; set; }
-        public IDbSet<Tag> Tags{ get; set; }
     }
 
     [Table("TextWalls")]
@@ -65,6 +68,10 @@ namespace jamescms.Models
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int CommentId { get; set; }
-        public string 
+        public string Comment { get; set; }
+        public int ParentCommentId { get; set; }
+        public int UserId { get; set; }
+        public int Upvotes { get; set; }
+        public int Downvotes { get; set; }
     }
 }

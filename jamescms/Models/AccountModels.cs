@@ -8,6 +8,12 @@ using System.Web.Security;
 
 namespace jamescms.Models
 {
+
+    public interface IUsersContext
+    {
+        IDbSet<UserProfile> UserProfiles { get; set; }
+    }
+
     public class UsersContext : DbContext, IUsersContext
     {
         public UsersContext()
@@ -16,11 +22,6 @@ namespace jamescms.Models
         }
 
         public virtual IDbSet<UserProfile> UserProfiles { get; set; }
-    }
-
-    public interface IUsersContext
-    {
-        IDbSet<UserProfile> UserProfiles { get; set; }
     }
 
     [Table("UserProfile")]

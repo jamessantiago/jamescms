@@ -30,7 +30,7 @@ namespace jamescms.Filters
                 try
                 {
                     using (var context = new UsersContext())
-                    {
+                    {                        
                         if (!context.Database.Exists())
                         {
                             // Create the SimpleMembership database without Entity Framework migration schema
