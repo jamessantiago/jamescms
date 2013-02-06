@@ -16,3 +16,12 @@ Scratch Notes
 * figure out the mvc 4 changes and incorporate some better view management than santiavodevelopment had
 
 * Source control for posts and other content would be nice
+
+
+                                                 9*&
+          |--------\                       -00  #*($&
+         /|         \============    -  pew  0  (*&    (==>
+        /=|__________\                     -00 097 &*
+    /^^^^^^^^^^^^^^^^^^^^^^^^^^\                (*$
+    |888888888888888888888888888|
+    \__________________________/
