@@ -200,7 +200,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\TextModel.cs" />
+    <Compile Include="Models\Models.cs" />
+    <Compile Include="Models\TextModels.cs" />
     <Compile Include="NLogRenderers\WebVariablesRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

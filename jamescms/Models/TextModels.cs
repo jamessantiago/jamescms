@@ -12,10 +12,10 @@ namespace jamescms.Models
 
     public interface ITextContext
     {
-        public IDbSet<TextWall> TextWalls { get; set; }
-        public IDbSet<Text> Texts { get; set; }
-        public IDbSet<Tag> Tags { get; set; }
-        public IDbSet<Comment> Comments { get; set; }
+        IDbSet<TextWall> TextWalls { get; set; }
+        IDbSet<Text> Texts { get; set; }
+        IDbSet<Tag> Tags { get; set; }
+        IDbSet<Comment> Comments { get; set; }
     }
 
     #endregion Interface
@@ -57,6 +57,7 @@ namespace jamescms.Models
                         d.MapRightKey("CommentId");
                     });
         }
+        
     }
 
     #endregion Model Context
@@ -104,7 +105,7 @@ namespace jamescms.Models
     {
         [Required]
         [StringLength(2000)]
-        public string Comment { get; set; }
+        public string CommentText { get; set; }
         public int? ParentCommentId { get; set; }
         public int UserId { get; set; }
         public DateTime Posted { get; set; }
