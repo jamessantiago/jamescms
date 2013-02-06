@@ -56,6 +56,8 @@ namespace jamescms.Models
                         d.MapLeftKey("CommentParentId");
                         d.MapRightKey("CommentId");
                     });
+
+            //add text comment relationship
         }
         
     }
