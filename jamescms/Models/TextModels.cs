@@ -92,7 +92,7 @@ namespace jamescms.Models
     }
 
     [Table("Tags")]
-    public class Tag
+    public class Tag : Entity
     {
         [Required]
         [StringLength(100)]
@@ -101,7 +101,7 @@ namespace jamescms.Models
         public virtual IList<Text> Texts { get; set; }
     }
 
-    public class Comment
+    public class Comment : Entity
     {
         [Required]
         [StringLength(2000)]
