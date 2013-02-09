@@ -34,7 +34,7 @@ namespace jamescms.Models
         public virtual IDbSet<Text> Texts { get; set; }
         public virtual IDbSet<Tag> Tags { get; set; }
         public virtual IDbSet<Comment> Comments { get; set; }
-
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Text>()
@@ -59,7 +59,7 @@ namespace jamescms.Models
 
             //add text comment relationship
         }
-        
+
     }
 
     #endregion Model Context
@@ -78,14 +78,16 @@ namespace jamescms.Models
     }
 
     [Table("Texts")]
+    [FullTextIndex("FTIX_Texts", "Title, Article")]
     public class Text : Entity
     {
         [Required]
         [StringLength(100)]
         public string Title { get; set; }
-        [Required]
+        [Required]        
         public string Article { get; set; }
         [Required]
+        [Index("IX_Text_Posted", false, true)]
         public DateTime Posted { get; set; }
         [Required]
         public DateTime Updated { get; set; }
@@ -109,6 +111,7 @@ namespace jamescms.Models
         [StringLength(2000)]
         public string CommentText { get; set; }
         public int? ParentCommentId { get; set; }
+        [Index("IX_Comment_UserId")]
         public int UserId { get; set; }
         public DateTime Posted { get; set; }
         public int Upvotes { get; set; }

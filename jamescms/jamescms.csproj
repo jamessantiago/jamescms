@@ -191,10 +191,19 @@
     <Compile Include="App_Start\NLogConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\FullTextIndexAttribute.cs" />
+    <Compile Include="Attributes\IndexAttribute.cs" />
     <Compile Include="Controllers\Accounts\AccountController.cs" />
     <Compile Include="Controllers\Management\ErrorController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
+    <Compile Include="Migrations\201302091047559_Indexes.cs" />
+    <Compile Include="Migrations\201302091047559_Indexes.Designer.cs">
+      <DependentUpon>201302091047559_Indexes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Database\CompositeInitializer.cs" />
+    <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
+    <Compile Include="Models\Database\IndexInitializer.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -301,7 +310,9 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -370,6 +381,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201302062111428_Original.resx">
       <DependentUpon>201302062111428_Original.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302091047559_Indexes.resx">
+      <DependentUpon>201302091047559_Indexes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

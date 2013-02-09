@@ -27,19 +27,18 @@ namespace jamescms.Migrations
                     Tags = new List<Tag>() { new Tag() { Name = "First" } }
                 });
 
+            context.Texts.AddOrUpdate(
+                d => d.Title,
+                new Text
+                {
+                    Title = "My second post",
+                    Article = "This my second post",
+                    Posted = new DateTime(1970, 1, 1),
+                    Updated = new DateTime(1970, 1, 1),
+                    Tags = new List<Tag>() { new Tag() { Name = "Fister" } }
+                });
 
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            context.Database.Initialize(true);
         }
     }
 }

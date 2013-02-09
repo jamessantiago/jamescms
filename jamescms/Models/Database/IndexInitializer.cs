@@ -7,6 +7,7 @@ namespace jamescms
 {
     public class IndexInitializer<T> : IDatabaseInitializer<T> where T : DbContext
     {
+        private const string SelectIndexes = "SELECT name FROM sys.indexes";
         private const string CreateIndexQueryTemplate = "CREATE {unique} INDEX {indexName} ON {tableName} ({columnName})";
 
         public void InitializeDatabase(T context)
@@ -14,7 +15,7 @@ namespace jamescms
             const BindingFlags PublicInstance = BindingFlags.Public | BindingFlags.Instance;
 
             foreach (var dataSetProperty in typeof(T).GetProperties(PublicInstance).Where(
-                p => p.PropertyType.Name == typeof(DbSet<>).Name))
+                p => p.PropertyType.Name == typeof(IDbSet<>).Name))
             {
                 var entityType = dataSetProperty.PropertyType.GetGenericArguments().Single();
 
@@ -39,8 +40,15 @@ namespace jamescms
                                 .Replace("{unique}", indexAttribute.IsUnique ? "UNIQUE" : string.Empty);
 
                             context.Database.CreateIfNotExists();
-
-                            context.Database.ExecuteSqlCommand(query);
+                            bool indexExists = false;
+                            var results = context.Database.SqlQuery(typeof(string), SelectIndexes);
+                            foreach (string result in results)
+                            {
+                                if (result == indexName)
+                                    indexExists = true;
+                            }
+                            if (!indexExists)
+                                context.Database.ExecuteSqlCommand(query);
                         }
                     }
                 }

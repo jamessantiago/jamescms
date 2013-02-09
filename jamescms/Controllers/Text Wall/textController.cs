@@ -43,5 +43,18 @@ namespace jamescms.Controllers
             return View();
         }
 
+        public ActionResult Create()
+        {
+            uow.TextContext.Texts.Add(new Text()
+            {
+                Article = "firsto",
+                Posted = DateTime.Now,
+                Title = "Firest",
+                Updated = DateTime.Now
+            });
+            uow.TextContext.SaveChanges();
+            return RedirectToAction("Index", "sd");
+        }
+
     }
 }

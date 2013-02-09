@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Configuration;
+using System.Data.Entity;
+using jamescms.Models;
 using NLog;
 
 namespace jamescms
@@ -19,6 +21,7 @@ namespace jamescms
         private Logger logger = LogManager.GetLogger("MvcApplication");
         private static string _facebookAppId { get; set; }
         private static string _facebookAppSecret { get; set; }
+        private static string _fullTextEnabled { get; set; }
 
         #endregion Private Properties
 
@@ -33,6 +36,19 @@ namespace jamescms
         { 
             get { if (_facebookAppSecret == null) { _facebookAppSecret = WebConfigurationManager.AppSettings["FacebookAppSecret"] ?? ""; }
                   return _facebookAppSecret;}
+        }
+
+        public static bool FullTextEnabled
+        {
+            get
+            {
+                if (_fullTextEnabled == null) {
+                    bool enabled = false;
+                    bool.TryParse(WebConfigurationManager.AppSettings["FullTextEnabled"], out enabled);
+                    _fullTextEnabled = enabled.ToString(); 
+                }
+                return bool.Parse(_fullTextEnabled);
+            }
         }
 
         #endregion Public Properties
@@ -50,6 +66,19 @@ namespace jamescms
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
             BundleTable.EnableOptimizations = true;
+            if (FullTextEnabled)
+            {
+                Database.SetInitializer<TextContext>(
+                    new CompositeDatabaseInitializer<TextContext>(
+                        new IndexInitializer<TextContext>(),
+                        new FullTextIndexInitializer<TextContext>()));
+            }
+            else
+            {
+                Database.SetInitializer<TextContext>(
+                    new IndexInitializer<TextContext>()
+                    );
+            }
             logger.Debug("jamescms has started");
         }
 
