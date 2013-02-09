@@ -14,14 +14,14 @@ namespace jamescms.Models
 
         #region Private Contexts
 
-        private virtual UsersContext usersContext { get; set; }
-        private virtual TextContext textContext { get; set; }
+        private UsersContext usersContext { get; set; }
+        private TextContext textContext { get; set; }
 
         #endregion Private Contexts
 
         #region Public Contexts
 
-        public virtual UsersContext UsersContext
+        public UsersContext UsersContext
         {
             get
             {
@@ -32,7 +32,7 @@ namespace jamescms.Models
                 return usersContext;
             }
         }
-        public virtual TextContext TextContext
+        public TextContext TextContext
         {
             get
             {

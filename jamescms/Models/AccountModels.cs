@@ -18,7 +18,7 @@ namespace jamescms.Models
     {
         public UsersContext()
             : base("DefaultConnection")
-        {
+        {            
         }
 
         public virtual IDbSet<UserProfile> UserProfiles { get; set; }

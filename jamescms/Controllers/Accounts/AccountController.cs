@@ -17,6 +17,18 @@ namespace jamescms.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        private UnitOfWork uow;
+
+        public AccountController()
+        {
+            uow = new UnitOfWork();
+        }
+
+        public AccountController(UnitOfWork UnitOfWork)
+        {
+            uow = UnitOfWork;
+        }
+
         //
         // GET: /Account/Login
 
@@ -263,25 +275,22 @@ namespace jamescms.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (UsersContext db = new UsersContext())
+                UserProfile user = uow.UsersContext.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
+                // Check if user already exists
+                if (user == null)
                 {
-                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
-                    // Check if user already exists
-                    if (user == null)
-                    {
-                        // Insert name into the profile table
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
-                        db.SaveChanges();
+                    // Insert name into the profile table
+                    uow.UsersContext.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+                    uow.UsersContext.SaveChanges();
 
-                        OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
-                        OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
+                    OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
+                    OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
 
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
-                    }
+                    return RedirectToLocal(returnUrl);
+                }
+                else
+                {
+                    ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
                 }
             }
 

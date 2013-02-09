@@ -208,6 +208,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Models.cs" />
     <Compile Include="Models\TextModels.cs" />
+    <Compile Include="Models\UnitOfWork.cs" />
     <Compile Include="NLogRenderers\WebVariablesRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -355,7 +356,7 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\Ajax.cshtml" />
     <Content Include="Views\Shared\_LoginFooter.cshtml" />
-    <Content Include="Views\t\Index.cshtml" />
+    <Content Include="Views\text\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -40,5 +40,5 @@ Scratch Notes
 
 - [http://blogs.msdn.com/b/dbrowne/archive/2010/06/03/using-new-transactionscope-considered-harmful.aspx](http://blogs.msdn.com/b/dbrowne/archive/2010/06/03/using-new-transactionscope-considered-harmful.aspx)
 
-
+- [http://blogs.southworks.net/dschenkelman/2012/08/18/creating-indexes-via-data-annotations-with-entity-framework-5-0/](http://blogs.southworks.net/dschenkelman/2012/08/18/creating-indexes-via-data-annotations-with-entity-framework-5-0/)
 
