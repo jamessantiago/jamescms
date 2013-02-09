@@ -9,6 +9,9 @@ using System.Data.Entity;
 
 namespace tests_jamescms.Models
 {
+
+    //see https://github.com/khalidabuhakmeh/NoRepositories
+
     public class FakeDbSet<T> : IDbSet<T> where T : class
     {
         private readonly List<T> list = new List<T>();

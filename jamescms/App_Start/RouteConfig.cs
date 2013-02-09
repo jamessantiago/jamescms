@@ -12,6 +12,12 @@ namespace jamescms
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            
+            routes.MapRoute(
+                "TextWall",
+                "{id}",
+                new { controller = "text", action = "Details"},
+                new { id= @"^[a-zA-Z0-9_]+$" });
 
             routes.MapRoute(
                 name: "Default",

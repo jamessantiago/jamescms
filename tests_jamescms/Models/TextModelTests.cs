@@ -8,5 +8,6 @@ namespace tests_jamescms.Models
 {
     class TextModelTests
     {
+
     }
 }

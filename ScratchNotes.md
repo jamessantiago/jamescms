@@ -25,3 +25,20 @@ Scratch Notes
          /^^^^^^^^^^^^^^^^^^^^^^^^^\                (*$
         |888888888888888888888888888|
         \__________________________/
+
+
+
+## Notes
+
+- Enable-Migrations "commit m"; Update-Database
+
+## References
+
+- [https://github.com/khalidabuhakmeh/NoRepositories](https://github.com/khalidabuhakmeh/NoRepositories)
+
+- [http://nlog-project.org/](http://nlog-project.org/)
+
+- [http://blogs.msdn.com/b/dbrowne/archive/2010/06/03/using-new-transactionscope-considered-harmful.aspx](http://blogs.msdn.com/b/dbrowne/archive/2010/06/03/using-new-transactionscope-considered-harmful.aspx)
+
+
+
