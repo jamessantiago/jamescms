@@ -18,6 +18,9 @@ namespace jamescms
                         "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/master").Include(
+                    "~/Scripts/MarkdownDeepLib.min.js"));
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -41,7 +44,8 @@ namespace jamescms
 
             bundles.Add(new StyleBundle("~/Content/Initializr").Include(
                         "~/Content/themes/Initializr/normalize.min.css",
-                        "~/Content/themes/Initializr/main.css"));
+                        "~/Content/themes/Initializr/main.css",
+                        "~/Scripts/mdd_styles.css"));
         }
     }
 }

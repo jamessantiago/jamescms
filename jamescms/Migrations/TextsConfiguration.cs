@@ -21,6 +21,7 @@ namespace jamescms.Migrations
                 new Text
                 {
                     Title = "My first post",
+                    UrlTitle = "My_first_post",
                     Article = "This my very first post",
                     Posted = new DateTime(1970, 1, 1),
                     Updated = new DateTime(1970, 1, 1)
@@ -31,6 +32,7 @@ namespace jamescms.Migrations
                 new Text
                 {
                     Title = "My second post",
+                    UrlTitle = "My_Second_post",
                     Article = "This my second post",
                     Posted = new DateTime(1970, 1, 1),
                     Updated = new DateTime(1970, 1, 1),
@@ -43,6 +45,7 @@ namespace jamescms.Migrations
                 {
                     Title = "My third post",
                     Article = "This my third post",
+                    UrlTitle = "third_post",
                     Posted = new DateTime(1970, 1, 1),
                     Updated = new DateTime(1970, 1, 1),
                     Tags = new List<Tag>() { new Tag() { Name = "thirds" } },

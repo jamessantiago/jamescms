@@ -1,13 +1,15 @@
 ﻿@model IQueryable<jamescms.Models.Text>
+@using jamescms.Helpers;
 
 @foreach (var text in Model)
 {
     <article>
         <header>
             <h1>@Html.RouteLink(text.Title, "TextWall", new { id = text.UrlTitle })</h1>
+            @*<h1>@text.Title</h1>*@
         </header>
         <section>
-            @text.Article
+            @MarkdownHelper.Markdown(text.Article)
         </section>
     </article>
 }

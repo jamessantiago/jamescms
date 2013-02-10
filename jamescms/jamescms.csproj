@@ -77,6 +77,9 @@
     <Reference Include="Growl.CoreLibrary">
       <HintPath>..\packages\Growl.0.6\lib\Growl.CoreLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="MarkdownDeep">
+      <HintPath>..\packages\MarkdownDeep.NET.1.4\lib\.NetFramework 3.5\MarkdownDeep.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Math">
       <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.1.4.12333\lib\net45-full\Mono.Math.dll</HintPath>
@@ -197,6 +200,7 @@
     <Compile Include="Controllers\Management\ErrorController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
+    <Compile Include="Helpers\MarkdownHelper.cs" />
     <Compile Include="Migrations\201302100227317_Users_Original.cs" />
     <Compile Include="Migrations\201302100227317_Users_Original.Designer.cs">
       <DependentUpon>201302100227317_Users_Original.cs</DependentUpon>
@@ -204,6 +208,10 @@
     <Compile Include="Migrations\201302100230032_Texts_Original.cs" />
     <Compile Include="Migrations\201302100230032_Texts_Original.Designer.cs">
       <DependentUpon>201302100230032_Texts_Original.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201302100859233_urltitle.cs" />
+    <Compile Include="Migrations\201302100859233_urltitle.Designer.cs">
+      <DependentUpon>201302100859233_urltitle.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\CompositeInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
@@ -309,6 +317,15 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\MarkdownDeep License.txt" />
+    <Content Include="Scripts\MarkdownDeep Quick Reference.txt" />
+    <Content Include="Scripts\MarkdownDeepLib.min.js" />
+    <Content Include="Scripts\mdd_ajax_loader.gif" />
+    <Content Include="Scripts\mdd_gripper.png" />
+    <Content Include="Scripts\mdd_help.htm" />
+    <Content Include="Scripts\mdd_modal_background.png" />
+    <Content Include="Scripts\mdd_styles.css" />
+    <Content Include="Scripts\mdd_toolbar.png" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -385,6 +402,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201302100230032_Texts_Original.resx">
       <DependentUpon>201302100230032_Texts_Original.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302100859233_urltitle.resx">
+      <DependentUpon>201302100859233_urltitle.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

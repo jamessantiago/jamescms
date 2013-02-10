@@ -28,8 +28,7 @@ namespace jamescms.Controllers
 
         public ActionResult Index()
         {
-            uow.TextContext.Texts.Take(10);
-            return View();
+            return View(uow.TextContext.Texts.Take(10));
         }
 
         public ActionResult p(int id)
