@@ -38,16 +38,6 @@ namespace jamescms.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Text>()
-                .HasMany(d => d.CodeSnippit)
-                .WithMany(d => d.Texts)
-                .Map(d =>
-                {
-                    d.ToTable("Texts_CodeSnippits");
-                    d.MapLeftKey("TextId");
-                    d.MapRightKey("CodeSnippitId");
-                });
-
-            modelBuilder.Entity<Text>()
                 .HasMany(d => d.Tags)
                 .WithMany(d => d.Texts)
                 .Map(d =>
@@ -104,7 +94,6 @@ namespace jamescms.Models
         [Required]
         public DateTime Updated { get; set; }
 
-        public virtual IList<CodeSnippit> CodeSnippit { get; set; }
         public virtual IList<Comment> Comments { get; set; }
         public virtual IList<Tag> Tags { get; set; }
         
@@ -137,19 +126,6 @@ namespace jamescms.Models
 
         public virtual Text Text {get; set;}
         public virtual IList<Comment> ChildComments { get; set; }
-    }
-
-    [Table("CodeSnippits")]
-    [FullTextIndex("FTIX_CodeSnippits", "Code")]
-    public class CodeSnippit : Entity
-    {
-        [Required]
-        [StringLength(100)]
-        public string Name { get; set; }
-        [Required]
-        public string Code {get; set;}
-
-        public virtual IList<Text> Texts { get; set; }
     }
 
     #endregion Text Model Classes

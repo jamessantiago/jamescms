@@ -11,7 +11,7 @@ namespace jamescms.Migrations
     {
         public TextsConfiguration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(jamescms.Models.TextContext context)
@@ -22,7 +22,17 @@ namespace jamescms.Migrations
                 {
                     Title = "My first post",
                     UrlTitle = "My_first_post",
-                    Article = "This my very first post",
+                    Article = 
+@"
+###This my very first post
+
+this is a test
+
+    {{C#}}
+    public void GetCats() {
+        return new Meow() { Name = ""Whiskers"" };
+    }
+",
                     Posted = new DateTime(1970, 1, 1),
                     Updated = new DateTime(1970, 1, 1)
                 });
@@ -49,7 +59,6 @@ namespace jamescms.Migrations
                     Posted = new DateTime(1970, 1, 1),
                     Updated = new DateTime(1970, 1, 1),
                     Tags = new List<Tag>() { new Tag() { Name = "thirds" } },
-                    CodeSnippit = new List<CodeSnippit>() { new CodeSnippit() { Name = "Test", Code = "10 GOTO 10" } }
                 });
 
             context.Database.Initialize(true);

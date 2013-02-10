@@ -201,18 +201,6 @@
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
     <Compile Include="Helpers\MarkdownHelper.cs" />
-    <Compile Include="Migrations\201302100227317_Users_Original.cs" />
-    <Compile Include="Migrations\201302100227317_Users_Original.Designer.cs">
-      <DependentUpon>201302100227317_Users_Original.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201302100230032_Texts_Original.cs" />
-    <Compile Include="Migrations\201302100230032_Texts_Original.Designer.cs">
-      <DependentUpon>201302100230032_Texts_Original.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201302100953272_urltitle.cs" />
-    <Compile Include="Migrations\201302100953272_urltitle.Designer.cs">
-      <DependentUpon>201302100953272_urltitle.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\Database\CompositeInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
     <Compile Include="Models\Database\IndexInitializer.cs" />
@@ -230,6 +218,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Prettify\prettify.css" />
+    <Content Include="Content\Prettify\Themes\desert.css" />
+    <Content Include="Content\Prettify\Themes\sons-of-obsidian.css" />
+    <Content Include="Content\Prettify\Themes\sunburst.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -320,6 +312,7 @@
     <Content Include="Scripts\MarkdownDeep License.txt" />
     <Content Include="Scripts\MarkdownDeep Quick Reference.txt" />
     <Content Include="Scripts\MarkdownDeepLib.min.js" />
+    <Content Include="Scripts\master.js" />
     <Content Include="Scripts\mdd_ajax_loader.gif" />
     <Content Include="Scripts\mdd_gripper.png" />
     <Content Include="Scripts\mdd_help.htm" />
@@ -327,6 +320,25 @@
     <Content Include="Scripts\mdd_styles.css" />
     <Content Include="Scripts\mdd_toolbar.png" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\Prettify\lang-apollo.js" />
+    <Content Include="Scripts\Prettify\lang-clj.js" />
+    <Content Include="Scripts\Prettify\lang-css.js" />
+    <Content Include="Scripts\Prettify\lang-go.js" />
+    <Content Include="Scripts\Prettify\lang-hs.js" />
+    <Content Include="Scripts\Prettify\lang-lisp.js" />
+    <Content Include="Scripts\Prettify\lang-lua.js" />
+    <Content Include="Scripts\Prettify\lang-ml.js" />
+    <Content Include="Scripts\Prettify\lang-n.js" />
+    <Content Include="Scripts\Prettify\lang-proto.js" />
+    <Content Include="Scripts\Prettify\lang-scala.js" />
+    <Content Include="Scripts\Prettify\lang-sql.js" />
+    <Content Include="Scripts\Prettify\lang-tex.js" />
+    <Content Include="Scripts\Prettify\lang-vb.js" />
+    <Content Include="Scripts\Prettify\lang-vhdl.js" />
+    <Content Include="Scripts\Prettify\lang-wiki.js" />
+    <Content Include="Scripts\Prettify\lang-xq.js" />
+    <Content Include="Scripts\Prettify\lang-yaml.js" />
+    <Content Include="Scripts\Prettify\prettify.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -396,17 +408,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201302100227317_Users_Original.resx">
-      <DependentUpon>201302100227317_Users_Original.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201302100230032_Texts_Original.resx">
-      <DependentUpon>201302100230032_Texts_Original.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201302100953272_urltitle.resx">
-      <DependentUpon>201302100953272_urltitle.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
