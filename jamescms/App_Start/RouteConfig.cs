@@ -18,12 +18,7 @@ namespace jamescms
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "sd", action = "Index", id = UrlParameter.Optional }
             );
-
-            routes.MapRoute(
-                "TextWall",
-                "{id}",
-                new { controller = "text", action = "Details" },
-                new { id = @"^[a-zA-Z0-9_]+$" });
+            
         }
     }
 }

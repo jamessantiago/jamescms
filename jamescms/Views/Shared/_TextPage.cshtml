@@ -5,8 +5,7 @@
 {
     <article>
         <header>
-            <h1>@Html.RouteLink(text.Title, "TextWall", new { id = text.UrlTitle })</h1>
-            @*<h1>@text.Title</h1>*@
+            <h1>@Html.ActionLink(text.Title, "d", new { id = text.UrlTitle })</h1>
         </header>
         <section>
             @MarkdownHelper.Markdown(text.Article)

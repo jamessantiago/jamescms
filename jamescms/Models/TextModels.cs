@@ -92,6 +92,9 @@ namespace jamescms.Models
         [Required]
         [StringLength(100)]
         public string Title { get; set; }
+        [Required]
+        [Index("IX_Text_UrlTitle", true)]
+        [StringLength(100)]
         public string UrlTitle { get; set; }
         [Required]        
         public string Article { get; set; }
@@ -124,8 +127,10 @@ namespace jamescms.Models
         [StringLength(2000)]
         public string CommentText { get; set; }
         public int? ParentCommentId { get; set; }
+        [Required]
         [Index("IX_Comment_UserId")]
         public int UserId { get; set; }
+        [Required]
         public DateTime Posted { get; set; }
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }
@@ -138,7 +143,10 @@ namespace jamescms.Models
     [FullTextIndex("FTIX_CodeSnippits", "Code")]
     public class CodeSnippit : Entity
     {
+        [Required]
+        [StringLength(100)]
         public string Name { get; set; }
+        [Required]
         public string Code {get; set;}
 
         public virtual IList<Text> Texts { get; set; }

@@ -209,9 +209,9 @@
     <Compile Include="Migrations\201302100230032_Texts_Original.Designer.cs">
       <DependentUpon>201302100230032_Texts_Original.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201302100859233_urltitle.cs" />
-    <Compile Include="Migrations\201302100859233_urltitle.Designer.cs">
-      <DependentUpon>201302100859233_urltitle.cs</DependentUpon>
+    <Compile Include="Migrations\201302100953272_urltitle.cs" />
+    <Compile Include="Migrations\201302100953272_urltitle.Designer.cs">
+      <DependentUpon>201302100953272_urltitle.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\CompositeInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
@@ -386,6 +386,7 @@
     <Content Include="Views\Shared\_LoginFooter.cshtml" />
     <Content Include="Views\text\Index.cshtml" />
     <Content Include="Views\Shared\_TextPage.cshtml" />
+    <Content Include="Views\text\d.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -403,8 +404,8 @@
     <EmbeddedResource Include="Migrations\201302100230032_Texts_Original.resx">
       <DependentUpon>201302100230032_Texts_Original.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201302100859233_urltitle.resx">
-      <DependentUpon>201302100859233_urltitle.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201302100953272_urltitle.resx">
+      <DependentUpon>201302100953272_urltitle.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

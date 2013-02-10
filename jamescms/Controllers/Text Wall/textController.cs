@@ -37,9 +37,13 @@ namespace jamescms.Controllers
             return View();
         }
 
-        public ActionResult Details(string id)
+        public ActionResult d(string id)
         {
-            return View();
+            var text = uow.TextContext.Texts.Where(d => d.UrlTitle == id).FirstOrDefault();
+            if (text != null)
+                return View(text);
+            else
+                return RedirectToAction("Index");
         }
 
         public ActionResult Create()
@@ -47,11 +51,13 @@ namespace jamescms.Controllers
             uow.TextContext.Texts.Add(new Text()
             {
                 Article = "firsto",
+                UrlTitle = "firsto",
                 Posted = DateTime.Now,
                 Title = "Firest",
                 Updated = DateTime.Now
             });
             uow.TextContext.SaveChanges();
+            
             return RedirectToAction("Index", "sd");
         }
 
