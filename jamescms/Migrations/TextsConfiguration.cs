@@ -23,8 +23,7 @@ namespace jamescms.Migrations
                     Title = "My first post",
                     Article = "This my very first post",
                     Posted = new DateTime(1970, 1, 1),
-                    Updated = new DateTime(1970, 1, 1),
-                    Tags = new List<Tag>() { new Tag() { Name = "First" } }
+                    Updated = new DateTime(1970, 1, 1)
                 });
 
             context.Texts.AddOrUpdate(
@@ -36,6 +35,18 @@ namespace jamescms.Migrations
                     Posted = new DateTime(1970, 1, 1),
                     Updated = new DateTime(1970, 1, 1),
                     Tags = new List<Tag>() { new Tag() { Name = "Fister" } }
+                });
+
+            context.Texts.AddOrUpdate(
+                d => d.Title,
+                new Text
+                {
+                    Title = "My third post",
+                    Article = "This my third post",
+                    Posted = new DateTime(1970, 1, 1),
+                    Updated = new DateTime(1970, 1, 1),
+                    Tags = new List<Tag>() { new Tag() { Name = "thirds" } },
+                    CodeSnippit = new List<CodeSnippit>() { new CodeSnippit() { Name = "Test", Code = "10 GOTO 10" } }
                 });
 
             context.Database.Initialize(true);
