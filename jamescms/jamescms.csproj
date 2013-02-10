@@ -197,9 +197,13 @@
     <Compile Include="Controllers\Management\ErrorController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
-    <Compile Include="Migrations\201302091047559_Indexes.cs" />
-    <Compile Include="Migrations\201302091047559_Indexes.Designer.cs">
-      <DependentUpon>201302091047559_Indexes.cs</DependentUpon>
+    <Compile Include="Migrations\201302100227317_Users_Original.cs" />
+    <Compile Include="Migrations\201302100227317_Users_Original.Designer.cs">
+      <DependentUpon>201302100227317_Users_Original.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201302100230032_Texts_Original.cs" />
+    <Compile Include="Migrations\201302100230032_Texts_Original.Designer.cs">
+      <DependentUpon>201302100230032_Texts_Original.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\CompositeInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
@@ -207,10 +211,6 @@
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201302062111428_Original.cs" />
-    <Compile Include="Migrations\201302062111428_Original.Designer.cs">
-      <DependentUpon>201302062111428_Original.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\TextsConfiguration.cs" />
     <Compile Include="Migrations\UsersConfiguration.cs" />
@@ -379,11 +379,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201302062111428_Original.resx">
-      <DependentUpon>201302062111428_Original.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201302100227317_Users_Original.resx">
+      <DependentUpon>201302100227317_Users_Original.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201302091047559_Indexes.resx">
-      <DependentUpon>201302091047559_Indexes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201302100230032_Texts_Original.resx">
+      <DependentUpon>201302100230032_Texts_Original.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

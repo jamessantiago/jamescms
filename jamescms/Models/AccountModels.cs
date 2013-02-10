@@ -17,7 +17,7 @@ namespace jamescms.Models
     public class UsersContext : DbContext, IUsersContext
     {
         public UsersContext()
-            : base("DefaultConnection")
+            : base("AccountConnection")
         {            
         }
 

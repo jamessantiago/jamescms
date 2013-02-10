@@ -64,8 +64,8 @@ namespace jamescms
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            AuthConfig.RegisterAuth();
             BundleTable.EnableOptimizations = true;
+            AuthConfig.RegisterAuth();
             if (FullTextEnabled)
             {
                 Database.SetInitializer<TextContext>(
