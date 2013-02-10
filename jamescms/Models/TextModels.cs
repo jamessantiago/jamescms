@@ -92,6 +92,7 @@ namespace jamescms.Models
         [Required]
         [StringLength(100)]
         public string Title { get; set; }
+        public string UrlTitle { get; set; }
         [Required]        
         public string Article { get; set; }
         [Required]

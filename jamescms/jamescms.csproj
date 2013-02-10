@@ -368,6 +368,7 @@
     <Content Include="Views\Error\Ajax.cshtml" />
     <Content Include="Views\Shared\_LoginFooter.cshtml" />
     <Content Include="Views\text\Index.cshtml" />
+    <Content Include="Views\Shared\_TextPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

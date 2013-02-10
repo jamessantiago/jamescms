@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IQueryable<jamescms.Models.Text>
+@{
     ViewBag.Title = "Text Wall";
 }
 
+@Html.Partial("_TextPage", Model)
