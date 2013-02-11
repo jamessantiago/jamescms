@@ -15,16 +15,16 @@ namespace jamescms.Controllers
 {
     [Authorize]
     [InitializeSimpleMembership]
-    public class AccountController : Controller
+    public class accountController : Controller
     {
         private UnitOfWork uow;
 
-        public AccountController()
+        public accountController()
         {
             uow = new UnitOfWork();
         }
 
-        public AccountController(UnitOfWork UnitOfWork)
+        public accountController(UnitOfWork UnitOfWork)
         {
             uow = UnitOfWork;
         }
@@ -33,7 +33,7 @@ namespace jamescms.Controllers
         // GET: /Account/Login
 
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -45,7 +45,7 @@ namespace jamescms.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model, string returnUrl)
+        public ActionResult login(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
@@ -62,7 +62,7 @@ namespace jamescms.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        public ActionResult logoff()
         {
             WebSecurity.Logout();
 
@@ -73,7 +73,7 @@ namespace jamescms.Controllers
         // GET: /Account/Register
 
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult register()
         {
             return View();
         }
@@ -84,7 +84,7 @@ namespace jamescms.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterModel model)
+        public ActionResult register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +110,7 @@ namespace jamescms.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Disassociate(string provider, string providerUserId)
+        public ActionResult disassociate(string provider, string providerUserId)
         {
             string ownerAccount = OAuthWebSecurity.GetUserName(provider, providerUserId);
             ManageMessageId? message = null;
@@ -137,7 +137,7 @@ namespace jamescms.Controllers
         //
         // GET: /Account/Manage
 
-        public ActionResult Manage(ManageMessageId? message)
+        public ActionResult manage(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
@@ -154,7 +154,7 @@ namespace jamescms.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage(LocalPasswordModel model)
+        public ActionResult manage(LocalPasswordModel model)
         {
             bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             ViewBag.HasLocalPassword = hasLocalAccount;
@@ -218,7 +218,7 @@ namespace jamescms.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
+        public ActionResult externallogin(string provider, string returnUrl)
         {
             return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
         }
@@ -227,7 +227,7 @@ namespace jamescms.Controllers
         // GET: /Account/ExternalLoginCallback
 
         [AllowAnonymous]
-        public ActionResult ExternalLoginCallback(string returnUrl)
+        public ActionResult externallogincallback(string returnUrl)
         {
             AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
             if (!result.IsSuccessful)
@@ -262,7 +262,7 @@ namespace jamescms.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ExternalLoginConfirmation(RegisterExternalLoginModel model, string returnUrl)
+        public ActionResult externalloginconfirmation(RegisterExternalLoginModel model, string returnUrl)
         {
             string provider = null;
             string providerUserId = null;
@@ -303,21 +303,21 @@ namespace jamescms.Controllers
         // GET: /Account/ExternalLoginFailure
 
         [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
+        public ActionResult externalloginfailure()
         {
             return View();
         }
 
         [AllowAnonymous]
         [ChildActionOnly]
-        public ActionResult ExternalLoginsList(string returnUrl)
+        public ActionResult externalloginslist(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return PartialView("_ExternalLoginsListPartial", OAuthWebSecurity.RegisteredClientData);
         }
 
         [ChildActionOnly]
-        public ActionResult RemoveExternalLogins()
+        public ActionResult removeexternallogins()
         {
             ICollection<OAuthAccount> accounts = OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name);
             List<ExternalLogin> externalLogins = new List<ExternalLogin>();

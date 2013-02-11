@@ -6,7 +6,7 @@
 
 <section class="social" id="socialLoginForm">
     <h2>Use another service to log in.</h2>
-    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+    @Html.Action("externalloginslist", new { ReturnUrl = ViewBag.ReturnUrl })
 </section>
 
 <section id="login-form">
@@ -33,7 +33,7 @@
     </ol>
     <input id="submit-button" type="submit" value="Log in" />
     <p>
-        @Html.ActionLink("Register", "Register") if you don't have an account.
+        @Html.ActionLink("register", "register") if you don't have an account.
     </p>
 }
 </section>

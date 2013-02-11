@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
 using jamescms.Models;
+using System.Web.Security;
 
 namespace jamescms.Filters
 {
@@ -34,11 +35,18 @@ namespace jamescms.Filters
                         if (!context.Database.Exists())
                         {
                             // Create the SimpleMembership database without Entity Framework migration schema
-                            ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();
+                            ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();                            
+                            
                         }
                     }
 
                     WebSecurity.InitializeDatabaseConnection("AccountConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                    if (!WebSecurity.UserExists("admin"))
+                    {
+                        Roles.CreateRole("Guides");
+                        WebSecurity.CreateUserAndAccount("admin", "password");
+                        Roles.AddUserToRole("admin", "Guides");
+                    }
                 }
                 catch (Exception ex)
                 {

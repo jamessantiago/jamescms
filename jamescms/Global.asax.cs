@@ -134,7 +134,7 @@ namespace jamescms
                 || isAjax)
             {
                 routeData.Values.Add("controller", "Error");
-                IController errorController = new Controllers.ErrorController();
+                IController errorController = new Controllers.errorController();
                 errorController.Execute(new RequestContext(
                      new HttpContextWrapper(Context), routeData));
             }

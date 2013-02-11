@@ -196,8 +196,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\FullTextIndexAttribute.cs" />
     <Compile Include="Attributes\IndexAttribute.cs" />
-    <Compile Include="Controllers\Accounts\AccountController.cs" />
-    <Compile Include="Controllers\Management\ErrorController.cs" />
+    <Compile Include="Controllers\Accounts\accountController.cs" />
+    <Compile Include="Controllers\Management\adminController.cs" />
+    <Compile Include="Controllers\Management\errorController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
     <Compile Include="Helpers\MarkdownHelper.cs" />
@@ -399,6 +400,7 @@
     <Content Include="Views\text\Index.cshtml" />
     <Content Include="Views\Shared\_TextPage.cshtml" />
     <Content Include="Views\text\d.cshtml" />
+    <Content Include="Views\guide\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

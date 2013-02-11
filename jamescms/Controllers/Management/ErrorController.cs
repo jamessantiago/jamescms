@@ -6,17 +6,17 @@ using System.Web.Mvc;
 
 namespace jamescms.Controllers
 {
-    public class ErrorController : Controller
+    public class errorController : Controller
     {
         //
         // GET: /Error/
 
-        public ActionResult Index()
+        public ActionResult index()
         {
             return View();
         }
 
-        public ActionResult Ajax()
+        public ActionResult ajax()
         {
             return View();
         }
