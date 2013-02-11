@@ -89,6 +89,13 @@ body {
     background: #454643;
 }
 
+.header-container h1 a,
+.header-container h1 a:visited {
+    color: #cecfcb;
+    text-decoration:none;
+}
+
+
 a {
     color: #768fcd;
 }

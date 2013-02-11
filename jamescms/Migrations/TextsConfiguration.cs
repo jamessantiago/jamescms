@@ -61,6 +61,26 @@ this is a test
                     Tags = new List<Tag>() { new Tag() { Name = "thirds" } },
                 });
 
+
+            context.Texts.AddOrUpdate(
+                d => d.Title,
+                new Text
+                {
+                    Title = "My powershell post",
+                    UrlTitle = "powersh_post",
+                    Article =
+@"
+    {{Powershell}}
+    function GetNextString ($current) { 
+      $x = ConvertStringToInt $current
+      $x ++
+      ConvertIntToString $x
+    } 
+",
+                    Posted = new DateTime(1970, 1, 1),
+                    Updated = new DateTime(1970, 1, 1)
+                });
+
             context.Database.Initialize(true);
         }
     }

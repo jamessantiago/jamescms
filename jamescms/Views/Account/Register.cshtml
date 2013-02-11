@@ -3,11 +3,8 @@
     ViewBag.Title = "Register";
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-    <h2>Create a new account.</h2>
-</hgroup>
-
+<section id="login-form">
+<h2>Create an account.</h2>
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
@@ -28,9 +25,10 @@
                 @Html.PasswordFor(m => m.ConfirmPassword)
             </li>
         </ol>
-        <input type="submit" value="Register" />
+        <input id="submit-button" type="submit" value="Register" />
     </fieldset>
 }
+    </section>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
