@@ -44,20 +44,27 @@ namespace jamescms.Controllers
         {
             public int TotalUsers { get; set; }
             public UserProfile NewestUser { get; set; }
+            public string[] Roles { get; set; }
         }
 
         public ActionResult UserControl()
         {
             UserStats stats = new UserStats(){
                 TotalUsers = uow.uc.UserProfiles.Count(),
-                NewestUser = uow.uc.UserProfiles.OrderByDescending(d => d.UserId).First()
+                NewestUser = uow.uc.UserProfiles.OrderByDescending(d => d.UserId).First(),
+                Roles = uow.uc.Roles
             };
             return PartialView("_UserControl", stats);
         }
 
         public ActionResult AllUsers()
         {
-            return PartialView("_AllUsers", uow.uc.UserProfiles);
+            return PartialView("_Users", uow.uc.UserProfiles);
+        }
+
+        public ActionResult UsersInRole(string role)
+        {
+            return PartialView("_Users", uow.uc.UserProfiles.Where(d => d.IsInRole(role)));
         }
 
         public ActionResult EditUser(string username)
@@ -72,6 +79,21 @@ namespace jamescms.Controllers
             var user = uow.uc.UserProfiles.Where(d => d.UserName == username).FirstOrDefault();
             user.AddToRole(role);
             return PartialView("_EditUser", user);
+        }
+
+        public ActionResult RemoveUserFromRole(string username, string role)
+        {
+            var user = uow.uc.UserProfiles.Where(d => d.UserName == username).FirstOrDefault();
+            user.RemoveFromRole(role);
+            return PartialView("_EditUser", user);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteUser(string username)
+        {
+            var user = uow.uc.UserProfiles.Where(d => d.UserName == username).FirstOrDefault();
+            uow.uc.UserProfiles.Remove(user);
+            return PartialView("_Users", uow.uc.UserProfiles);
         }
 
         #endregion Users

@@ -35,11 +35,24 @@ namespace jamescms.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
-        public string[] IsInRole { get { return Roles.GetRolesForUser(UserName); } }
+
+        #region SimpleMembership properties
+
+        public string[] UserRoles { get { return Roles.GetRolesForUser(UserName); } }
 
         public void AddToRole(string role)
         {
             Roles.AddUserToRole(UserName, role);
+        }
+
+        public void RemoveFromRole(string role)
+        {
+            Roles.RemoveUserFromRole(UserName, role);
+        }
+
+        public bool IsInRole(string role)
+        {
+            return Roles.IsUserInRole(role);
         }
 
         public DateTime CreateDate
@@ -58,10 +71,14 @@ namespace jamescms.Models
         {
             get { return WebSecurity.GetPasswordFailuresSinceLastSuccess(UserName); }
         }
+        [ValdiateBoolIsFalse(ErrorMessage = "Account is currently locked out")]
         public bool IsAccountLockedOut
         {
             get { return WebSecurity.IsAccountLockedOut(UserName, 10, 600); }
         }
+
+        #endregion SimpleMembership properties
+
     }
 
     public class RegisterExternalLoginModel
