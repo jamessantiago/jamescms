@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Globalization;
 using System.Web.Security;
+using WebMatrix.WebData;
 
 namespace jamescms.Models
 {
@@ -18,10 +20,12 @@ namespace jamescms.Models
     {
         public UsersContext()
             : base("AccountConnection")
-        {            
+        {
+            
         }
 
         public virtual IDbSet<UserProfile> UserProfiles { get; set; }
+        public virtual string[] Roles { get { return System.Web.Security.Roles.GetAllRoles(); } }
     }
 
     [Table("UserProfile")]
@@ -31,6 +35,33 @@ namespace jamescms.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
+        public string[] IsInRole { get { return Roles.GetRolesForUser(UserName); } }
+
+        public void AddToRole(string role)
+        {
+            Roles.AddUserToRole(UserName, role);
+        }
+
+        public DateTime CreateDate
+        {
+            get { return WebSecurity.GetCreateDate(UserName);}
+        }
+        public DateTime LastPasswordFailureDate
+        {
+            get { return WebSecurity.GetLastPasswordFailureDate(UserName); }
+        }
+        public DateTime PasswordChangedDate
+        {
+            get { return WebSecurity.GetPasswordChangedDate(UserName); }
+        }
+        public int PasswordFailuresSinceLastSuccess
+        {
+            get { return WebSecurity.GetPasswordFailuresSinceLastSuccess(UserName); }
+        }
+        public bool IsAccountLockedOut
+        {
+            get { return WebSecurity.IsAccountLockedOut(UserName, 10, 600); }
+        }
     }
 
     public class RegisterExternalLoginModel

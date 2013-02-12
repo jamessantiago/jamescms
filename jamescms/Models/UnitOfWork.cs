@@ -21,7 +21,7 @@ namespace jamescms.Models
 
         #region Public Contexts
 
-        public UsersContext UsersContext
+        public UsersContext uc
         {
             get
             {
@@ -32,7 +32,7 @@ namespace jamescms.Models
                 return usersContext;
             }
         }
-        public TextContext TextContext
+        public TextContext tc
         {
             get
             {

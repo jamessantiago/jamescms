@@ -275,13 +275,13 @@ namespace jamescms.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                UserProfile user = uow.UsersContext.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
+                UserProfile user = uow.uc.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                 // Check if user already exists
                 if (user == null)
                 {
                     // Insert name into the profile table
-                    uow.UsersContext.UserProfiles.Add(new UserProfile { UserName = model.UserName });
-                    uow.UsersContext.SaveChanges();
+                    uow.uc.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+                    uow.uc.SaveChanges();
 
                     OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                     OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);

@@ -28,7 +28,7 @@ namespace jamescms.Controllers
 
         public ActionResult Index()
         {
-            return View(uow.TextContext.Texts.Take(10));
+            return View(uow.tc.Texts.Take(10));
         }
 
         public ActionResult p(int id)
@@ -39,7 +39,7 @@ namespace jamescms.Controllers
 
         public ActionResult d(string id)
         {
-            var text = uow.TextContext.Texts.Where(d => d.UrlTitle == id).FirstOrDefault();
+            var text = uow.tc.Texts.Where(d => d.UrlTitle == id).FirstOrDefault();
             if (text != null)
                 return View(text);
             else
@@ -48,7 +48,7 @@ namespace jamescms.Controllers
 
         public ActionResult Create()
         {
-            uow.TextContext.Texts.Add(new Text()
+            uow.tc.Texts.Add(new Text()
             {
                 Article = "firsto",
                 UrlTitle = "firsto",
@@ -56,7 +56,7 @@ namespace jamescms.Controllers
                 Title = "Firest",
                 Updated = DateTime.Now
             });
-            uow.TextContext.SaveChanges();
+            uow.tc.SaveChanges();
             
             return RedirectToAction("Index", "sd");
         }
