@@ -198,6 +198,7 @@
     <Compile Include="App_Start\NLogConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\CustomValidationAttributes.cs" />
     <Compile Include="Attributes\FullTextIndexAttribute.cs" />
     <Compile Include="Attributes\IndexAttribute.cs" />
     <Compile Include="Controllers\Accounts\accountController.cs" />
@@ -405,6 +406,7 @@
     <Content Include="Views\Shared\_TextPage.cshtml" />
     <Content Include="Views\text\d.cshtml" />
     <Content Include="Views\guide\Index.cshtml" />
+    <Content Include="Views\guide\_UsersControl.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

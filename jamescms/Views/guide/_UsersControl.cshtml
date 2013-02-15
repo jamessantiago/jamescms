@@ -1,0 +1,14 @@
+﻿@model jamescms.Controllers.guideController.UserStats
+
+<div class="standard-form">
+    <h2>Users</h2>
+    <label>Total Users</label>
+    <p>@Model.TotalUsers</p>
+    <label>Newest User</label>
+    <p>@Model.NewestUser.UserName</p>
+    <label>Roles</label>
+    @foreach (var role in Model.Roles)
+    {
+        @Html.AjaxButton(role, "usersControl", "GetUsersInRole")
+    }    
+</div>

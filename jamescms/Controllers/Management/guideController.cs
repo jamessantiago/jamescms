@@ -54,7 +54,7 @@ namespace jamescms.Controllers
                 NewestUser = uow.uc.UserProfiles.OrderByDescending(d => d.UserId).First(),
                 Roles = uow.uc.Roles
             };
-            return PartialView("_UserControl", stats);
+            return PartialView("_UsersControl", stats);
         }
 
         public ActionResult AllUsers()

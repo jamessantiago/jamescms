@@ -182,7 +182,7 @@ nav a:hover {
 }
 
 
-
+.standard-form,
 #login-form {
     width: 80%;
     margin: 2%;
@@ -196,6 +196,10 @@ nav a:hover {
     float: left;
 }
 
+.standard-form input,
+.standard-form select,
+.standard-form textarea,
+.standard-form label,
 #login-form input, 
 #login-form select, 
 #login-form textarea, 
@@ -204,6 +208,9 @@ nav a:hover {
 	margin-bottom:2px;
 }
 
+.standard-form input,
+.standard-form select,
+.standard-form textarea,
 #login-form input, 
 #login-form select, 
 #login-form textarea {
@@ -213,30 +220,38 @@ nav a:hover {
 	padding:4px;
 }
 
+.standard-form input:focus,
+.standard-form select:focus,
+.standard-form textarea:focus,
 #login-form input:focus, 
 #login-form select:focus, 
 #login-form textarea:focus {
 	border: 1px solid #AFCDD8;
 }
 
+.standard-form textarea,
 #login-form textarea {
 	height:150px;
 	resize: none;
 }
 
+.standard-form label,
 #login-form label {
 	display:block;
 }
 
+.standard-form input[type="checkbox"],
 #login-form input[type="checkbox"] {
     width: auto;
 }
 
+.standard-form .required,
 #login-form .required {
 	font-weight:bold;
 	color:#F00;	
 }
 
+.standard-form #submit-button,
 #login-form #submit-button
 {
     background-color: #333;
@@ -265,6 +280,7 @@ nav a:hover {
 	background-color: #A6CFDD;
 }
 
+.standard-form #submit-button:active,
 #login-form #submit-button:active {
 	position:relative;
 	top:1px;
