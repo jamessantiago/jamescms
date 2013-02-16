@@ -206,7 +206,8 @@
     <Compile Include="Controllers\Management\errorController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
-    <Compile Include="Helpers\MarkdownHelper.cs" />
+    <Compile Include="Helpers and Extensions\HtmlExtensions.cs" />
+    <Compile Include="Helpers and Extensions\MarkdownHelper.cs" />
     <Compile Include="Models\Database\CompositeInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
     <Compile Include="Models\Database\IndexInitializer.cs" />

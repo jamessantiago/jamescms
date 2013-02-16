@@ -2,13 +2,13 @@
 
 <div class="standard-form">
     <h2>Users</h2>
-    <label>Total Users</label>
+    <b>Total Users</b>
     <p>@Model.TotalUsers</p>
-    <label>Newest User</label>
+    <b>Newest User</b>
     <p>@Model.NewestUser.UserName</p>
-    <label>Roles</label>
+    <b>Roles</b>
     @foreach (var role in Model.Roles)
     {
-        @Html.AjaxButton(role, "usersControl", "GetUsersInRole")
+        @Html.AjaxButton(role, "usersControl", "UsersInRole", new { role = role })        
     }    
 </div>
