@@ -10,7 +10,6 @@ using WebMatrix.WebData;
 
 namespace jamescms.Models
 {
-
     public interface IUsersContext
     {
         IDbSet<UserProfile> UserProfiles { get; set; }
@@ -35,44 +34,6 @@ namespace jamescms.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
-
-        #region SimpleMembership extension methods
-
-                public void AddToRole(string role)
-        {
-            Roles.AddUserToRole(UserName, role);
-        }
-
-        public void RemoveFromRole(string role)
-        {
-            Roles.RemoveUserFromRole(UserName, role);
-        }
-               
-
-        public DateTime GetCreationDate()
-        {
-            return WebSecurity.GetCreateDate(UserName);
-        }
-        public DateTime GetLastPasswordFailureDate()
-        {
-            return WebSecurity.GetLastPasswordFailureDate(UserName);
-        }
-        public DateTime GetPasswordChangedDate()
-        {
-            return WebSecurity.GetPasswordChangedDate(UserName);
-        }
-        public int GetPasswordFailuresSinceLastSuccess()
-        {
-            return WebSecurity.GetPasswordFailuresSinceLastSuccess(UserName);
-        }
-
-        public bool GetAccountLockoutStatus()
-        {
-            return WebSecurity.IsAccountLockedOut(UserName, 10, 600);
-        }
-
-        #endregion SimpleMembership extension methods
-
     }    
 
     public class RegisterExternalLoginModel

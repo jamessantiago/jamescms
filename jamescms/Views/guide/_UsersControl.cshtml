@@ -9,6 +9,10 @@
     <h3>Roles</h3>
     @foreach (var role in Model.Roles)
     {
-        @Html.AjaxButton(role, "usersControl", "UsersInRole", new { role = role })        
+        @Html.AjaxButton(role, "usersControl", "UsersInRole", new { role = role })  
     }    
 </div>
+
+<script type="text/javascript">
+    readyControl();
+</script>

@@ -1,10 +1,15 @@
 ﻿@model String[]
 
 <div class="standard-form">
-    <table>
+    <table class="standard-table">
         <thead>
             <tr>
-                <td>Username</td>
+                <th>Username</th>
+                @{var roles = Roles.GetAllRoles();}
+                @foreach (var role in roles)
+                {
+                    <th>@role</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -12,8 +17,24 @@
             {
                 <tr>
                     <td>@user</td>
+                    @foreach (var role in roles)
+                    {
+                        if (Roles.IsUserInRole(user, role))
+                        {
+                            <td>Remove from role</td>
+                        }
+                        else
+                        {
+                            <td>Add to role</td>
+                        }
+                    }
                 </tr>
             }
         </tbody>
     </table>
+    @Html.AjaxButton("Back", "usersControl", "UserControl")
 </div>
+
+<script type="text/javascript">
+    readyControl();
+</script>

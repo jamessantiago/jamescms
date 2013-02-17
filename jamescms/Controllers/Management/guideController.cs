@@ -14,6 +14,7 @@ using jamescms.Models;
 namespace jamescms.Controllers
 {
     [Authorize(Roles="Guides")]
+    [InitializeSimpleMembership]
     public class guideController : Controller
     {
 

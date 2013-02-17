@@ -268,7 +268,7 @@ nav a:hover {
     background-color: #333;
     color: #FFF;
     border: none;
-    padding: 20px;
+    padding: 10px;
     margin: 10px;
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
@@ -285,6 +285,27 @@ nav a:hover {
 	position:relative;
 	top:1px;
 }
+
+/*Standard table*/
+
+.standard-table th
+{
+    padding: 10px 8px;
+    border-bottom: 2px solid;
+}
+
+.standard-table td
+{
+    padding: 9px 8px 0px 8px;
+}
+
+.standard-table tbody tr:hover td
+{
+    color: #009;
+}
+
+
+
 
 
 

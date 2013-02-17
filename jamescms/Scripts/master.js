@@ -27,3 +27,9 @@ function readyLoad()
         }        
     });
 }
+
+function readyControl() {
+    prettyPrint();
+    jLoad();
+    readyLoad();
+}
