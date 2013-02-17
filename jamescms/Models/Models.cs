@@ -15,4 +15,17 @@ namespace jamescms.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
     }
+
+    public static class ModelExtensions
+    {
+        public static string[] GetUserRoles(this UserProfile profile)
+        {
+            return Roles.GetRolesForUser(profile.UserName);
+        }
+
+        public static bool IsInRole(this UserProfile profile, string role)
+        {
+            return Roles.IsUserInRole(profile.UserName, role);
+        }
+    }
 }

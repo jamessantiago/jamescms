@@ -1,0 +1,19 @@
+﻿@model String[]
+
+<div class="standard-form">
+    <table>
+        <thead>
+            <tr>
+                <td>Username</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

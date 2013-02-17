@@ -289,6 +289,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="humans.txt" />
+    <Content Include="Images\Loading.gif" />
     <Content Include="lib\agsXMPP.dll" />
     <Content Include="lib\agsXmppNlogTarget.dll" />
     <Content Include="lib\agsXmppNlogTarget.pdb" />
@@ -408,6 +409,7 @@
     <Content Include="Views\text\d.cshtml" />
     <Content Include="Views\guide\Index.cshtml" />
     <Content Include="Views\guide\_UsersControl.cshtml" />
+    <Content Include="Views\guide\_Users.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

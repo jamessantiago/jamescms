@@ -36,11 +36,9 @@ namespace jamescms.Models
         public int UserId { get; set; }
         public string UserName { get; set; }
 
-        #region SimpleMembership properties
+        #region SimpleMembership extension methods
 
-        public string[] UserRoles { get { return Roles.GetRolesForUser(UserName); } }
-
-        public void AddToRole(string role)
+                public void AddToRole(string role)
         {
             Roles.AddUserToRole(UserName, role);
         }
@@ -49,37 +47,33 @@ namespace jamescms.Models
         {
             Roles.RemoveUserFromRole(UserName, role);
         }
+               
 
-        public bool IsInRole(string role)
+        public DateTime GetCreationDate()
         {
-            return Roles.IsUserInRole(role);
+            return WebSecurity.GetCreateDate(UserName);
         }
-
-        public DateTime CreateDate
+        public DateTime GetLastPasswordFailureDate()
         {
-            get { return WebSecurity.GetCreateDate(UserName);}
+            return WebSecurity.GetLastPasswordFailureDate(UserName);
         }
-        public DateTime LastPasswordFailureDate
+        public DateTime GetPasswordChangedDate()
         {
-            get { return WebSecurity.GetLastPasswordFailureDate(UserName); }
+            return WebSecurity.GetPasswordChangedDate(UserName);
         }
-        public DateTime PasswordChangedDate
+        public int GetPasswordFailuresSinceLastSuccess()
         {
-            get { return WebSecurity.GetPasswordChangedDate(UserName); }
-        }
-        public int PasswordFailuresSinceLastSuccess
-        {
-            get { return WebSecurity.GetPasswordFailuresSinceLastSuccess(UserName); }
-        }
-        [ValdiateBoolIsFalse(ErrorMessage = "Account is currently locked out")]
-        public bool IsAccountLockedOut
-        {
-            get { return WebSecurity.IsAccountLockedOut(UserName, 10, 600); }
+            return WebSecurity.GetPasswordFailuresSinceLastSuccess(UserName);
         }
 
-        #endregion SimpleMembership properties
+        public bool GetAccountLockoutStatus()
+        {
+            return WebSecurity.IsAccountLockedOut(UserName, 10, 600);
+        }
 
-    }
+        #endregion SimpleMembership extension methods
+
+    }    
 
     public class RegisterExternalLoginModel
     {

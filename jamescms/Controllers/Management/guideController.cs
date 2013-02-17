@@ -59,12 +59,13 @@ namespace jamescms.Controllers
 
         public ActionResult AllUsers()
         {
-            return PartialView("_Users", uow.uc.UserProfiles);
+            return PartialView("_Users", uow.uc.UserProfiles.Select(d => d.UserName));
         }
 
         public ActionResult UsersInRole(string role)
         {
-            return PartialView("_Users", uow.uc.UserProfiles.Where(d => d.IsInRole(role)));
+            
+            return PartialView("_Users", Roles.GetUsersInRole(role));
         }
 
         public ActionResult EditUser(string username)
