@@ -199,6 +199,9 @@
     <Reference Include="XSockets.External, Version=2.2.0.0, Culture=neutral, PublicKeyToken=af78bc3db43331f5, processorArchitecture=MSIL">
       <HintPath>..\packages\XSockets.External.2.2\lib\net40\XSockets.External.dll</HintPath>
     </Reference>
+    <Reference Include="XSockets.Longpolling">
+      <HintPath>..\packages\XSockets.Fallback.2.2\lib\net40\XSockets.Longpolling.dll</HintPath>
+    </Reference>
     <Reference Include="XSockets.Plugin.Framework">
       <HintPath>..\packages\XSockets.Core.2.2\lib\net40\XSockets.Plugin.Framework.dll</HintPath>
     </Reference>

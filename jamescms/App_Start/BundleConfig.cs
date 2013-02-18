@@ -21,7 +21,10 @@ namespace jamescms
             bundles.Add(new ScriptBundle("~/bundles/master").Include(
                     "~/Scripts/MarkdownDeepLib.min.js",
                     "~/Scripts/Prettify/prettify.js",
-                    "~/Scripts/master.js"));
+                    "~/Scripts/master.js",
+                    "~/Scripts/json2.js",
+                    "~/Scripts/jXSockets.2.2.min.js",
+                    "~/Scripts/jXSockets.fallback.2.1.min.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

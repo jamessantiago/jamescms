@@ -106,8 +106,6 @@ namespace jamescms.Controllers
 
         public ActionResult TestWS()
         {
-            jamescms.Services.WebSocketListener ws = new Services.WebSocketListener();
-            new Thread(new ThreadStart(ws.InitializeListener)) { IsBackground = true }.Start();
             return PartialView("_TestWS");
         }
 

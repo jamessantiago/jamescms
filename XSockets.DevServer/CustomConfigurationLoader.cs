@@ -9,7 +9,7 @@ namespace XSockets.DevServer
     /// Make changes to this class or remove and create your own for the configuration.
     /// Just make sure to implement IConfigurationLoader and Export the interface
     /// </summary>
-    /*
+    
     public class CustomConfigurationLoader : IConfigurationLoader
     {
         public CustomConfigurationLoader()
@@ -41,12 +41,12 @@ namespace XSockets.DevServer
             {
                 if (this._settings == null)
                 {
-                    var uri = GetUri("ws://127.0.0.1");
+                    var uri = GetUri("ws://localhost");
 
                     this._settings = new XSockets.Core.Configuration.ConfigurationSettings
                         {
                             Port = 4502,
-                            Origin = new List<string>() { "http://localhost:YourPortNumberHere" },
+                            Origin = new List<string>() { "http://localhost:50695" },
                             Location = uri.Host,
                             Scheme = uri.Scheme,
                             Uri = uri,
@@ -59,5 +59,5 @@ namespace XSockets.DevServer
                 return this._settings;
             }
         }
-    }*/
+    }
 }
