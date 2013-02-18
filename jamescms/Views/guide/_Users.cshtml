@@ -10,6 +10,7 @@
                 {
                     <th>@role</th>
                 }
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -21,13 +22,14 @@
                     {
                         if (Roles.IsUserInRole(user, role))
                         {
-                            <td>Remove from role</td>
+                            <td>@Html.AjaxButton("Remove from role", "usersControl", "RemoveUserFromRole", new { username = user, role = role, BackToRole = true})</td>
                         }
                         else
                         {
-                            <td>Add to role</td>
+                            <td>@Html.AjaxButton("Add to role", "usersControl", "AddUserToRole", new { username = user, role = role, BackToRole = true})</td>
                         }
                     }
+                    <td>@Html.AjaxButton("Delete " + user, "usersControl", "DeleteUser", new { username = user })</td>
                 </tr>
             }
         </tbody>

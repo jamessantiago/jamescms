@@ -1,0 +1,24 @@
+﻿<div class="standard-form">
+    <div id="data"></div>
+    <input type="button" value="establish" id="est" />
+</div>
+
+<script type="text/javascript">
+    establish();
+    $("#est").click(function () { establish(); });
+    function establish() {
+        var socket = new WebSocket("ws://localhost:8989/websession");
+        socket.onopen = function () {
+            $("#data").append("handshake established\n");
+        };
+        socket.onerror = function (evt) {
+            $("#data").append("<p>" + evt.data + "</p>");
+        };
+        socket.onmessage = function (message) {
+            $("#data").append("<p>" + message.data + "</p>");
+        };
+        socket.onclose = function () {
+            $("#data").append("<p>connection closed</p>");
+        };
+    };
+</script>

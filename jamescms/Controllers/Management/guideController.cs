@@ -10,11 +10,11 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using jamescms.Filters;
 using jamescms.Models;
+using System.Threading;
 
 namespace jamescms.Controllers
 {
     [Authorize(Roles="Guides")]
-    [InitializeSimpleMembership]
     public class guideController : Controller
     {
 
@@ -53,14 +53,14 @@ namespace jamescms.Controllers
             UserStats stats = new UserStats(){
                 TotalUsers = uow.uc.UserProfiles.Count(),
                 NewestUser = uow.uc.UserProfiles.OrderByDescending(d => d.UserId).First(),
-                Roles = uow.uc.Roles
+                Roles = Roles.GetAllRoles()
             };
             return PartialView("_UsersControl", stats);
         }
 
         public ActionResult AllUsers()
         {
-            return PartialView("_Users", uow.uc.UserProfiles.Select(d => d.UserName));
+            return PartialView("_Users", uow.uc.UserProfiles.Select(d => d.UserName).ToArray());
         }
 
         public ActionResult UsersInRole(string role)
@@ -68,36 +68,49 @@ namespace jamescms.Controllers
             
             return PartialView("_Users", Roles.GetUsersInRole(role));
         }
-
-        public ActionResult EditUser(string username)
-        {
-            var user = uow.uc.UserProfiles.Where(d => d.UserName == username).FirstOrDefault();
-            return PartialView("_EditUser", user);
-        }
-
-        [HttpPost]
-        public ActionResult AddUserToRole(string username, string role)
+        
+        public ActionResult AddUserToRole(string username, string role, bool BackToRole)
         {
             var user = uow.uc.UserProfiles.Where(d => d.UserName == username).FirstOrDefault();
             user.AddToRole(role);
-            return PartialView("_EditUser", user);
+            if (BackToRole)
+                return PartialView("_Users", Roles.GetUsersInRole(role));
+            else
+                return PartialView("_Users", uow.uc.UserProfiles.Select(d => d.UserName).ToArray());
         }
 
-        public ActionResult RemoveUserFromRole(string username, string role)
+        public ActionResult RemoveUserFromRole(string username, string role, bool BackToRole)
         {
             var user = uow.uc.UserProfiles.Where(d => d.UserName == username).FirstOrDefault();
             user.RemoveFromRole(role);
-            return PartialView("_EditUser", user);
+            if (BackToRole)
+                return PartialView("_Users", Roles.GetUsersInRole(role));
+            else
+                return PartialView("_Users", uow.uc.UserProfiles.Select(d => d.UserName).ToArray());
         }
 
-        [HttpPost]
         public ActionResult DeleteUser(string username)
         {
             var user = uow.uc.UserProfiles.Where(d => d.UserName == username).FirstOrDefault();
+            var userroles = user.GetUserRoles();
+            if (userroles.Any())
+                Roles.RemoveUserFromRoles(username, userroles);
             uow.uc.UserProfiles.Remove(user);
-            return PartialView("_Users", uow.uc.UserProfiles);
+            uow.uc.SaveChanges();
+            return PartialView("_Users", uow.uc.UserProfiles.Select(d => d.UserName).ToArray());
         }
 
         #endregion Users
+
+        #region Error Logs
+
+        public ActionResult TestWS()
+        {
+            jamescms.Services.WebSocketListener ws = new Services.WebSocketListener();
+            new Thread(new ThreadStart(ws.InitializeListener)) { IsBackground = true }.Start();
+            return PartialView("_TestWS");
+        }
+
+        #endregion Error Logs
     }
 }

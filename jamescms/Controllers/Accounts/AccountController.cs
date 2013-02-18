@@ -14,7 +14,6 @@ using jamescms.Models;
 namespace jamescms.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
     public class accountController : Controller
     {
         private UnitOfWork uow;

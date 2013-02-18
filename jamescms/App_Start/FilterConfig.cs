@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using jamescms.Filters;
 
 namespace jamescms
 {
@@ -9,6 +10,7 @@ namespace jamescms
         {
             //filters.Add(new HandleErrorAttribute());
             filters.Add(new NLogHandleErrorAttribute());
+            filters.Add(new InitializeSimpleMembershipAttribute());
         }
     }
 

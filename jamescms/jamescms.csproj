@@ -223,6 +223,7 @@
     <Compile Include="Models\UnitOfWork.cs" />
     <Compile Include="NLogRenderers\WebVariablesRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\WebSocketListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Prettify\prettify.css" />
@@ -410,6 +411,7 @@
     <Content Include="Views\guide\Index.cshtml" />
     <Content Include="Views\guide\_UsersControl.cshtml" />
     <Content Include="Views\guide\_Users.cshtml" />
+    <Content Include="Views\guide\_TestWS.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

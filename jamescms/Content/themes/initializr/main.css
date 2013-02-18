@@ -89,6 +89,10 @@ body {
     background: #454643;
 }
 
+.header-container h1 {
+    margin: 10px 0;
+}
+
 .header-container h1 a,
 .header-container h1 a:visited {
     color: #cecfcb;
@@ -324,7 +328,7 @@ nav a:hover {
         float: left;
         width: 27%;
         margin: 0 1.7%;
-        padding: 25px 2%;
+        padding: 10px 2%;
         margin-bottom: 0;
     }
 
@@ -336,7 +340,7 @@ nav a:hover {
         margin-right: 0;
     }
 
-    #login-form, #socialLoginForm {
+    #login-form, #socialLoginForm, .standard-form {
         width: 90%;
     }
 

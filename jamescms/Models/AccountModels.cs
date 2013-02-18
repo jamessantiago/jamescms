@@ -24,7 +24,6 @@ namespace jamescms.Models
         }
 
         public virtual IDbSet<UserProfile> UserProfiles { get; set; }
-        public virtual string[] Roles { get { return System.Web.Security.Roles.GetAllRoles(); } }
     }
 
     [Table("UserProfile")]

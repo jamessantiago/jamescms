@@ -3,7 +3,7 @@
 <div class="standard-form">
     <h2>Users</h2>
     <h3>Total Users</h3>
-    <p>@Model.TotalUsers</p>
+    <p>@Model.TotalUsers</p> <p>@Html.AjaxButton("View All Users", "usersControl", "AllUsers")  </p>
     <h3>Newest User</h3>
     <p>@Model.NewestUser.UserName</p>
     <h3>Roles</h3>

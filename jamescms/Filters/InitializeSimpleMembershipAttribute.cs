@@ -47,6 +47,10 @@ namespace jamescms.Filters
                         WebSecurity.CreateUserAndAccount("admin", "password");
                         Roles.AddUserToRole("admin", "Guides");
                     }
+                    //else if (!Roles.IsUserInRole("admin", "Guides"))
+                    //{
+                    //    Roles.AddUserToRole("admin", "Guides");
+                    //}
                 }
                 catch (Exception ex)
                 {
