@@ -14,7 +14,7 @@ using NLog;
 namespace jamescms
 {
 
-    public class jcms: System.Web.HttpApplication
+    public class jcms : System.Web.HttpApplication
     {
         #region Private Properties
 
@@ -27,25 +27,33 @@ namespace jamescms
 
         #region Public Properties
 
-        public static string FacebookAppId { 
-            get { if (_facebookAppId == null) { _facebookAppId = WebConfigurationManager.AppSettings["FacebookAppId"] ?? ""; }
-                  return _facebookAppId;}
+        public static string FacebookAppId
+        {
+            get
+            {
+                if (_facebookAppId == null) { _facebookAppId = WebConfigurationManager.AppSettings["FacebookAppId"] ?? ""; }
+                return _facebookAppId;
+            }
         }
 
         public static string FacebookAppSecret
-        { 
-            get { if (_facebookAppSecret == null) { _facebookAppSecret = WebConfigurationManager.AppSettings["FacebookAppSecret"] ?? ""; }
-                  return _facebookAppSecret;}
+        {
+            get
+            {
+                if (_facebookAppSecret == null) { _facebookAppSecret = WebConfigurationManager.AppSettings["FacebookAppSecret"] ?? ""; }
+                return _facebookAppSecret;
+            }
         }
 
         public static bool FullTextEnabled
         {
             get
             {
-                if (_fullTextEnabled == null) {
+                if (_fullTextEnabled == null)
+                {
                     bool enabled = false;
                     bool.TryParse(WebConfigurationManager.AppSettings["FullTextEnabled"], out enabled);
-                    _fullTextEnabled = enabled.ToString(); 
+                    _fullTextEnabled = enabled.ToString();
                 }
                 return bool.Parse(_fullTextEnabled);
             }
@@ -95,7 +103,7 @@ namespace jamescms
 
             HttpException httpException = exception as HttpException;
 
-            RouteData routeData = new RouteData();            
+            RouteData routeData = new RouteData();
             bool isAjax = false;
 
             if (httpException == null)
@@ -148,5 +156,5 @@ namespace jamescms
         }
 
         #endregion Application Error
-    }    
+    }
 }
