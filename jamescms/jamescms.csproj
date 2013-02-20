@@ -222,6 +222,7 @@
     <Compile Include="Controllers\Accounts\accountController.cs" />
     <Compile Include="Controllers\Management\guideController.cs" />
     <Compile Include="Controllers\Management\errorController.cs" />
+    <Compile Include="Controllers\SocketsController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
     <Compile Include="Helpers and Extensions\HtmlExtensions.cs" />
@@ -422,9 +423,11 @@
     <Content Include="XSockets\XFiddle\Refs\Scripts\XSockets\jXSockets.2.2.min.js" />
     <Content Include="XSockets\XFiddle\Refs\Scripts\XSockets\jXSockets.fallback.2.1.js" />
     <Content Include="XSockets\XFiddle\Refs\Scripts\XSockets\jXSockets.fallback.2.1.min.js" />
+    <Content Include="XSockets\XSocketServerPlugins\XSockets.Controllers.dll" />
     <Content Include="XSockets\XSocketServerPlugins\XSockets.Core.Communication.dll" />
     <Content Include="XSockets\XSocketServerPlugins\XSockets.Core.dll" />
     <Content Include="XSockets\XSocketServerPlugins\XSockets.DevelopmentServer.dll" />
+    <Content Include="XSockets\XSocketServerPlugins\XSockets.DevServer.dll" />
     <Content Include="XSockets\XSocketServerPlugins\XSockets.Extensibility.Handlers.dll" />
     <Content Include="XSockets\XSocketServerPlugins\XSockets.Extensibility.Interceptors.dll" />
     <Content Include="XSockets\XSocketServerPlugins\XSockets.External.dll" />
