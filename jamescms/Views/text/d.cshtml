@@ -1,0 +1,14 @@
+﻿@model jamescms.Models.Text
+@using jamescms.Helpers;
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<article>
+    <header>
+        <h1>@Html.ActionLink(Model.Title, "d", new { id = Model.UrlTitle })</h1>
+    </header>
+    <section>
+        @MarkdownHelper.Markdown(Model.Article)
+    </section>
+</article>
