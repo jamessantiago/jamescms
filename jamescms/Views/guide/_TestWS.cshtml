@@ -1,0 +1,23 @@
+﻿<div class="standard-form">
+    <div id="data"></div>
+    <input type="button" value="establish" id="est" />
+</div>
+
+<script type="text/javascript">
+    establish();
+    $("#est").click(function () { establish(); });
+    function establish() {
+        var url = "ws://127.0.0.1:4502/Generic";
+        var controller = "Generic";
+        var ws = new XSockets.WebSocket(url, controller);
+        ws.bind(XSockets.Events.open, function (connection) {
+            $("#data").append("<p>connected</p>");
+        });
+        ws.bind(XSockets.Events.onError, function (error) {
+            $("#data").append("<p>" +  error.data + "</p>");
+        });
+        ws.bind(XSockets.Events.close, function () {
+            $("#data").append("<p>closed</p>");
+        });
+    };
+</script>

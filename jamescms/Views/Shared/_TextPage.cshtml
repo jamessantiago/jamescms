@@ -1,0 +1,14 @@
+﻿@model IQueryable<jamescms.Models.Text>
+@using jamescms.Helpers;
+
+@foreach (var text in Model)
+{
+    <article>
+        <header>
+            <h1>@Html.ActionLink(text.Title, "d", new { id = text.UrlTitle })</h1>
+        </header>
+        <section>
+            @MarkdownHelper.Markdown(text.Article)
+        </section>
+    </article>
+}
