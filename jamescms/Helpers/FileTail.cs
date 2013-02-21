@@ -5,7 +5,7 @@ using System.Web;
 using System.IO;
 using System.Text;
 
-namespace jamescms.Helpers_and_Extensions
+namespace jamescms.Helpers
 {
     public class FileTail
     {
@@ -24,7 +24,7 @@ namespace jamescms.Helpers_and_Extensions
 
         public event EventHandler ChangesArrived;
 
-        private StringBuilder changes;
+        private StringBuilder changes = new StringBuilder();
         private FileStream fileStream;
         private long previousSize;
         private FileSystemWatcher fileWatcher;                
@@ -43,7 +43,9 @@ namespace jamescms.Helpers_and_Extensions
                 changes.Append(encoder.GetString(b));
             }
             previousSize = fileStream.Length;
-            fileWatcher = new FileSystemWatcher(FilePath);
+            string filename = Path.GetFileName(FilePath);
+            string path = FilePath.Replace(filename, "");
+            fileWatcher = new FileSystemWatcher(path, filename);
             fileWatcher.Changed += File_Changed;
         }
 

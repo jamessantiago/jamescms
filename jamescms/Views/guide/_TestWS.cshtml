@@ -1,4 +1,5 @@
-﻿<div class="standard-form">
+﻿@{XSocketServerPlugins.FileXSocket fs = new XSocketServerPlugins.FileXSocket("D:\\Code\\jamescms\\jamescms\\logs\\2013-01-30.log");}
+<div class="standard-form">
     <div id="data"></div>
     <input type="button" value="establish" id="est" />
 </div>
@@ -7,8 +8,8 @@
     establish();
     $("#est").click(function () { establish(); });
     function establish() {
-        var url = "ws://127.0.0.1:4502/Generic";
-        var controller = "Generic";
+        var url = "ws://127.0.0.1:4502/FileXSocket";
+        var controller = "FileXSocket";
         var ws = new XSockets.WebSocket(url, controller);
         ws.bind(XSockets.Events.open, function (connection) {
             $("#data").append("<p>connected</p>");

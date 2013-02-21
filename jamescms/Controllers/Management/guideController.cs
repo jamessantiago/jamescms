@@ -11,6 +11,7 @@ using WebMatrix.WebData;
 using jamescms.Filters;
 using jamescms.Models;
 using System.Threading;
+using jamescms.Helpers;
 
 namespace jamescms.Controllers
 {
@@ -105,7 +106,7 @@ namespace jamescms.Controllers
         #region Error Logs
 
         public ActionResult TestWS()
-        {
+        {            
             return PartialView("_TestWS");
         }
 

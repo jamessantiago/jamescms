@@ -18,11 +18,9 @@ namespace XSockets.DevServer
             {
                 Debug.AutoFlush = true;
                 this.ComposeMe();
-
                 //Note: ************************************************************************
                 //Note: For high speed, run this in release mode. Events only for debug purpose
                 //Note: ************************************************************************
-
                 wss.OnServersStarted += wss_OnServersStarted;
                 wss.OnServerClientConnection += wss_OnServerClientConnection;
                 wss.OnServerClientDisconnection += wss_OnServerClientDisconnection;
