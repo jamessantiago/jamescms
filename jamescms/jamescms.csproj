@@ -416,7 +416,8 @@
     <Content Include="Views\guide\Index.cshtml" />
     <Content Include="Views\guide\_UsersControl.cshtml" />
     <Content Include="Views\guide\_Users.cshtml" />
-    <Content Include="Views\guide\_TestWS.cshtml" />
+    <Content Include="Views\guide\_Log.cshtml" />
+    <Content Include="Views\guide\_LogChooser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

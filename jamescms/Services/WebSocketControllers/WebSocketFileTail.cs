@@ -7,10 +7,11 @@ using jamescms.Models;
 using System.IO;
 using NLog;
 using Fleck;
+using System.Net;
 
 namespace jamescms.Services.WebSocketControllers
 {
-    public class WebSocketFileTail
+    public class WebSocketFileTail : IDisposable
     {
         private FileTail fileTail;
         private WebSocketServer server;
@@ -18,24 +19,36 @@ namespace jamescms.Services.WebSocketControllers
 
         private Logger logger = LogManager.GetLogger("WebSocketFileTail");
         private string filePath;
+        private string serverName;
 
-        public WebSocketFileTail(string FilePath)
+        public WebSocketFileTail(string FilePath, string ServerName)
         {
+            serverName = ServerName;
             filePath = FilePath;
         }
 
         public void Start()
         {
-            server = new WebSocketServer("ws://localhost:8989/FileTail");
-
+            server = new WebSocketServer("ws://localhost:8989/" + serverName);
             try
             {
+                //System.Net.Sockets.Socket s = new System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp);
+                //s.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.ReuseAddress, true);
+                //var ep = new System.Net.IPEndPoint(System.Net.IPAddress.Any, 8989);
+                //s.Bind((EndPoint)ep);
+                //if (s.Connected)
+                //{
+                //    s.Shutdown(System.Net.Sockets.SocketShutdown.Both);
+                //    s.Disconnect(true);
+                //}
+                //s.Close();
+                
                 server.Start(socket =>
                 {
                     socket.OnOpen = () => InitiateFileTail(socket);
                     socket.OnError = error => logger.DebugException("Error occurred establishing new websocket", error);
                     //socket.OnMessage = message => logger.Debug("Websocket message received: " + message);
-                });                
+                });                                    
             }
             catch (Exception ex)
             {
@@ -44,7 +57,7 @@ namespace jamescms.Services.WebSocketControllers
         }
 
         private void InitiateFileTail(IWebSocketConnection Socket)
-        {
+        {            
             socket = Socket;
             //logger.Debug("Initiating file tail");
             fileTail = new FileTail(filePath, true);
@@ -52,6 +65,7 @@ namespace jamescms.Services.WebSocketControllers
             fileTail.ChangesArrived += new EventHandler(filetail_FileReadChangesArrived);
             fileTail.Error += new UnhandledExceptionEventHandler(filetail_Error);
             fileTail.StartTrackingFileTail();
+
         }
 
         private void filetail_FileReadChangesArrived(object sender, EventArgs e)
@@ -72,5 +86,43 @@ namespace jamescms.Services.WebSocketControllers
             //logger.Debug("Closing file tail websocket");
             socket.Close();            
         }
+
+        #region Dispose
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~WebSocketFileTail()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (socket != null)
+                {
+                    socket.Close();
+                    socket = null;
+                }
+                if (server != null)
+                {
+                    server.ListenerSocket.Close();
+                    server.Dispose();
+                    server = null;
+                }
+                if (fileTail != null)
+                {
+                    fileTail.Dispose();
+                    fileTail = null;
+                }
+            }
+        }
+
+        #endregion Dispose
     }
 }

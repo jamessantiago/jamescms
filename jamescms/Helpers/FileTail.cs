@@ -8,7 +8,7 @@ using NLog;
 
 namespace jamescms.Helpers
 {
-    public class FileTail
+    public class FileTail : IDisposable
     {
         public string Changes { 
             get
@@ -104,5 +104,39 @@ namespace jamescms.Helpers
             }
         }        
         
+        #region Dispose
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~FileTail()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (fileWatcher != null)
+                {
+                    fileWatcher.EnableRaisingEvents = false;
+                    fileWatcher.Dispose();
+                    fileWatcher = null;
+                }
+                if (ChangesArrived != null)
+                    ChangesArrived = null;
+                if (Error != null)
+                    Error = null;
+                if (FileRead != null)
+                    FileRead = null;
+            }
+        }
+
+        #endregion Dispose
+
     }
 }

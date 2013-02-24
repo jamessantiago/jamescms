@@ -1,0 +1,40 @@
+﻿@model List<string>
+<div class="standard-form">
+    <select name="Files" id="Files">
+        <option>Select a file to view</option>
+        @foreach (var file in Model)
+        {
+            <option value="@file">@file</option>
+        }
+    </select>
+
+    <div id="logData"></div>
+
+</div>
+<script type="text/javascript">
+    var socket;
+    $("#Files").change(function () {
+        var file = $("#Files").val();
+        if (file.length > 0 && file != "") {
+            $("#logData").load('@Url.Action("GetLog")?logname=' + file, function () { establishConnection(); });
+        };
+    });
+    function establishConnection() {
+        if (socket != null) {
+            socket.close();
+        }
+        socket = new WebSocket("ws://localhost:8989/@Html.Raw(Session.SessionID)");
+        socket.onopen = function (connection) {
+            $("#data").append("<br/>connected<br/>");
+        };
+        socket.onerror = function (error) {
+            $("#data").append("<br/>" + error.data + "<br/>");
+        };
+        socket.onclose = function () {
+            $("#data").append("<br/>closed<br/>");
+        };
+        socket.onmessage = function (message) {
+            $("#data").append(message.data);
+        };
+    };
+</script>
