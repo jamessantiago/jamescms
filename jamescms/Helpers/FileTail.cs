@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.IO;
 using System.Text;
+using NLog;
 
 namespace jamescms.Helpers
 {
@@ -23,42 +24,85 @@ namespace jamescms.Helpers
             } }
 
         public event EventHandler ChangesArrived;
+        public event EventHandler FileRead;
+        public event UnhandledExceptionEventHandler Error;
 
         private StringBuilder changes = new StringBuilder();
-        private FileStream fileStream;
         private long previousSize;
         private FileSystemWatcher fileWatcher;                
         private byte[] b = new byte[1024];
         private UTF8Encoding encoder = new UTF8Encoding(true);
+        private string filePath;
         private bool autoFlush = false;
+        private Logger logger = LogManager.GetLogger("filetail");
 
-        
 
         public FileTail(string FilePath, bool AutoFlushChanges)
         {
+            filePath = FilePath;
             autoFlush = AutoFlushChanges;
-            fileStream = File.OpenRead(FilePath);
-            while (fileStream.Read(b, 0, b.Length) > 0)
+        }
+
+
+        public void StartTrackingFileTail()
+        {
+            try
             {
-                changes.Append(encoder.GetString(b));
+                //logger.Debug("file tracking started for " + filePath);
+                using (FileStream fileStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    int bytesRead;
+                    while ((bytesRead = fileStream.Read(b, 0, b.Length)) > 0)
+                    {
+                        changes.Append(encoder.GetString(b, 0, bytesRead));
+                    }
+                    if (fileStream.Length > 0)
+                        previousSize = fileStream.Length;
+                    //logger.Debug("previousSize: " + previousSize);
+                }
+                if (FileRead != null)
+                    FileRead(this, new EventArgs());
+                string filename = Path.GetFileName(filePath);
+                string path = filePath.Replace(filename, "");
+                fileWatcher = new FileSystemWatcher(path, filename);
+                fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                fileWatcher.IncludeSubdirectories = false;
+                fileWatcher.Changed += new FileSystemEventHandler(File_Changed);
+                fileWatcher.EnableRaisingEvents = true;
             }
-            previousSize = fileStream.Length;
-            string filename = Path.GetFileName(FilePath);
-            string path = FilePath.Replace(filename, "");
-            fileWatcher = new FileSystemWatcher(path, filename);
-            fileWatcher.Changed += File_Changed;
+            catch (Exception ex)
+            {
+                if (Error != null)
+                    Error(this, new UnhandledExceptionEventArgs(ex, false));
+            }
         }
 
         public void File_Changed(object source, FileSystemEventArgs e)
         {
-            fileStream.Seek(previousSize, SeekOrigin.Begin);
-            while (fileStream.Read(b, 0, b.Length) > 0)
+            try
             {
-                changes.Append(encoder.GetString(b));
+                using (FileStream fileStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    fileStream.Seek(previousSize, SeekOrigin.Begin);
+                    int bytesRead;
+                    while ((bytesRead = fileStream.Read(b, 0, b.Length)) > 0)
+                    {
+                        changes.Append(encoder.GetString(b, 0, bytesRead));
+                    }
+                    if (fileStream.Length > 0)
+                        previousSize = fileStream.Length;
+                    //logger.Debug("previousSize: " + previousSize);
+                    
+                }
+                if (ChangesArrived != null && changes.Length > 0)
+                    ChangesArrived(this, new EventArgs());
             }
-            previousSize = fileStream.Length;
-            ChangesArrived(this, new EventArgs());
-        }
+            catch (Exception ex)
+            {
+                if (Error != null)
+                    Error(this, new UnhandledExceptionEventArgs(ex, false));
+            }
+        }        
         
     }
 }

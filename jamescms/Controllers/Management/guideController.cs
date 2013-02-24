@@ -12,6 +12,7 @@ using jamescms.Filters;
 using jamescms.Models;
 using System.Threading;
 using jamescms.Helpers;
+using jamescms.Services.WebSocketControllers;
 
 namespace jamescms.Controllers
 {
@@ -106,7 +107,9 @@ namespace jamescms.Controllers
         #region Error Logs
 
         public ActionResult TestWS()
-        {            
+        {
+            var listener = new WebSocketFileTail("D:\\Code\\jamescms\\jamescms\\logs\\2013-02-24.log");
+            new Thread(new ThreadStart(listener.Start)).Start();
             return PartialView("_TestWS");
         }
 
