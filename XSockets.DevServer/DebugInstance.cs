@@ -28,6 +28,7 @@ namespace XSockets.DevServer
                 wss.OnIncommingTextData += wss_OnIncommingTextData;
                 wss.OnOutgoingText += wss_OnOutgoingText;
                 wss.OnServersStopped += wss_OnServersStopped;
+                
                 wss.StartServers();
             }
             catch (Exception ex)

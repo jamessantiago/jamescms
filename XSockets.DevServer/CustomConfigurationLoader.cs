@@ -53,7 +53,8 @@ namespace XSockets.DevServer
                             BufferSize = 8192,
                             RemoveInactiveStorageAfterXDays = 7,
                             RemoveInactiveChannelsAfterXMinutes = 30,
-                            NumberOfAllowedConections = -1
+                            NumberOfAllowedConections = -1,
+                            Endpoint = new System.Net.IPEndPoint(System.Net.IPAddress.Parse("127.0.0.1"), 4502)
                         };
                 }
                 return this._settings;

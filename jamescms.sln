@@ -15,10 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9E51F8
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSockets.DevServer", "XSockets.DevServer\XSockets.DevServer.csproj", "{DD15E142-002E-432F-BE61-FC52365D9559}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSockets.Controllers", "XSockets.Controllers\XSockets.Controllers.csproj", "{CCD4CC65-20B4-44F5-8FEF-A11A13DBD422}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,14 +29,6 @@ Global
 		{F1E80F4D-0326-4FE6-B53B-15F7FFD33588}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1E80F4D-0326-4FE6-B53B-15F7FFD33588}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1E80F4D-0326-4FE6-B53B-15F7FFD33588}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD15E142-002E-432F-BE61-FC52365D9559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD15E142-002E-432F-BE61-FC52365D9559}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD15E142-002E-432F-BE61-FC52365D9559}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD15E142-002E-432F-BE61-FC52365D9559}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CCD4CC65-20B4-44F5-8FEF-A11A13DBD422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCD4CC65-20B4-44F5-8FEF-A11A13DBD422}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CCD4CC65-20B4-44F5-8FEF-A11A13DBD422}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CCD4CC65-20B4-44F5-8FEF-A11A13DBD422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

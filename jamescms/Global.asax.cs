@@ -87,7 +87,6 @@ namespace jamescms
                     new IndexInitializer<TextContext>()
                     );
             }
-            new XSockets.DevServer.DebugInstance();
             logger.Debug("jamescms has started");
         }
 

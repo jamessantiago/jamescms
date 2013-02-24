@@ -18,8 +18,6 @@ namespace jamescms
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "sd", action = "Index", id = UrlParameter.Optional }
             );
-
-            routes.MapRoute("Fallback", "{controller}/{action}", new { controller = "Fallback", action = "Init" }, new[] { "XSockets.Longpolling" });
         }
     }
 }
