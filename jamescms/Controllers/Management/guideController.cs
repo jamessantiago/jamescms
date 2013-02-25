@@ -17,7 +17,6 @@ using System.IO;
 
 namespace jamescms.Controllers
 {
-    
     [Authorize(Roles="Guides")]
     public class guideController : Controller
     {
@@ -120,20 +119,6 @@ namespace jamescms.Controllers
 
         public ActionResult GetLog(string logName)
         {
-            //for (int i = 0; i < runningThreads.Count; i++)
-            //{
-            //    if (runningThreads[i].Name == Session.SessionID)
-            //    {
-            //        runningThreads[i].Abort();
-            //        runningThreads.Remove(runningThreads[i]);
-            //    }
-            //}
-            //var listener = new WebSocketFileTail("D:\\Code\\jamescms\\jamescms\\logs\\" + logName, Session.SessionID);            
-            //Thread t = new Thread(new ThreadStart(listener.Start));            
-            //t.IsBackground = true;
-            //t.Name = Session.SessionID;
-            //t.Start();
-            //runningThreads.Add(t);
             var oldListener = listeners.Where(d => d.Key == User.Identity.Name);
             if (oldListener.Count() == 1)
             {

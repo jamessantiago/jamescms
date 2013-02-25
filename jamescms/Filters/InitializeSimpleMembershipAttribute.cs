@@ -18,7 +18,7 @@ namespace jamescms.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            // Ensure ASP.NET Simple Membership is initialized only once per app start
+            // Ensure ASP.NET Simple Membership is initialized only once per app start            
             LazyInitializer.EnsureInitialized(ref _initializer, ref _isInitialized, ref _initializerLock);
         }
 
@@ -26,35 +26,34 @@ namespace jamescms.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<UsersContext>(null);
-
-                try
+                lock (_initializerLock)
                 {
-                    using (var context = new UsersContext())
-                    {                        
-                        if (!context.Database.Exists())
+                    Database.SetInitializer<UsersContext>(null);
+
+                    try
+                    {
+                        using (var context = new UsersContext())
                         {
-                            // Create the SimpleMembership database without Entity Framework migration schema
-                            ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();                            
-                            
+                            if (!context.Database.Exists())
+                            {
+                                // Create the SimpleMembership database without Entity Framework migration schema
+                                ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();
+
+                            }
+                        }
+
+                        WebSecurity.InitializeDatabaseConnection("AccountConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                        if (!WebSecurity.UserExists("admin"))
+                        {
+                            Roles.CreateRole("Guides");
+                            WebSecurity.CreateUserAndAccount("admin", "password");
+                            Roles.AddUserToRole("admin", "Guides");
                         }
                     }
-
-                    WebSecurity.InitializeDatabaseConnection("AccountConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-                    if (!WebSecurity.UserExists("admin"))
+                    catch (Exception ex)
                     {
-                        Roles.CreateRole("Guides");
-                        WebSecurity.CreateUserAndAccount("admin", "password");
-                        Roles.AddUserToRole("admin", "Guides");
+                        throw new InvalidOperationException("The ASP.NET Simple Membership database could not be initialized. For more information, please see http://go.microsoft.com/fwlink/?LinkId=256588", ex);
                     }
-                    //else if (!Roles.IsUserInRole("admin", "Guides"))
-                    //{
-                    //    Roles.AddUserToRole("admin", "Guides");
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException("The ASP.NET Simple Membership database could not be initialized. For more information, please see http://go.microsoft.com/fwlink/?LinkId=256588", ex);
                 }
             }
         }
