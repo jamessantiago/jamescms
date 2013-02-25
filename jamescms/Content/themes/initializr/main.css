@@ -308,6 +308,19 @@ nav a:hover {
     color: #009;
 }
 
+.log-container
+{
+    background-color: #000;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -o-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -khtml-border-radius: 8px;
+    border-radius: 8px;
+    height: 400px; 
+    overflow: auto;
+    padding: 5px;
+}
 
 
 
