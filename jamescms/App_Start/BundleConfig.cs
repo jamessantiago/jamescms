@@ -21,6 +21,7 @@ namespace jamescms
             bundles.Add(new ScriptBundle("~/bundles/master").Include(
                     "~/Scripts/MarkdownDeepLib.min.js",
                     "~/Scripts/Prettify/prettify.js",
+                    "~/Scripts/Prettify/lang-log.js",
                     "~/Scripts/master.js",
                     "~/Scripts/json2.js",
                     "~/Scripts/jXSockets.2.2.min.js",

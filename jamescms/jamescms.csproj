@@ -340,6 +340,7 @@
     <Content Include="Scripts\Prettify\lang-go.js" />
     <Content Include="Scripts\Prettify\lang-hs.js" />
     <Content Include="Scripts\Prettify\lang-lisp.js" />
+    <Content Include="Scripts\Prettify\lang-log.js" />
     <Content Include="Scripts\Prettify\lang-lua.js" />
     <Content Include="Scripts\Prettify\lang-ml.js" />
     <Content Include="Scripts\Prettify\lang-n.js" />
