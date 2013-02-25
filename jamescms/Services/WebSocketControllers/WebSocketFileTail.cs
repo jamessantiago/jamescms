@@ -71,7 +71,7 @@ namespace jamescms.Services.WebSocketControllers
         private void filetail_FileReadChangesArrived(object sender, EventArgs e)
         {
             //logger.Debug("File changes triggered");
-            var message = fileTail.Changes.Replace("\n", "<br />");
+            var message = fileTail.Changes;
             if (!string.IsNullOrEmpty(message))
                 socket.Send(message);
         }

@@ -1,5 +1,6 @@
 ﻿@model List<string>
 <div class="standard-form">
+    <h2>Log Watcher</h2>
     <select name="Files" id="Files">
         <option>Select a file to view</option>
         @foreach (var file in Model)
@@ -7,7 +8,7 @@
             <option value="@file">@file</option>
         }
     </select>
-
+    <p>Status: <span id="status"></span></p>
     <div id="logData"></div>
 
 </div>
@@ -25,16 +26,18 @@
         }
         socket = new WebSocket("ws://localhost:8989/@Html.Raw(Session.SessionID)");
         socket.onopen = function (connection) {
-            $("#data").append("<br/>connected<br/>");
+            $("#status").html("connected");
         };
         socket.onerror = function (error) {
-            $("#data").append("<br/>" + error.data + "<br/>");
+            $("#status").html(error.data);
         };
         socket.onclose = function () {
-            $("#data").append("<br/>closed<br/>");
+            $("#data").append("closed");
         };
         socket.onmessage = function (message) {
             $("#data").append(message.data);
+            $("#filedata").prop({ scrollTop: $("#filedata").prop("scrollHeight") });
+            prettyPrint();
         };
     };
 </script>
