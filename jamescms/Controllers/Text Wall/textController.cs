@@ -28,13 +28,12 @@ namespace jamescms.Controllers
 
         public ActionResult Index()
         {
-            return View(uow.tc.Texts.Take(10));
+            return View();
         }
 
-        public ActionResult p(int id)
+        public ActionResult p(int id = 0)
         {
-            int page = id;
-            return View();
+            return PartialView("_TextPage", uow.tc.Texts.Skip(id * 10).Take(10));
         }
 
         public ActionResult d(string id)
