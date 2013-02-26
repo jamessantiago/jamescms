@@ -4,3 +4,10 @@
 }
 
 @Html.AjaxReadyLoadDiv("textWall", "p")
+
+@section scripts {
+    <script type="text/javascript">
+        window.EnableScroll = true;
+        textWallInfiniScroll();
+    </script>
+}

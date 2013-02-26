@@ -412,13 +412,14 @@
     <Content Include="Views\Error\Ajax.cshtml" />
     <Content Include="Views\Shared\_LoginFooter.cshtml" />
     <Content Include="Views\text\Index.cshtml" />
-    <Content Include="Views\Shared\_TextPage.cshtml" />
+    <Content Include="Views\text\_TextPage.cshtml" />
     <Content Include="Views\text\d.cshtml" />
     <Content Include="Views\guide\Index.cshtml" />
     <Content Include="Views\guide\_UsersControl.cshtml" />
     <Content Include="Views\guide\_Users.cshtml" />
     <Content Include="Views\guide\_Log.cshtml" />
     <Content Include="Views\guide\_LogChooser.cshtml" />
+    <Content Include="Views\text\_EndofPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

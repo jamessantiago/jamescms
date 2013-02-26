@@ -2,10 +2,10 @@
 @using jamescms.Helpers;
 
 
-<section class="page" @if (!string.IsNullOrEmpty(ViewData["page"] as string)) { @Html.Raw("page-number='" + ViewData["page"].ToString() + "'") } else { @Html.Raw("page-number='1'") }>
+
 @foreach (var text in Model)
 {
-    <article>
+    <article @if (!string.IsNullOrEmpty(ViewData["page"] as string)) { @Html.Raw("page='" + ViewData["page"].ToString() + "'") }>
         <header>
             <h1>@Html.ActionLink(text.Title, "d", new { id = text.UrlTitle })</h1>
         </header>
@@ -14,4 +14,3 @@
         </section>
     </article>
 }
-</section>

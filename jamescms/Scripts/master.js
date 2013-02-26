@@ -28,6 +28,24 @@ function readyLoad()
     });
 }
 
+function textWallInfiniScroll() {
+    $(window).scroll(function () {
+        if (window.EnableScroll)
+        {
+            var currentPosition = window.pageYOffset;
+            var bottom = $(window).height() - 200;
+            if (currentPosition > bottom) {
+                var lastPage = $(".page:last").attr("page-number");
+                if (lastPage.length > 0)
+                {
+                    $("#textWall").append($("<div>").load("text/p/" + lastPage));
+                }
+            }
+        }
+    });
+}
+
+
 function readyControl() {
     prettyPrint();
     jLoad();

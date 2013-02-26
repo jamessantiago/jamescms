@@ -25,7 +25,7 @@ namespace jamescms.Controllers
         }
 
         #endregion Constructor
-
+        
         public ActionResult Index()
         {
             return View();
@@ -33,7 +33,14 @@ namespace jamescms.Controllers
 
         public ActionResult p(int id = 0)
         {
-            return PartialView("_TextPage", uow.tc.Texts.Skip(id * 10).Take(10));
+            ViewData["page"] = id + 1;
+
+            var total = uow.tc.Texts.Count();
+            var take = (id * 10 + 10) > total ? total - (id * 10) : 10;
+            if (take > 0)
+                return PartialView("_TextPage", uow.tc.Texts.OrderByDescending(d => d.Id).Skip(id * 10).Take(take));
+            else
+                return PartialView("_EndofPage");
         }
 
         public ActionResult d(string id)
@@ -47,15 +54,71 @@ namespace jamescms.Controllers
 
         public ActionResult Create()
         {
-            uow.tc.Texts.Add(new Text()
+            uow.tc.Texts.Add(
+                new Text
+                {
+                    Title = "My first post",
+                    UrlTitle = "Mdy_first_post",
+                    Article =
+@"
+###This my very first post
+
+this is a test
+
+    {{C#}}
+    public void GetCats() {
+        return new Meow() { Name = ""Whiskers"" };
+    }
+",
+                    Posted = new DateTime(1970, 1, 1),
+                    Updated = new DateTime(1970, 1, 1)
+                });
+
+            uow.tc.Texts.Add(
+                new Text
+                {
+                    Title = "My second post",
+                    UrlTitle = "My_Second_postf",
+                    Article = "This my second post",
+                    Posted = new DateTime(1970, 1, 1),
+                    Updated = new DateTime(1970, 1, 1),
+                    Tags = new List<Tag>() { new Tag() { Name = "Fister" } }
+                });
+
+            uow.tc.Texts.Add(
+                new Text
+                {
+                    Title = "My third post",
+                    Article = "This my third post",
+                    UrlTitle = "thirdd_post",
+                    Posted = new DateTime(1970, 1, 1),
+                    Updated = new DateTime(1970, 1, 1),
+                    Tags = new List<Tag>() { new Tag() { Name = "thirds" } },
+                });
+
+
+            uow.tc.Texts.Add(
+                new Text
+                {
+                    Title = "My powershell post",
+                    UrlTitle = "powedrsh_post",
+                    Article =
+@"
+    {{Powershell}}
+    function GetNextString ($current) { 
+      $x = ConvertStringToInt $current
+      $x ++
+      ConvertIntToString $x
+    } 
+",
+                    Posted = new DateTime(1970, 1, 1),
+                    Updated = new DateTime(1970, 1, 1)
+                });
+            try
             {
-                Article = "firsto",
-                UrlTitle = "firsto",
-                Posted = DateTime.Now,
-                Title = "Firest",
-                Updated = DateTime.Now
-            });
-            uow.tc.SaveChanges();
+                uow.tc.SaveChanges();
+            }
+            catch { }
             
             return RedirectToAction("Index", "sd");
         }
