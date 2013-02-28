@@ -90,8 +90,10 @@ namespace jamescms.Models
         public string Article { get; set; }
         [Required]
         [Index("IX_Text_Posted", false, true)]
+        [DisplayFormat(DataFormatString="{0:dd MMM yy}", ApplyFormatInEditMode=true)]
         public DateTime Posted { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yy}", ApplyFormatInEditMode = true)]
         public DateTime Updated { get; set; }
 
         public virtual IList<Comment> Comments { get; set; }
