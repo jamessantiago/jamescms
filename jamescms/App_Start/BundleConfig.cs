@@ -15,6 +15,7 @@ namespace jamescms
                         "~/Scripts/jquery-ui-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+                        "~/Scripts/jquery.migrate*",
                         "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*"));
 
@@ -22,10 +23,7 @@ namespace jamescms
                     "~/Scripts/MarkdownDeepLib.min.js",
                     "~/Scripts/Prettify/prettify.js",
                     "~/Scripts/Prettify/lang-log.js",
-                    "~/Scripts/master.js",
-                    "~/Scripts/json2.js",
-                    "~/Scripts/jXSockets.2.2.min.js",
-                    "~/Scripts/jXSockets.fallback.2.1.min.js"));
+                    "~/Scripts/master.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

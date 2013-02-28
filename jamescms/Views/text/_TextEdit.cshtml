@@ -1,0 +1,59 @@
+﻿@model jamescms.Models.Text
+
+@using (Ajax.BeginForm("edit", new AjaxOptions { UpdateTargetId = "text-" + Model.Id.ToString(), HttpMethod = "Post", Url = Url.Action("edit")})) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false)
+    
+    <section class="standard-form">
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Title)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UrlTitle)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UrlTitle)
+            @Html.ValidationMessageFor(model => model.UrlTitle)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Article)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Article)
+            @Html.ValidationMessageFor(model => model.Article)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Posted)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Posted)
+            @Html.ValidationMessageFor(model => model.Posted)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Updated)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Updated)
+            @Html.ValidationMessageFor(model => model.Updated)
+        </div>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <p>
+            <input type="submit" value="Save" class="form-button" />
+            @Html.AjaxButton("Cancel", "text-" + Model.Id, "loadOne", new { id = Model.Id })
+        </p>
+    </section>
+}
+
+<script type="text/javascript">
+    readyControl();
+</script>

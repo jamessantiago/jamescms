@@ -52,6 +52,37 @@ namespace jamescms.Controllers
                 return RedirectToAction("Index");
         }
 
+        [Authorize(Roles="Guides")]
+        public ActionResult edit(int id)
+        {
+            var item = uow.tc.Texts.Where(d => d.Id == id).FirstOrDefault();
+            return PartialView("_TextEdit", item);
+        }
+
+        [Authorize(Roles = "Guides")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult edit(Text model)
+        {
+            var text = uow.tc.Texts.Where(d => d.Id == model.Id).FirstOrDefault();
+            UpdateModel(text);
+            if (ModelState.IsValid)
+            {
+                uow.tc.SaveChanges();
+                ViewData["readyControl"] = true;
+                return PartialView("_SingleText", text);
+            }
+            else
+                return PartialView("_TextEdit", text);
+        }
+
+        public ActionResult loadOne(int id)
+        {
+            ViewData["readyControl"] = true;
+            var text = uow.tc.Texts.Where(d => d.Id == id).FirstOrDefault();
+            return PartialView("_SingleText", text);
+        }
+
         public ActionResult Create()
         {
             uow.tc.Texts.Add(
