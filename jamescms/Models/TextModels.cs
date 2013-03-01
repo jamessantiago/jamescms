@@ -30,6 +30,7 @@ namespace jamescms.Models
             
         }
 
+        public virtual IDbSet<Setting> Settings { get; set; }
         public virtual IDbSet<TextWall> TextWalls { get; set; }
         public virtual IDbSet<Text> Texts { get; set; }
         public virtual IDbSet<Tag> Tags { get; set; }
@@ -65,10 +66,9 @@ namespace jamescms.Models
     #region Text Model Classes
 
     [Table("Settings")]
-    public class Settings
+    public class Setting
     {
-        public DateTime LastTextFilesPull {get; set;}
-        public DateTime LastTextFilesPush {get; set;}
+        public string HeadSha { get; set; }
     }
 
     [Table("TextWalls")]
