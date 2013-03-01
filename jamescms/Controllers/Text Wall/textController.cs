@@ -83,6 +83,16 @@ namespace jamescms.Controllers
             return PartialView("_SingleText", text);
         }
 
+        public ActionResult PullTextFiles()
+        {
+
+        }
+
+        public ActionResult PushTextFiles()
+        {
+
+        }
+
         public ActionResult Create()
         {
             uow.tc.Texts.Add(

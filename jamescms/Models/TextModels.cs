@@ -64,6 +64,13 @@ namespace jamescms.Models
 
     #region Text Model Classes
 
+    [Table("Settings")]
+    public class Settings
+    {
+        public DateTime LastTextFilesPull {get; set;}
+        public DateTime LastTextFilesPush {get; set;}
+    }
+
     [Table("TextWalls")]
     public class TextWall : Entity
     {

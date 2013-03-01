@@ -212,6 +212,7 @@
     <Compile Include="Helpers\FileTail.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\MarkdownHelper.cs" />
+    <Compile Include="Helpers\TextFileHelper.cs" />
     <Compile Include="Models\Database\CompositeInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
     <Compile Include="Models\Database\IndexInitializer.cs" />
