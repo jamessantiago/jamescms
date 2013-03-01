@@ -217,6 +217,10 @@
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\MarkdownHelper.cs" />
     <Compile Include="Helpers\TextFileHelper.cs" />
+    <Compile Include="Migrations\201303011347573_Setting.cs" />
+    <Compile Include="Migrations\201303011347573_Setting.Designer.cs">
+      <DependentUpon>201303011347573_Setting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Database\CompositeInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
     <Compile Include="Models\Database\IndexInitializer.cs" />
@@ -438,6 +442,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201303011347573_Setting.resx">
+      <DependentUpon>201303011347573_Setting.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

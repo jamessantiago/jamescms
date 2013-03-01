@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Threading;
 using jamescms.Models;
+using jamescms.Helpers;
 
 namespace jamescms.Controllers
 {
@@ -83,14 +85,18 @@ namespace jamescms.Controllers
             return PartialView("_SingleText", text);
         }
 
+        [Authorize(Roles = "Guides")]
         public ActionResult PullTextFiles()
         {
-
+            new Thread(new ThreadStart(TextFileHelper.PullTextFiles)).Start();
+            return RedirectToAction("Index");            
         }
 
+        [Authorize(Roles="Guides")]
         public ActionResult PushTextFiles()
         {
-
+            new Thread(new ThreadStart(TextFileHelper.PushTextFiles)).Start();
+            return RedirectToAction("Index");
         }
 
         public ActionResult Create()

@@ -66,7 +66,7 @@ namespace jamescms.Models
     #region Text Model Classes
 
     [Table("Settings")]
-    public class Setting
+    public class Setting : Entity
     {
         public string HeadSha { get; set; }
     }

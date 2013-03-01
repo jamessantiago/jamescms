@@ -14,8 +14,8 @@ namespace jamescms.Helpers
     {
         private static Logger logger = LogManager.GetLogger("TextFileHelper");
 
-        private static string FilePath { get { return Path.Combine(Directory.GetCurrentDirectory(), "TextFiles"); } }
-        private static string RepoPath { get { return Path.Combine(FilePath, "TextFiles.git"); } }
+        private static string FilePath { get { return Path.Combine("D:\\", "TextFiles"); } }
+        private static string RepoPath { get { return Path.Combine(FilePath, ".git"); } }
 
         public static void PushTextFiles()
         {
@@ -31,10 +31,12 @@ namespace jamescms.Helpers
                     {
                         string textPath = Path.Combine(filePath, text.UrlTitle + ".md");
                         File.WriteAllText(textPath, text.CraftTextString());
+                        GitHelper.AddUpdateFile(textPath, repoPath);
                     }
                     GitHelper.CommitChanges("Changes from website", repoPath);
                     string headSha = GitHelper.GetHeadCommitSha(repoPath);
                     uow.tc.Settings.First().HeadSha = headSha;
+                    uow.tc.SaveChanges();
                     logger.Debug("Git head is now at " + headSha);
                 }
             }
@@ -51,33 +53,39 @@ namespace jamescms.Helpers
                 logger.Debug("Pulling texts from " + filePath);
                 using (UnitOfWork uow = new UnitOfWork())
                 {
-                    foreach (var file in Directory.GetFiles(filePath))
+                    string headSha = GitHelper.GetHeadCommitSha(repoPath);
+                    if (uow.tc.Settings.First().HeadSha != headSha)
                     {
-                        string fileData = File.ReadAllText(file);
-                        string urlTitle = Path.GetFileNameWithoutExtension(file);
-                        Text model = fileData.ToText();
-                        var text = uow.tc.Texts.Where(d => d.UrlTitle == urlTitle).FirstOrDefault();
-                        if (text != null)
+                        foreach (var file in Directory.GetFiles(filePath))
                         {
-                            text.Posted = model.Posted;
-                            text.Title = model.Title;
-                            text.Article = model.Article;
-                            text.Updated = DateTime.Now;
-                        }
-                        else
-                        {
-                            Text newText = new Text()
+                            string fileData = File.ReadAllText(file);
+                            string urlTitle = Path.GetFileNameWithoutExtension(file);
+                            Text model = fileData.ToText();
+                            var text = uow.tc.Texts.Where(d => d.UrlTitle == urlTitle).FirstOrDefault();
+                            if (text != null)
                             {
-                                Article = model.Article,
-                                Posted = model.Posted,
-                                Title = model.Title,
-                                UrlTitle = urlTitle,
-                                Updated = model.Updated
-                            };
-                            uow.tc.Texts.Add(newText);
+                                text.Posted = model.Posted;
+                                text.Title = model.Title;
+                                text.Article = model.Article;
+                                text.Updated = DateTime.Now;
+                            }
+                            else
+                            {
+                                Text newText = new Text()
+                                {
+                                    Article = model.Article,
+                                    Posted = model.Posted,
+                                    Title = model.Title,
+                                    UrlTitle = urlTitle,
+                                    Updated = model.Updated
+                                };
+                                uow.tc.Texts.Add(newText);
+                            }
                         }
+                        uow.tc.SaveChanges();
                     }
-                    uow.tc.SaveChanges();
+                    else
+                        logger.Debug("HEAD is same as last pull");
                 }
             }
             else

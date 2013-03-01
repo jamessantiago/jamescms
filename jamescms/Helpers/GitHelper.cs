@@ -29,5 +29,13 @@ namespace jamescms.Helpers
                 repo.Commit(Message, sig);
             }
         }
+
+        public static void AddUpdateFile(string FileName, string RepoPath)
+        {
+            using (var repo = new Repository(RepoPath))
+            {
+                repo.Index.Stage(FileName);
+            }
+        }
     }
 }
