@@ -85,6 +85,20 @@ namespace jamescms.Controllers
             return PartialView("_SingleText", text);
         }
 
+        public ActionResult latest()
+        {
+            var text = uow.tc.Texts.OrderByDescending(d => d.Posted).FirstOrDefault();
+            return PartialView("_LatestText", text);
+        }
+
+        public ActionResult recentList()
+        {
+            var total = uow.tc.Texts.Count();
+            var take = 5 > total ? total - 5 : 5;
+            var texts = uow.tc.Texts.OrderByDescending(d => d.Posted).Take(5);
+            return PartialView("_RecentTexts", texts);
+        }
+
         [Authorize(Roles = "Guides")]
         public ActionResult PullTextFiles()
         {

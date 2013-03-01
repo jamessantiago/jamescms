@@ -433,6 +433,8 @@
     <Content Include="Views\text\_EndofPage.cshtml" />
     <Content Include="Views\text\_SingleText.cshtml" />
     <Content Include="Views\text\_TextEdit.cshtml" />
+    <Content Include="Views\text\_LatestText.cshtml" />
+    <Content Include="Views\text\_RecentTexts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
