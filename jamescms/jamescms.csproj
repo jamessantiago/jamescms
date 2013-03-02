@@ -78,6 +78,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Google.GData.Client.2.1.0.0\lib\Google.GData.Client.dll</HintPath>
     </Reference>
+    <Reference Include="Google.GData.Extensions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Google.GData.Extensions.2.1.0.0\lib\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Photos, Version=2.1.0.0, Culture=neutral, PublicKeyToken=a25b50f2e8e3887a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Google.GData.Photos.2.1.0.0\lib\Google.GData.Photos.dll</HintPath>
+    </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
     </Reference>
@@ -216,6 +224,7 @@
     <Compile Include="Helpers\GitHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\MarkdownHelper.cs" />
+    <Compile Include="Helpers\PicasaHelper.cs" />
     <Compile Include="Helpers\TextFileHelper.cs" />
     <Compile Include="Migrations\201303011347573_Setting.cs" />
     <Compile Include="Migrations\201303011347573_Setting.Designer.cs">
@@ -231,7 +240,9 @@
     <Compile Include="Migrations\TextsConfiguration.cs" />
     <Compile Include="Migrations\UsersConfiguration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\IPhotoRepository.cs" />
     <Compile Include="Models\Models.cs" />
+    <Compile Include="Models\PhotoRepository.cs" />
     <Compile Include="Models\TextModels.cs" />
     <Compile Include="Models\UnitOfWork.cs" />
     <Compile Include="NLogRenderers\WebVariablesRenderer.cs" />
@@ -435,6 +446,7 @@
     <Content Include="Views\text\_TextEdit.cshtml" />
     <Content Include="Views\text\_LatestText.cshtml" />
     <Content Include="Views\text\_RecentTexts.cshtml" />
+    <Content Include="Views\text\_preview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

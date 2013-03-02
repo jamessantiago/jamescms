@@ -52,6 +52,26 @@ function textWallInfiniScroll() {
     });
 }
 
+function previewMarkdown(text, preview, url) {
+    $(text).keydown(function () {        
+        if ($(preview).hasClass("loading") == false)
+        {
+            $(preview).addClass("loading");
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { "data": $(text).val() },
+                dataType: "Html",
+                traditional: true,
+                success: function (data) {
+                    $(preview).removeClass("loading");
+                    $(preview).html(data);
+                }
+            });
+        }
+    });
+}
+
 
 function readyControl() {
     prettyPrint();

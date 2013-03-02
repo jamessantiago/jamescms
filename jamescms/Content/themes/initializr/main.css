@@ -225,8 +225,7 @@ nav a:hover {
 }
 
 .standard-form textarea {
-    width:600px;
-    height:800px;
+    width:95%;
     margin-bottom:20px;
     padding:4px;
 }

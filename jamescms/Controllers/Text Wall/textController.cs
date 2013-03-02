@@ -78,6 +78,14 @@ namespace jamescms.Controllers
                 return PartialView("_TextEdit", text);
         }
 
+        [Authorize(Roles = "Guides")]
+        [HttpPost]
+        public ActionResult preview(FormCollection collection)
+        {
+            string data = collection[0];
+            return PartialView("_preview", data);
+        }
+
         public ActionResult loadOne(int id)
         {
             ViewData["readyControl"] = true;

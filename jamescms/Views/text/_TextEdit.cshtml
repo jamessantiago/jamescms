@@ -1,5 +1,9 @@
 ﻿@model jamescms.Models.Text
 
+<section>
+    <article class="no-asside" id="preview"></article>
+</section>
+
 @using (Ajax.BeginForm("edit", new AjaxOptions { UpdateTargetId = "text-" + Model.Id.ToString(), HttpMethod = "Post", Url = Url.Action("edit")})) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(false)
@@ -56,4 +60,5 @@
 
 <script type="text/javascript">
     readyControl();
+    previewMarkdown("#Article", "#preview", "@Url.Action("preview")");
 </script>

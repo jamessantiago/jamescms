@@ -16,6 +16,7 @@ namespace jamescms.Models
 
         private UsersContext usersContext { get; set; }
         private TextContext textContext { get; set; }
+        private PhotoRepository photoRepository { get; set; }
 
         #endregion Private Contexts
 
@@ -41,6 +42,17 @@ namespace jamescms.Models
                     textContext = new TextContext();
                 }
                 return textContext;
+            }
+        }
+        public PhotoRepository pr
+        {
+            get
+            {
+                if (photoRepository == null)
+                {
+                    photoRepository = new PhotoRepository();
+                }
+                return photoRepository;
             }
         }
 
