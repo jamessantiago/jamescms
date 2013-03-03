@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using MarkdownDeep;
 using jamescms.Models;
 using System.Collections.Generic;
@@ -17,11 +18,12 @@ namespace jamescms.Helpers
 		/// </summary>
 		/// <param name="text">The Markdown that should be transformed.</param>
 		/// <returns>The HTML representation of the supplied Markdown.</returns>
-		public static IHtmlString Markdown(string text)
+		public static IHtmlString Markdown(string text, RequestContext context)
 		{
 			// Transform the supplied text (Markdown) into HTML.
-			var markdownTransformer = new Markdown();
-            markdownTransformer.FormatCodeBlock = new System.Func<MarkdownDeep.Markdown, string, string>(FormatCodePrettyPrint); 
+			var markdownTransformer = new jamesMarkdown();
+            markdownTransformer.RequestContext = context;
+            markdownTransformer.FormatCodeBlock = new System.Func<MarkdownDeep.Markdown, string, string>(FormatCodePrettyPrint);            
 			string html = markdownTransformer.Transform(text);
             
 			// Wrap the html in an MvcHtmlString otherwise it'll be HtmlEncoded and displayed to the user as HTML :(
@@ -36,8 +38,7 @@ namespace jamescms.Helpers
 		/// <returns>The HTML representation of the supplied Markdown.</returns>
 		public static IHtmlString Markdown(this HtmlHelper helper, string text)
 		{
-			// Just call the other one, to avoid having two copies (we don't use the HtmlHelper).
-			return Markdown(text);
+			return Markdown(text, helper.ViewContext.RequestContext);
 		}
 
         public static Regex rxExtractLanguage = new Regex("^({{(.+)}}[\r\n])", RegexOptions.Compiled);
@@ -80,4 +81,5 @@ namespace jamescms.Helpers
                                     language.ToLowerInvariant(), code);
         }
 	}
+
 }

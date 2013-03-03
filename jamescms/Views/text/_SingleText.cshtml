@@ -6,7 +6,7 @@
         <h1>@Html.ActionLink(Model.Title, "d", new { id = Model.UrlTitle })</h1>
     </header>
     <section>
-        @MarkdownHelper.Markdown(Model.Article)
+        @Html.Markdown(Model.Article)
     </section>
     @if (User.IsInRole("Guides"))
     {

@@ -22,6 +22,7 @@ namespace jamescms
         private static string _facebookAppId { get; set; }
         private static string _facebookAppSecret { get; set; }
         private static string _fullTextEnabled { get; set; }
+        private static string _textWallPhotoAlbum { get; set; }
 
         #endregion Private Properties
 
@@ -56,6 +57,15 @@ namespace jamescms
                     _fullTextEnabled = enabled.ToString();
                 }
                 return bool.Parse(_fullTextEnabled);
+            }
+        }
+
+        public static string TextWallPhotoAlbum
+        {
+            get
+            {
+                if (_textWallPhotoAlbum == null) { _textWallPhotoAlbum = WebConfigurationManager.AppSettings["TextWallPhotoAlbum"] ?? ""; }
+                return _textWallPhotoAlbum;
             }
         }
 

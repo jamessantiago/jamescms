@@ -20,7 +20,7 @@ namespace jamescms.Models
 
         public AtomEntryCollection GetAllAlbums(PicasaQuery.AccessLevel accessLevel)
         {
-            PicasaService service = new PicasaService("Albums");
+            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
             service.setUserCredentials(GetGUsername(), GetGPassword());
             AlbumQuery query = new AlbumQuery(PicasaQuery.CreatePicasaUri(GetGUsername()));
             PicasaFeed feed = service.Query(query);
@@ -30,7 +30,7 @@ namespace jamescms.Models
 
         public AtomEntryCollection GetAllPhotos(string id, PicasaQuery.AccessLevel accessLevel)
         {
-            PicasaService service = new PicasaService("Photos");
+            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
             service.setUserCredentials(GetGUsername(), GetGPassword());
             PhotoQuery query = new PhotoQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), id) + "?imgmax=576");
             query.Access = accessLevel;
@@ -38,19 +38,21 @@ namespace jamescms.Models
             return feed.Entries;
         }
 
-        public AtomEntryCollection GetPhoto(string albumId, string photoId, PicasaQuery.AccessLevel accessLevel)
+        public PicasaEntry GetPhoto(string albumId, string photoId, PicasaQuery.AccessLevel accessLevel)
         {
-            PicasaService service = new PicasaService("Photos");
+            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
             service.setUserCredentials(GetGUsername(), GetGPassword());
-            PhotoQuery query = new PhotoQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), albumId, photoId) + "?imgmax=576");
+            PhotoQuery query = new PhotoQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), albumId, photoId));
             query.Access = accessLevel;
+            query.ExtraParameters = "imgmax=576";
+            query.KindParameter = "";
             PicasaFeed feed = service.Query(query);
-            return feed.Entries;
+            return (PicasaEntry)feed.Entries.FirstOrDefault();
         }
 
         public string GetAllComments(string albumid, string photoid)
         {
-            PicasaService service = new PicasaService("Comments");
+            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
             service.setUserCredentials(GetGUsername(), GetGPassword());
             CommentsQuery query = new CommentsQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), albumid, photoid));
             PicasaFeed feed = service.Query(query);
@@ -74,7 +76,7 @@ namespace jamescms.Models
 
         public void AddComment(string albumid, string photoid, string comment)
         {
-            PicasaService service = new PicasaService("AddComment");
+            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
             service.setUserCredentials(GetGUsername(), GetGPassword());
             Uri postUri = new Uri(PicasaQuery.CreatePicasaUri("default", albumid, photoid));
             CommentEntry entry = new CommentEntry();
@@ -84,7 +86,7 @@ namespace jamescms.Models
 
         public void ModifyAlbumSummary(string albumid, string summary)
         {
-            PicasaService service = new PicasaService("Albums");
+            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
             service.setUserCredentials(GetGUsername(), GetGPassword());
 
             AlbumQuery query = new AlbumQuery();
@@ -112,7 +114,7 @@ namespace jamescms.Models
                 return true;
 
 
-            PicasaService service = new PicasaService("Albums");
+            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
             service.setUserCredentials(GetGUsername(), GetGPassword());
 
             AlbumQuery query = new AlbumQuery();
