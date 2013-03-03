@@ -11,7 +11,7 @@ namespace jamescms.Models
     {
         AtomEntryCollection GetAllAlbums(PicasaQuery.AccessLevel accessLevel);
         AtomEntryCollection GetAllPhotos(string id, PicasaQuery.AccessLevel accessLevel);
-        PicasaEntry GetPhoto(string albumId, string photoId, PicasaQuery.AccessLevel accessLevel);
+        PicasaEntry GetPhoto(string albumId, string photoTitle, PicasaQuery.AccessLevel accessLevel);
         String GetAllComments(String albumid, String photoid);
         void AddComment(String albumid, String photoid, String comment);
         void ModifyAlbumSummary(string albumid, string summary);

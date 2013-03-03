@@ -38,16 +38,17 @@ namespace jamescms.Models
             return feed.Entries;
         }
 
-        public PicasaEntry GetPhoto(string albumId, string photoId, PicasaQuery.AccessLevel accessLevel)
+        public PicasaEntry GetPhoto(string albumId, string photoTitle, PicasaQuery.AccessLevel accessLevel)
         {
             PicasaService service = new PicasaService("jamessantiago-jamescms-1");
             service.setUserCredentials(GetGUsername(), GetGPassword());
-            PhotoQuery query = new PhotoQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), albumId, photoId));
+            PhotoQuery query = new PhotoQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), albumId));
             query.Access = accessLevel;
             query.ExtraParameters = "imgmax=576";
             query.KindParameter = "";
             PicasaFeed feed = service.Query(query);
-            return (PicasaEntry)feed.Entries.FirstOrDefault();
+            var entry = feed.Entries.Where(d => d.Title.Text == photoTitle).FirstOrDefault();
+            return (PicasaEntry)entry;
         }
 
         public string GetAllComments(string albumid, string photoid)
