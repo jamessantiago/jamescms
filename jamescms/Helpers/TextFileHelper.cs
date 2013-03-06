@@ -77,7 +77,7 @@ namespace jamescms.Helpers
                                     Posted = model.Posted,
                                     Title = model.Title,
                                     UrlTitle = urlTitle,
-                                    Updated = model.Updated
+                                    Updated = DateTime.Now
                                 };
                                 uow.tc.Texts.Add(newText);
                             }
