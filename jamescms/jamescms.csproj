@@ -218,7 +218,7 @@
     <Compile Include="Controllers\Accounts\accountController.cs" />
     <Compile Include="Controllers\Management\guideController.cs" />
     <Compile Include="Controllers\Management\errorController.cs" />
-    <Compile Include="Controllers\Portal\photoController.cs" />
+    <Compile Include="Controllers\Portal\photosController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
     <Compile Include="Helpers\FileTail.cs" />
@@ -339,6 +339,8 @@
     <Content Include="Scripts\jquery-migrate-1.1.0.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.galleriffic.js" />
+    <Content Include="Scripts\jquery.opacityrollover.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -449,6 +451,8 @@
     <Content Include="Views\text\_LatestText.cshtml" />
     <Content Include="Views\text\_RecentTexts.cshtml" />
     <Content Include="Views\text\_preview.cshtml" />
+    <Content Include="Views\photos\Index.cshtml" />
+    <Content Include="Views\photos\Album.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

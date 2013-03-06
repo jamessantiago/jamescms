@@ -8,7 +8,7 @@ using jamescms.Models;
 using jamescms.Helpers;
 
 namespace jamescms.Controllers
-{
+{    
     public class textController : Controller
     {
 
@@ -33,6 +33,7 @@ namespace jamescms.Controllers
             return View();
         }
 
+        [OutputCache(Duration = 3600)]
         public ActionResult p(int id = 0)
         {
             ViewData["page"] = id + 1;
@@ -45,6 +46,7 @@ namespace jamescms.Controllers
                 return PartialView("_EndofPage");
         }
 
+        [OutputCache(Duration = 3600)]
         public ActionResult d(string id)
         {
             var text = uow.tc.Texts.Where(d => d.UrlTitle == id).FirstOrDefault();
@@ -86,6 +88,7 @@ namespace jamescms.Controllers
             return PartialView("_preview", data);
         }
 
+        [OutputCache(Duration = 3600)]
         public ActionResult loadOne(int id)
         {
             ViewData["readyControl"] = true;
@@ -93,12 +96,14 @@ namespace jamescms.Controllers
             return PartialView("_SingleText", text);
         }
 
+        [OutputCache(Duration = 3600)]
         public ActionResult latest()
         {
             var text = uow.tc.Texts.OrderByDescending(d => d.Posted).FirstOrDefault();
             return PartialView("_LatestText", text);
         }
 
+        [OutputCache(Duration = 3600)]
         public ActionResult recentList()
         {
             var total = uow.tc.Texts.Count();
@@ -119,78 +124,7 @@ namespace jamescms.Controllers
         {
             new Thread(new ThreadStart(TextFileHelper.PushTextFiles)).Start();
             return RedirectToAction("Index");
-        }
-
-        public ActionResult Create()
-        {
-            uow.tc.Texts.Add(
-                new Text
-                {
-                    Title = "My first post",
-                    UrlTitle = "Mafdy_firsdft_post",
-                    Article =
-@"
-###This my very first post
-
-this is a test
-
-    {{C#}}
-    public void GetCats() {
-        return new Meow() { Name = ""Whiskers"" };
-    }
-",
-                    Posted = new DateTime(1970, 1, 1),
-                    Updated = new DateTime(1970, 1, 1)
-                });
-
-            uow.tc.Texts.Add(
-                new Text
-                {
-                    Title = "My second post",
-                    UrlTitle = "Mayf_Secdfond_postf",
-                    Article = "This my second post",
-                    Posted = new DateTime(1970, 1, 1),
-                    Updated = new DateTime(1970, 1, 1),
-                    Tags = new List<Tag>() { new Tag() { Name = "Fister" } }
-                });
-
-            uow.tc.Texts.Add(
-                new Text
-                {
-                    Title = "My thifrd post",
-                    Article = "This fmy third post",
-                    UrlTitle = "thirfadd_post",
-                    Posted = new DateTime(1970, 1, 1),
-                    Updated = new DateTime(1970, 1, 1),
-                    Tags = new List<Tag>() { new Tag() { Name = "thirds" } },
-                });
-
-
-            uow.tc.Texts.Add(
-                new Text
-                {
-                    Title = "My powershell post",
-                    UrlTitle = "poaawefddrsh_post",
-                    Article =
-@"
-    {{Powershell}}
-    function GetNextString ($current) { 
-      $x = ConvertStringToInt $current
-      $x ++
-      ConvertIntToString $x
-    } 
-",
-                    Posted = new DateTime(1970, 1, 1),
-                    Updated = new DateTime(1970, 1, 1)
-                });
-            try
-            {
-                uow.tc.SaveChanges();
-            }
-            catch { }
-            
-            return RedirectToAction("Index", "sd");
-        }
+        }        
 
     }
 }

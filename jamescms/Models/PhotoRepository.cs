@@ -13,37 +13,30 @@ namespace jamescms.Models
 {
     public class PhotoRepository : IPhotoRepository
     {
+        private PicasaService service = new PicasaService("jamessantiago-jamescms-1");
+
         public PhotoRepository()
         {
-
+            service.setUserCredentials(GetGUsername(), GetGPassword());
         }
 
-        public AtomEntryCollection GetAllAlbums(PicasaQuery.AccessLevel accessLevel)
+        public AtomEntryCollection GetAllAlbums()
         {
-            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
-            service.setUserCredentials(GetGUsername(), GetGPassword());
             AlbumQuery query = new AlbumQuery(PicasaQuery.CreatePicasaUri(GetGUsername()));
             PicasaFeed feed = service.Query(query);
-            query.Access = accessLevel;
             return feed.Entries;
         }
 
-        public AtomEntryCollection GetAllPhotos(string id, PicasaQuery.AccessLevel accessLevel)
+        public AtomEntryCollection GetAllPhotos(string id)
         {
-            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
-            service.setUserCredentials(GetGUsername(), GetGPassword());
             PhotoQuery query = new PhotoQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), id) + "?imgmax=576");
-            query.Access = accessLevel;
             PicasaFeed feed = service.Query(query);
             return feed.Entries;
         }
 
-        public PicasaEntry GetPhoto(string albumId, string photoTitle, PicasaQuery.AccessLevel accessLevel)
+        public PicasaEntry GetPhoto(string albumId, string photoTitle)
         {
-            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
-            service.setUserCredentials(GetGUsername(), GetGPassword());
             PhotoQuery query = new PhotoQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), albumId));
-            query.Access = accessLevel;
             query.ExtraParameters = "imgmax=576";
             query.KindParameter = "";
             PicasaFeed feed = service.Query(query);
@@ -53,8 +46,6 @@ namespace jamescms.Models
 
         public string GetAllComments(string albumid, string photoid)
         {
-            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
-            service.setUserCredentials(GetGUsername(), GetGPassword());
             CommentsQuery query = new CommentsQuery(PicasaQuery.CreatePicasaUri(GetGUsername(), albumid, photoid));
             PicasaFeed feed = service.Query(query);
             if (feed.Entries.Count != 0)
@@ -77,8 +68,6 @@ namespace jamescms.Models
 
         public void AddComment(string albumid, string photoid, string comment)
         {
-            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
-            service.setUserCredentials(GetGUsername(), GetGPassword());
             Uri postUri = new Uri(PicasaQuery.CreatePicasaUri("default", albumid, photoid));
             CommentEntry entry = new CommentEntry();
             entry.Content.Content = comment;
@@ -87,9 +76,6 @@ namespace jamescms.Models
 
         public void ModifyAlbumSummary(string albumid, string summary)
         {
-            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
-            service.setUserCredentials(GetGUsername(), GetGPassword());
-
             AlbumQuery query = new AlbumQuery();
             PicasaEntry album = (PicasaEntry)service.Get(
                 string.Format("http://picasaweb.google.com/data/entry/api/user/{0}/albumid/{1}", GetGUsername(), albumid)
@@ -112,11 +98,7 @@ namespace jamescms.Models
         public bool isAuthorized(System.Security.Principal.IPrincipal User, string albumid)
         {
             if (User.IsInRole("Friends"))
-                return true;
-
-
-            PicasaService service = new PicasaService("jamessantiago-jamescms-1");
-            service.setUserCredentials(GetGUsername(), GetGPassword());
+                return true;           
 
             AlbumQuery query = new AlbumQuery();
             PicasaEntry album = (PicasaEntry)service.Get(

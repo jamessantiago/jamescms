@@ -1,0 +1,55 @@
+﻿@using Google.GData.Client
+@using Google.GData.Photos
+
+@{
+    ViewBag.Title = "Albums - Santiago Development";
+}
+
+<div id="nosidebar">
+	
+		@foreach (PicasaEntry entry in ViewData["Albums"] as Google.GData.Client.AtomEntryCollection)
+		{
+			AlbumAccessor ac = new AlbumAccessor(entry);            
+			bool OkToDisplay = false;
+			if (User.IsInRole("Guides") || User.IsInRole("Friends"))
+				{ OkToDisplay = true; }
+			else if (ac.AlbumSummary.ToUpper().Contains("ALL"))
+				{ OkToDisplay = true; }
+			if (OkToDisplay)
+			{
+				<div class="boxgrid ui-corner-all"> 
+					<img src="@entry.Media.Thumbnails[0].Attributes["url"]" alt=""/> 
+					<div class="boxcaption"> 
+					@{if (entry.Title.Text.Length > 21)
+					{
+						@entry.Title.Text.Substring(0, 20)
+					}
+					else
+					{ 
+						 @entry.Title.Text
+					} }
+						<br><a href="@Url.Action("Album","Photos")/@ac.Id" style="color:White;">See all @ac.NumPhotos photos</a>
+					</div>		
+                    @if (User.IsInRole("Guides"))
+                    {
+                        if (ac.AlbumSummary.ToLower() == "all")
+                        {
+                            <p style="bottom: 0;position: absolute; color:white;" class="ui-state-default"><b>Public</b><br />
+                            @Html.ActionLink("+FriendsOnly", "MakePrivate", "Photos", new { id = ac.Id }, new { @class = "ui-state-default" })<br />
+                            </p>                            
+                        }
+                        else
+                        {
+                             <p style="bottom: 0;position: absolute; color:white;" class="ui-state-default">Friends Only<br />
+                             @Html.ActionLink("+Public", "MakePublic", "Photos", new { id = ac.Id }, new { @class = "ui-state-default" })
+                             </p>
+                        }
+
+                    }
+				</div> 
+			}
+		}
+
+</div>
+
+

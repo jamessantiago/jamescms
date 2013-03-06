@@ -9,9 +9,9 @@ namespace jamescms.Models
 {
     public interface IPhotoRepository
     {
-        AtomEntryCollection GetAllAlbums(PicasaQuery.AccessLevel accessLevel);
-        AtomEntryCollection GetAllPhotos(string id, PicasaQuery.AccessLevel accessLevel);
-        PicasaEntry GetPhoto(string albumId, string photoTitle, PicasaQuery.AccessLevel accessLevel);
+        AtomEntryCollection GetAllAlbums();
+        AtomEntryCollection GetAllPhotos(string id);
+        PicasaEntry GetPhoto(string albumId, string photoTitle);
         String GetAllComments(String albumid, String photoid);
         void AddComment(String albumid, String photoid, String comment);
         void ModifyAlbumSummary(string albumid, string summary);

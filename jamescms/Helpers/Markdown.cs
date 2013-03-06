@@ -21,7 +21,7 @@ namespace MarkdownDeep
                 using (UnitOfWork uow = new UnitOfWork())
                 {
                     string photoid = url.ToLower().Replace("getphoto=", "");
-                    var photo = uow.pr.GetPhoto(jcms.TextWallPhotoAlbum, photoid, Google.GData.Photos.PicasaQuery.AccessLevel.AccessPublic);
+                    var photo = uow.pr.GetPhoto(jcms.TextWallPhotoAlbum, photoid);
                     return photo.Media.Content.Attributes["url"].ToString();
                 }
             }
