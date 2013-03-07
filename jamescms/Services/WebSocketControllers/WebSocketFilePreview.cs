@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using jamescms.Helpers;
 using jamescms.Models;
 using System.IO;
@@ -11,9 +13,9 @@ using System.Net;
 
 namespace jamescms.Services.WebSocketControllers
 {
-    public class WebSocketFileTail : IDisposable
+    public class WebSocketFilePreview : IDisposable
     {
-        private FileTail fileTail;
+        private FilePreview filePreview;
         private WebSocketServer server;
         private IWebSocketConnection socket;
 
@@ -21,7 +23,7 @@ namespace jamescms.Services.WebSocketControllers
         private string filePath;
         private string serverName;
 
-        public WebSocketFileTail(string FilePath, string ServerName)
+        public WebSocketFilePreview(string FilePath, string ServerName)
         {
             serverName = ServerName;
             filePath = FilePath;
@@ -47,24 +49,27 @@ namespace jamescms.Services.WebSocketControllers
         private void InitiateFileTail(IWebSocketConnection Socket)
         {            
             socket = Socket;
-            fileTail = new FileTail(filePath, true);
-            fileTail.FileRead += new EventHandler(filetail_FileReadChangesArrived);
-            fileTail.ChangesArrived += new EventHandler(filetail_FileReadChangesArrived);
-            fileTail.Error += new UnhandledExceptionEventHandler(filetail_Error);
-            fileTail.StartTrackingFileTail();
+            filePreview = new FilePreview(filePath);
+            filePreview.FileRead += new EventHandler(filepreview_FileReadChangesArrived);
+            filePreview.ChangesArrived += new EventHandler(filepreview_FileReadChangesArrived);
+            filePreview.Error += new UnhandledExceptionEventHandler(filepreview_Error);
+            filePreview.StartTrackingFileTail();
 
         }
 
-        private void filetail_FileReadChangesArrived(object sender, EventArgs e)
+        private void filepreview_FileReadChangesArrived(object sender, EventArgs e)
         {
-            var message = fileTail.Changes;
+            var message = filePreview.FileText;
             if (!string.IsNullOrEmpty(message))
+            {
+                message = MarkdownHelper.Markdown(message, null).ToString();
                 socket.Send(message);
+            }
         }
 
-        private void filetail_Error(object sender, UnhandledExceptionEventArgs e)
+        private void filepreview_Error(object sender, UnhandledExceptionEventArgs e)
         {
-            logger.DebugException("File tail reported an error", (Exception)e.ExceptionObject);
+            logger.DebugException("File preview reported an error", (Exception)e.ExceptionObject);
         }
 
         private void KillFileTail()
@@ -80,7 +85,7 @@ namespace jamescms.Services.WebSocketControllers
             GC.SuppressFinalize(this);
         }
 
-        ~WebSocketFileTail()
+        ~WebSocketFilePreview()
         {
             Dispose(false);
         }
@@ -100,10 +105,10 @@ namespace jamescms.Services.WebSocketControllers
                     server.Dispose();
                     server = null;
                 }
-                if (fileTail != null)
+                if (filePreview != null)
                 {
-                    fileTail.Dispose();
-                    fileTail = null;
+                    filePreview.Dispose();
+                    filePreview = null;
                 }
             }
         }

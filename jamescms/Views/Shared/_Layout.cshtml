@@ -21,9 +21,6 @@
         <div class="header-container">
             <div class="wrapper clearfix">
                 <h1 class="title">@Html.ActionLink("Santiago Development", "index", "sd")</h1>
-                @*<section id="login">
-                    @Html.Partial("_LoginPartial")
-                </section>*@
                 <nav>
                     <ul>
                         <li>@Html.ActionLink("Text Wall", "index", "text")</li>
@@ -41,7 +38,7 @@
 
         <div class="footer-container">
             <footer class="wrapper">
-                <p>@Html.ActionLink("Home", "Index", "sd") ▲ @Html.ActionLink("Text Wall", "Index", "text") ▲ @Html.ActionLink("Photos", "Index", "photos")</p>
+                <p>@Html.ActionLink("Home", "Index", "sd") ▲ @Html.ActionLink("Text Wall", "Index", "text") ▲ @Html.ActionLink("Photos", "Index", "photos")@if (User.IsInRole("Guides")) { @Html.Raw(" ▲ ") @Html.ActionLink("Admin", "Index", "guide") }</p>
             </footer>
         </div>
         

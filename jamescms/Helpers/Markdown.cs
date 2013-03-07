@@ -33,7 +33,10 @@ namespace MarkdownDeep
                 {
                     action = urlParts[0];
                     controller = urlParts[1];
-                    finalurl = UrlHelper.GenerateUrl("Default", action, controller, null, RouteTable.Routes, RequestContext, false);
+                    if (RequestContext != null)
+                        finalurl = UrlHelper.GenerateUrl("Default", action, controller, null, RouteTable.Routes, RequestContext, false);
+                    else
+                        finalurl = controller + "/" + action;
 
                 }
                 if (urlParts.Length >= 3)
@@ -52,7 +55,10 @@ namespace MarkdownDeep
                         else
                             query += "/" + urlParts[i];
                     }
-                    finalurl = UrlHelper.GenerateUrl("Default", action, controller, null, RouteTable.Routes, RequestContext, false) + query;
+                    if (RequestContext != null)
+                        finalurl = UrlHelper.GenerateUrl("Default", action, controller, null, RouteTable.Routes, RequestContext, false) + query;
+                    else
+                        finalurl = controller + "/" + action + query;
                 }
                 return finalurl;
             }

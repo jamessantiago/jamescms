@@ -2,7 +2,11 @@
 @{
     ViewBag.Title = "Text Wall";
 }
-
+@if (User.IsInRole("Guides"))
+{
+    @Html.ActionLink("Push Text Files", "pushtextfiles")
+    <span style="float:right">@Html.ActionLink("Pull Text Files", "pulltextfiles")</span>
+}
 @Html.AjaxReadyLoadDiv("textWall", "p")
 
 @section scripts {    

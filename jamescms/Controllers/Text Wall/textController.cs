@@ -41,7 +41,7 @@ namespace jamescms.Controllers
             var total = uow.tc.Texts.Count();
             var take = (id * 10 + 10) > total ? total - (id * 10) : 10;
             if (take > 0)
-                return PartialView("_TextPage", uow.tc.Texts.OrderByDescending(d => d.Id).Skip(id * 10).Take(take));
+                return PartialView("_TextPage", uow.tc.Texts.OrderByDescending(d => d.Posted).Skip(id * 10).Take(take));
             else
                 return PartialView("_EndofPage");
         }

@@ -22,6 +22,7 @@ namespace jamescms.Controllers
     {
 
         private static Dictionary<string, WebSocketFileTail> listeners = new Dictionary<string, WebSocketFileTail>();
+        private static Dictionary<string, WebSocketFilePreview> previewListeners = new Dictionary<string, WebSocketFilePreview>();
 
         #region Constructor
 
@@ -132,5 +133,31 @@ namespace jamescms.Controllers
         }
 
         #endregion Error Logs
+
+        #region File Preview
+
+        public ActionResult FilePreviewChooser()
+        {
+            List<string> files = (from file in Directory.EnumerateFiles("D:\\TextFiles\\")
+                                  select Path.GetFileName(file)).ToList();
+
+            return PartialView("_filePreviewChooser", files);
+        }
+
+        public ActionResult GetFilePreview(string fileName)
+        {
+            var oldListener = previewListeners.Where(d => d.Key == User.Identity.Name);
+            if (oldListener.Count() == 1)
+            {
+                oldListener.FirstOrDefault().Value.Dispose();
+                previewListeners.Remove(oldListener.FirstOrDefault().Key);
+            }
+            var previewListener = new WebSocketFilePreview("D:\\TextFiles\\" + fileName, "fp" +  Session.SessionID);
+            previewListener.Start();
+            previewListeners.Add(User.Identity.Name, previewListener);
+            return PartialView("_FilePreview");
+        }
+
+        #endregion File Preview
     }
 }

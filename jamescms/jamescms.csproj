@@ -221,6 +221,7 @@
     <Compile Include="Controllers\Portal\photosController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
+    <Compile Include="Helpers\FilePreview.cs" />
     <Compile Include="Helpers\FileTail.cs" />
     <Compile Include="Helpers\GitHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Models\UnitOfWork.cs" />
     <Compile Include="NLogRenderers\WebVariablesRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\WebSocketControllers\WebSocketFilePreview.cs" />
     <Compile Include="Services\WebSocketControllers\WebSocketFileTail.cs" />
     <Compile Include="Services\WebSocketControllers\WebSocketListener.cs" />
   </ItemGroup>
@@ -453,6 +455,8 @@
     <Content Include="Views\text\_preview.cshtml" />
     <Content Include="Views\photos\Index.cshtml" />
     <Content Include="Views\photos\Album.cshtml" />
+    <Content Include="Views\guide\_filePreviewChooser.cshtml" />
+    <Content Include="Views\guide\_FilePreview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
