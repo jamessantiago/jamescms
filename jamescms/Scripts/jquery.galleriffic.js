@@ -1027,5 +1027,5 @@ jQuery(document).ready(function ($) {
             this.fadeTo('fast', 1.0);
         }
     });
-    $(document).unbind("keydown", $.galleriffic.keydownHandler);
+    //$(document).unbind("keydown", $.galleriffic.keydownHandler);
 });

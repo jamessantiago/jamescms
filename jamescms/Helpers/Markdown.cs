@@ -25,6 +25,13 @@ namespace MarkdownDeep
                     return photo.Media.Content.Attributes["url"].ToString();
                 }
             }
+            else if (url.StartsWith("~"))
+            {
+                if (RequestContext != null)
+                    return UrlHelper.GenerateContentUrl(url, RequestContext.HttpContext);
+                else
+                    return url;
+            }
             else if (url.Contains(','))
             {
                 string action = "", controller = "", query = "", finalurl = "";

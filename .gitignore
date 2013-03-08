@@ -18,6 +18,7 @@ robots.txt
 *.mdf
 *.ldf
 Web.config
+jamescms/Content/Files/
 
 # Build results
 [Dd]ebug/

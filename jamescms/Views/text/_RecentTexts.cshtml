@@ -3,6 +3,6 @@
 <ul>
 @foreach (var text in Model)
 {
-    <li><a href="@Url.Action("Index", "text")#text-@text.Id">@text.Title</a></li>    
+    <li><a href="@Url.Action("Index", "text")">@text.Title</a></li>    
 }
 </ul>

@@ -56,21 +56,21 @@ namespace jamescms.Controllers.Portal
             return RedirectToAction("Album", new { id = albumid });
         }
 
-        [Authorize(Roles="Administrators")]
+        [Authorize(Roles = "Guides")]
         public ActionResult MakePrivate(string id)
         {
             uow.pr.ModifyAlbumSummary(id, "Friends Only");
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Guides")]
         public ActionResult MakeSemiPrivate(string id)
         {
             uow.pr.ModifyAlbumSummary(id, "coworkers");
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Administrators")]
+        [Authorize(Roles = "Guides")]
         public ActionResult MakePublic(string id)
         {
             uow.pr.ModifyAlbumSummary(id, "all");
