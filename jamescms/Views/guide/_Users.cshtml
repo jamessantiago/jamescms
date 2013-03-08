@@ -1,0 +1,42 @@
+﻿@model String[]
+
+<div class="standard-form">
+    <table class="standard-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                @{var roles = Roles.GetAllRoles();}
+                @foreach (var role in roles)
+                {
+                    <th>@role</th>
+                }
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user</td>
+                    @foreach (var role in roles)
+                    {
+                        if (Roles.IsUserInRole(user, role))
+                        {
+                            <td>@Html.AjaxButton("Remove from role", "usersControl", "RemoveUserFromRole", new { username = user, role = role, BackToRole = true})</td>
+                        }
+                        else
+                        {
+                            <td>@Html.AjaxButton("Add to role", "usersControl", "AddUserToRole", new { username = user, role = role, BackToRole = true})</td>
+                        }
+                    }
+                    <td>@Html.AjaxButton("Delete " + user, "usersControl", "DeleteUser", new { username = user })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @Html.AjaxButton("Back", "usersControl", "UserControl")
+</div>
+
+<script type="text/javascript">
+    readyControl();
+</script>

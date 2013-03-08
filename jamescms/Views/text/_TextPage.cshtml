@@ -1,0 +1,10 @@
+﻿@model IQueryable<jamescms.Models.Text>
+@using jamescms.Helpers;
+
+
+<section class="page" @if (ViewData["page"] != null) { @Html.Raw("page-number='" + ViewData["page"].ToString() + "'") } else { @Html.Raw("page-number='1'") }>
+@foreach (var text in Model)
+{
+    @Html.Partial("_SingleText", text)    
+}
+</section>
