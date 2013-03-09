@@ -24,7 +24,7 @@
         if (socket != null) {
             socket.close();
         }
-        socket = new WebSocket("ws://localhost:8989/@Html.Raw(Session.SessionID)");
+        socket = new WebSocket("ws://santiagodevelopment.com:8989/@Html.Raw(Session.SessionID)");
         socket.onopen = function (connection) {
             $("#status").html("connected");
         };

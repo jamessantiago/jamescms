@@ -23,7 +23,8 @@ namespace jamescms
                     "~/Scripts/MarkdownDeepLib.min.js",
                     "~/Scripts/Prettify/prettify.js",
                     "~/Scripts/Prettify/lang-log.js",
-                    "~/Scripts/master.js"));
+                    "~/Scripts/master.js",
+                    "~/Scripts/GoogleAnalytics.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/gallerific").Include(
                     "~/Scripts/jquery.opacityrollover.js",

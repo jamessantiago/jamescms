@@ -43,7 +43,7 @@ namespace jamescms.Filters
                         }
 
                         WebSecurity.InitializeDatabaseConnection("AccountConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-                        if (!WebSecurity.UserExists("admin"))
+                        if (!Roles.RoleExists("Guides"))
                         {
                             Roles.CreateRole("Guides");
                             WebSecurity.CreateUserAndAccount("admin", "password");

@@ -112,7 +112,7 @@ namespace jamescms.Controllers
 
         public ActionResult LogChooser()
         {
-            List<string> files = (from file in Directory.EnumerateFiles("D:\\Code\\jamescms\\jamescms\\logs\\")
+            List<string> files = (from file in Directory.EnumerateFiles(Path.Combine(HttpContext.Request.PhysicalApplicationPath, "logs"))
                                  select Path.GetFileName(file)).ToList();
             
             return PartialView("_LogChooser", files);
@@ -126,7 +126,7 @@ namespace jamescms.Controllers
                 oldListener.FirstOrDefault().Value.Dispose();
                 listeners.Remove(oldListener.FirstOrDefault().Key);
             }
-            var listener = new WebSocketFileTail("D:\\Code\\jamescms\\jamescms\\logs\\" + logName, Session.SessionID);
+            var listener = new WebSocketFileTail(Path.Combine(HttpContext.Request.PhysicalApplicationPath, "logs",  logName), Session.SessionID);
             listener.Start();
             listeners.Add(User.Identity.Name, listener);
             return PartialView("_Log");

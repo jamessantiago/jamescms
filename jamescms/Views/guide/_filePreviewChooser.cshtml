@@ -24,7 +24,7 @@
         if (psocket != null) {
             psocket.close();
         }
-        psocket = new WebSocket("ws://localhost:8990/fp" + "@Html.Raw(Session.SessionID)");
+        psocket = new WebSocket("ws://santiagodevelopment.com:8990/fp" + "@Html.Raw(Session.SessionID)");
         psocket.onopen = function (connection) {
             $("#pstatus").html("connected");
         };

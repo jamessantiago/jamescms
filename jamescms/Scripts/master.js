@@ -41,8 +41,9 @@ function textWallInfiniScroll() {
                 {
                     window.EnableScroll = false;
                     $("#textWall").append($("<div>").load("text/p/" + lastPage, function () {
+                        prettyPrint();
                         if (!window.EndOfPage) {
-                            window.EnableScroll = true;
+                            window.EnableScroll = true;                            
                             textWallInfiniScroll();
                         }
                     }));

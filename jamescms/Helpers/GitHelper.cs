@@ -26,7 +26,7 @@ namespace jamescms.Helpers
             {
                 logger.Debug("Git commit to " + RepoPath);
                 Signature sig = new Signature("SantiagoDevelopment", "SantiagoDevelopment@SantiagoDevelopment.com", DateTimeOffset.Now );
-                repo.Commit(Message, sig);
+                repo.Commit(Message, sig, sig);
             }
         }
 

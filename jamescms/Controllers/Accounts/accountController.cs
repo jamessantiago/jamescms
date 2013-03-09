@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using jamescms.Filters;
 using jamescms.Models;
+using NLog;
 
 namespace jamescms.Controllers
 {
@@ -17,6 +18,8 @@ namespace jamescms.Controllers
     public class accountController : Controller
     {
         private UnitOfWork uow;
+
+        private Logger logger = LogManager.GetLogger("accountController");
 
         public accountController()
         {
@@ -48,6 +51,7 @@ namespace jamescms.Controllers
         {
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
+                logger.Debug("User " + model.UserName + " logged in");
                 return RedirectToLocal(returnUrl);
             }
 
@@ -63,6 +67,7 @@ namespace jamescms.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult logoff()
         {
+            logger.Debug("User " + User.Identity.Name + " logged out");
             WebSecurity.Logout();
 
             return RedirectToAction("Index", "sd");
@@ -92,6 +97,7 @@ namespace jamescms.Controllers
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
                     WebSecurity.Login(model.UserName, model.Password);
+                    logger.Info("A new user has been registered: " + model.UserName);
                     return RedirectToAction("Index", "sd");
                 }
                 catch (MembershipCreateUserException e)
@@ -284,7 +290,7 @@ namespace jamescms.Controllers
 
                     OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                     OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
-
+                    logger.Info("A new user has been registered: " + model.UserName);
                     return RedirectToLocal(returnUrl);
                 }
                 else

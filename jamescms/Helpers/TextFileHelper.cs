@@ -19,77 +19,102 @@ namespace jamescms.Helpers
 
         public static void PushTextFiles()
         {
-            string filePath = FilePath;
-            string repoPath = RepoPath;
-            if (Directory.Exists(filePath) && Directory.Exists(repoPath))
+            try
             {
-                logger.Debug("Writing texts to " + filePath);
-                using (UnitOfWork uow = new UnitOfWork())
-                {                        
-                    var texts = uow.tc.Texts;
-                    foreach (var text in texts)
+                string filePath = FilePath;
+                string repoPath = RepoPath;
+                if (Directory.Exists(filePath) && Directory.Exists(repoPath))
+                {
+                    logger.Debug("Writing texts to " + filePath);
+                    using (UnitOfWork uow = new UnitOfWork())
                     {
-                        string textPath = Path.Combine(filePath, text.UrlTitle + ".md");
-                        File.WriteAllText(textPath, text.CraftTextString());
-                        GitHelper.AddUpdateFile(textPath, repoPath);
+                        var texts = uow.tc.Texts;
+                        foreach (var text in texts)
+                        {
+                            string textPath = Path.Combine(filePath, text.UrlTitle + ".md");
+                            File.WriteAllText(textPath, text.CraftTextString());
+                            GitHelper.AddUpdateFile(textPath, repoPath);
+                        }
+                        GitHelper.CommitChanges("Changes from website", repoPath);
+                        string headSha = GitHelper.GetHeadCommitSha(repoPath);
+                        uow.tc.Settings.First().HeadSha = headSha;
+                        uow.tc.SaveChanges();
+                        logger.Debug("Git head is now at " + headSha);
                     }
-                    GitHelper.CommitChanges("Changes from website", repoPath);
-                    string headSha = GitHelper.GetHeadCommitSha(repoPath);
-                    uow.tc.Settings.First().HeadSha = headSha;
-                    uow.tc.SaveChanges();
-                    logger.Debug("Git head is now at " + headSha);
                 }
+                else
+                    logger.Debug("Missing TextFiles path or git repo");
             }
-            else
-                logger.Debug("Missing TextFiles path or git repo");
+            catch (Exception ex)
+            {
+                logger.ErrorException("Failed to push texts to file", ex);
+            }
         }
 
         public static void PullTextFiles()
         {
-            string filePath = FilePath;
-            string repoPath = RepoPath;
-            if (Directory.Exists(filePath) && Directory.Exists(repoPath))
+            try
             {
-                logger.Debug("Pulling texts from " + filePath);
-                using (UnitOfWork uow = new UnitOfWork())
+                string filePath = FilePath;
+                string repoPath = RepoPath;
+                if (Directory.Exists(filePath) && Directory.Exists(repoPath))
                 {
-                    string headSha = GitHelper.GetHeadCommitSha(repoPath);
-                    if (uow.tc.Settings.First().HeadSha != headSha)
+                    logger.Debug("Pulling texts from " + filePath);
+                    using (UnitOfWork uow = new UnitOfWork())
                     {
-                        foreach (var file in Directory.GetFiles(filePath))
+                        string headSha = GitHelper.GetHeadCommitSha(repoPath);
+                        if (uow.tc.Settings.First().HeadSha != headSha)
                         {
-                            string fileData = File.ReadAllText(file);
-                            string urlTitle = Path.GetFileNameWithoutExtension(file);
-                            Text model = fileData.ToText();
-                            var text = uow.tc.Texts.Where(d => d.UrlTitle == urlTitle).FirstOrDefault();
-                            if (text != null)
+                            foreach (var file in Directory.GetFiles(filePath))
                             {
-                                text.Posted = model.Posted;
-                                text.Title = model.Title;
-                                text.Article = model.Article;
-                                text.Updated = DateTime.Now;
-                            }
-                            else
-                            {
-                                Text newText = new Text()
+                                try
                                 {
-                                    Article = model.Article,
-                                    Posted = model.Posted,
-                                    Title = model.Title,
-                                    UrlTitle = urlTitle,
-                                    Updated = DateTime.Now
-                                };
-                                uow.tc.Texts.Add(newText);
+                                    string fileData = File.ReadAllText(file);
+                                    string urlTitle = Path.GetFileNameWithoutExtension(file);
+                                    Text model = fileData.ToText();
+                                    var text = uow.tc.Texts.Where(d => d.UrlTitle == urlTitle).FirstOrDefault();
+                                    if (text != null)
+                                    {
+                                        text.Posted = model.Posted;
+                                        text.Title = model.Title;
+                                        text.Article = model.Article;
+                                        text.Updated = DateTime.Now;
+                                        logger.Debug("Added " + text.Title);
+                                    }
+                                    else
+                                    {
+                                        Text newText = new Text()
+                                        {
+                                            Article = model.Article,
+                                            Posted = model.Posted,
+                                            Title = model.Title,
+                                            UrlTitle = urlTitle,
+                                            Updated = DateTime.Now
+                                        };
+                                        uow.tc.Texts.Add(newText);
+                                        logger.Debug("Updated " + newText.Title);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    logger.ErrorException("Failed to update text file " + file, ex);
+                                }
                             }
+                            uow.tc.Settings.First().HeadSha = headSha;
+                            uow.tc.SaveChanges();
+                            logger.Debug("Successfully completed pull");
                         }
-                        uow.tc.SaveChanges();
+                        else
+                            logger.Debug("HEAD is same as last pull");
                     }
-                    else
-                        logger.Debug("HEAD is same as last pull");
                 }
+                else
+                    logger.Debug("Missing TextFiles path or git repo");
             }
-            else
-                logger.Debug("Missing TextFiles path or git repo");
+            catch (Exception ex)
+            {
+                logger.ErrorException("Failed to update text files", ex);
+            }
         }
 
         public static Text ToText(this string fileData)

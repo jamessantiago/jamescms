@@ -92,7 +92,8 @@
     <Reference Include="Growl.CoreLibrary">
       <HintPath>..\packages\Growl.0.6\lib\Growl.CoreLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="LibGit2Sharp">
+    <Reference Include="LibGit2Sharp, Version=0.9.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\LibGit2Sharp.0.9.5\lib\net35\LibGit2Sharp.dll</HintPath>
     </Reference>
     <Reference Include="MarkdownDeep">
@@ -255,6 +256,9 @@
     <Compile Include="Services\WebSocketControllers\WebSocketListener.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Files\hosts.txt" />
+    <Content Include="Content\Files\team8.wmv" />
+    <Content Include="Content\Files\webpages.txt" />
     <Content Include="Content\Prettify\prettify.css" />
     <Content Include="Content\Prettify\Themes\desert.css" />
     <Content Include="Content\Prettify\Themes\sons-of-obsidian.css" />
@@ -323,16 +327,27 @@
     <Content Include="lib\agsXMPP.dll" />
     <Content Include="lib\agsXmppNlogTarget.dll" />
     <Content Include="lib\agsXmppNlogTarget.pdb" />
+    <Content Include="lib\LibGit2Sharp.xml" />
     <Content Include="lib\license.txt" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Content\Files\biometrics.zip" />
+    <Content Include="Content\Files\BPP.zip" />
+    <Content Include="Content\Files\BPP_Source.zip" />
+    <Content Include="Content\Files\LuceneDotNetIndex.zip" />
+    <Content Include="Content\Files\VCE.zip" />
+    <Content Include="Content\Files\james_keys.pdf" />
+    <Content Include="Content\Files\Programming_Assignment_4.pdf" />
+    <Content Include="Content\Files\programming_assingment_2.pdf" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
     <Content Include="robots.txt" />
+    <None Include="Properties\PublishProfiles\Profile.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\GoogleAnalytics.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
