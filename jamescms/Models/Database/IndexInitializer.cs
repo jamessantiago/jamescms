@@ -7,6 +7,7 @@ namespace jamescms
 {
     public class IndexInitializer<T> : IDatabaseInitializer<T> where T : DbContext
     {
+        
         private const string SelectIndexes = "SELECT name FROM sys.indexes";
         private const string CreateIndexQueryTemplate = "CREATE {unique} INDEX {indexName} ON {tableName} ({columnName})";
 

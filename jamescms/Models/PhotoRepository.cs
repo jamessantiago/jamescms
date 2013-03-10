@@ -40,7 +40,7 @@ namespace jamescms.Models
             query.ExtraParameters = "imgmax=576";
             query.KindParameter = "";
             PicasaFeed feed = service.Query(query);
-            var entry = feed.Entries.Where(d => d.Title.Text == photoTitle).FirstOrDefault();
+            var entry = feed.Entries.Where(d => d.Title.Text.ToLower() == photoTitle.ToLower()).FirstOrDefault();
             return (PicasaEntry)entry;
         }
 

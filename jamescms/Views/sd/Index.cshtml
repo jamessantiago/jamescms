@@ -3,8 +3,8 @@
 }
 <aside>
     <h3>Recent Posts</h3>
-    @Html.AjaxReadyLoadDiv("latestTitles", "recentList", "text", null)
+    @Html.Action("recentlist", "text")
 </aside>
 <section>
-    @Html.AjaxReadyLoadDiv("latestArticle", "latest", "text", null)    
+    @Html.Action("latest", "text")
 </section>

@@ -240,7 +240,7 @@ namespace jamescms.Controllers
                 return RedirectToAction("ExternalLoginFailure");
             }
 
-            if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
+            if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: true))
             {
                 return RedirectToLocal(returnUrl);
             }
@@ -289,7 +289,7 @@ namespace jamescms.Controllers
                     uow.uc.SaveChanges();
 
                     OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
-                    OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
+                    OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: true);
                     logger.Info("A new user has been registered: " + model.UserName);
                     return RedirectToLocal(returnUrl);
                 }

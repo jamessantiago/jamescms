@@ -15,6 +15,7 @@ namespace jamescms.Filters
         private static SimpleMembershipInitializer _initializer;
         private static object _initializerLock = new object();
         private static bool _isInitialized;
+        private static NLog.Logger logger = NLog.LogManager.GetLogger("InitializeSimpleMembershipAttribute");
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -28,6 +29,7 @@ namespace jamescms.Filters
             {
                 lock (_initializerLock)
                 {
+                    logger.Debug("Initializing membership database");
                     Database.SetInitializer<UsersContext>(null);
 
                     try
@@ -38,16 +40,19 @@ namespace jamescms.Filters
                             {
                                 // Create the SimpleMembership database without Entity Framework migration schema
                                 ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();
+                                logger.Debug("Created new membership database");
 
                             }
                         }
 
                         WebSecurity.InitializeDatabaseConnection("AccountConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                        logger.Debug("Membership database connection initialized");
                         if (!Roles.RoleExists("Guides"))
                         {
                             Roles.CreateRole("Guides");
                             WebSecurity.CreateUserAndAccount("admin", "password");
                             Roles.AddUserToRole("admin", "Guides");
+                            logger.Debug("Created default admin account");
                         }
                     }
                     catch (Exception ex)

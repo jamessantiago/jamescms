@@ -22,7 +22,13 @@ namespace MarkdownDeep
                 {
                     string photoid = url.ToLower().Replace("getphoto=", "");
                     var photo = uow.pr.GetPhoto(jcms.TextWallPhotoAlbum, photoid);
-                    return photo.Media.Content.Attributes["url"].ToString();
+                    var resultUrl = "photonotfound";
+                    try
+                    {
+                        resultUrl = photo.Media.Content.Attributes["url"].ToString();
+                    }
+                    catch { }
+                    return resultUrl;
                 }
             }
             else if (url.StartsWith("~"))

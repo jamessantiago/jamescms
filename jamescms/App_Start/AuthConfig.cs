@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
+using DotNetOpenAuth.AspNet;
+using DotNetOpenAuth.AspNet.Clients;
+using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
+using DotNetOpenAuth.OpenId.RelyingParty;
 using jamescms.Models;
 
 namespace jamescms
@@ -21,16 +25,15 @@ namespace jamescms
 
             //OAuthWebSecurity.RegisterLinkedInClient(
             //    consumerKey: "",
-            //    consumerSecret: "");
-
+            //    consumerSecret: "");            
+            
             OAuthWebSecurity.RegisterFacebookClient(
                 appId: jcms.FacebookAppId,
                 appSecret: jcms.FacebookAppSecret);
-
+            
             OAuthWebSecurity.RegisterGoogleClient();
-
+            
             OAuthWebSecurity.RegisterYahooClient();
-
         }
     }
 }

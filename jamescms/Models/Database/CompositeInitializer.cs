@@ -5,6 +5,7 @@ namespace jamescms
 { 
     public class CompositeDatabaseInitializer<T> : IDatabaseInitializer<T> where T : DbContext
     {
+        private NLog.Logger logger = NLog.LogManager.GetLogger("CompositeInitializer");
         private readonly List<IDatabaseInitializer<T>> initializers;
  
         public CompositeDatabaseInitializer(params IDatabaseInitializer<T>[] databaseInitializers)
@@ -17,6 +18,7 @@ namespace jamescms
         {
             foreach (var databaseInitializer in this.initializers)
             {
+                logger.Debug("Calling database initializer " + databaseInitializer.GetType().Name);
                 databaseInitializer.InitializeDatabase(context);
             }
         }

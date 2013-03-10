@@ -35,7 +35,7 @@
             $("#data").append("closed");
         };
         socket.onmessage = function (message) {
-            $("#data").append(message.data);
+            $("#data").append("\n" + message.data);
             $("#filedata").prop({ scrollTop: $("#filedata").prop("scrollHeight") });
             prettyPrint();
         };

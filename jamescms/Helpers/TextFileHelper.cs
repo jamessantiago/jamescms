@@ -79,7 +79,7 @@ namespace jamescms.Helpers
                                         text.Title = model.Title;
                                         text.Article = model.Article;
                                         text.Updated = DateTime.Now;
-                                        logger.Debug("Added " + text.Title);
+                                        logger.Debug("Updated " + text.Title);
                                     }
                                     else
                                     {
@@ -92,7 +92,7 @@ namespace jamescms.Helpers
                                             Updated = DateTime.Now
                                         };
                                         uow.tc.Texts.Add(newText);
-                                        logger.Debug("Updated " + newText.Title);
+                                        logger.Debug("Added " + newText.Title);
                                     }
                                 }
                                 catch (Exception ex)
