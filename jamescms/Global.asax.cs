@@ -9,6 +9,7 @@ using System.Web.Routing;
 using System.Web.Configuration;
 using System.Data.Entity;
 using jamescms.Models;
+using WebMatrix.WebData;
 using NLog;
 
 namespace jamescms
@@ -97,6 +98,8 @@ namespace jamescms
                     new IndexInitializer<TextContext>()
                     );
             }
+            Database.SetInitializer<UsersContext>(new SimpleMembershipInitializer<UsersContext>());
+            SimpleMembershipInitializer<UsersContext>.InitializeDatabaseConnection();
             logger.Debug("jamescms has started");
         }
 

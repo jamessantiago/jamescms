@@ -10,7 +10,6 @@ namespace jamescms
         {
             //filters.Add(new HandleErrorAttribute());
             filters.Add(new NLogHandleErrorAttribute());
-            filters.Add(new InitializeSimpleMembershipAttribute());
         }
     }
 

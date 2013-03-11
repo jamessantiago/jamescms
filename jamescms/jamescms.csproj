@@ -235,6 +235,7 @@
       <DependentUpon>201303011347573_Setting.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Database\CompositeInitializer.cs" />
+    <Compile Include="Models\Database\SimpleMembershipInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
     <Compile Include="Models\Database\IndexInitializer.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
