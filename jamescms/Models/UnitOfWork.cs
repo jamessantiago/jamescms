@@ -17,6 +17,7 @@ namespace jamescms.Models
         private UsersContext usersContext { get; set; }
         private TextContext textContext { get; set; }
         private PhotoRepository photoRepository { get; set; }
+        private QuizGameContext quizGameContext { get; set; }
 
         #endregion Private Contexts
 
@@ -55,6 +56,18 @@ namespace jamescms.Models
                 return photoRepository;
             }
         }
+        public QuizGameContext qg
+        {
+            get
+            {
+                if (quizGameContext == null)
+                {
+                    quizGameContext = new QuizGameContext();
+                }
+                return quizGameContext;
+            }
+        }
+        
 
         #endregion Public Contexts
 

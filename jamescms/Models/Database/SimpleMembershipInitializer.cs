@@ -6,16 +6,19 @@ using System.Web.Mvc;
 using WebMatrix.WebData;
 using jamescms.Models;
 using System.Web.Security;
+using NLog;
 
 namespace jamescms
 {
     public class SimpleMembershipInitializer<T> : IDatabaseInitializer<T> where T : DbContext
     {
+        private static Logger logger = LogManager.GetLogger("SimpleMembershipInitializer");
 
         public void InitializeDatabase(T context)
         {
             try
             {
+                logger.Debug("Initializing membership database");
                 context.Database.CreateIfNotExists();
 
                 //WebSecurity.InitializeDatabaseConnection("AccountConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
@@ -35,6 +38,7 @@ namespace jamescms
 
         public static void InitializeDatabaseConnection()
         {
+            logger.Debug("Initializing websecurity database connection");
             WebSecurity.InitializeDatabaseConnection("AccountConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
         }
     }

@@ -15,7 +15,9 @@ namespace jamescms.Models
         {
         }
 
-
+        public virtual IDbSet<QuizState> QuizStates { get; set; }
+        public virtual IDbSet<TriviaQuestion> TriviaQuestions { get; set; }
+        public virtual IDbSet<UserGameProfile> UserGameProfiles { get; set; }
     }
 
     public class QuizState : Entity

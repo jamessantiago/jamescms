@@ -18,7 +18,8 @@ namespace jamescms.Models
     }
 
     public static class AccountModelExtensions
-    {
+    {       
+
         public static string[] GetUserRoles(this UserProfile profile)
         {
             return Roles.GetRolesForUser(profile.UserName);
@@ -61,4 +62,5 @@ namespace jamescms.Models
             return WebSecurity.IsAccountLockedOut(profile.UserName, 10, 600);
         }
     }
+    
 }

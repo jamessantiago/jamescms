@@ -222,6 +222,7 @@
     <Compile Include="Controllers\Portal\photosController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
+    <Compile Include="Games\QuizGame.cs" />
     <Compile Include="Helpers\FilePreview.cs" />
     <Compile Include="Helpers\FileTail.cs" />
     <Compile Include="Helpers\GitHelper.cs" />

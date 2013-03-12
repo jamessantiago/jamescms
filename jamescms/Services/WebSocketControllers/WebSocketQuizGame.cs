@@ -17,25 +17,34 @@ namespace jamescms.Services.WebSocketControllers
     {
         private Logger logger = LogManager.GetLogger("WebSocketQuizGame");
         private WebSocketServer server;
+        private IWebSocketConnection socket;
 
         public void Start()
         {
-            server = new WebSocketServer("ws://santiagodevelopment.com:8990/" + serverName);
+            server = new WebSocketServer("ws://santiagodevelopment.com:8990/quizgame");
             try
             {
                 server.Start(socket =>
                 {
-                    socket.OnOpen = () => 
+                    socket.OnOpen = () => StartQuizGame(socket);
                     socket.OnError = error => logger.DebugException("Error occurred establishing new websocket", error);
-                    socket.OnMessage = 
+                    socket.OnMessage = message => HandleChatMessage(message);                    
                 });
             }
             catch (Exception ex)
             {
-                logger.DebugException("Failed to establish file tail web socket", ex);
+                logger.DebugException("Failed to establish quiz game socket", ex);
             }
         }
 
-        public 
+        public void StartQuizGame(IWebSocketConnection Socket)
+        {
+            socket = Socket;
+        }
+
+        public void HandleChatMessage(string message)
+        {
+
+        }
     }
 }
