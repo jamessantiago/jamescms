@@ -23,7 +23,8 @@ namespace jamescms.Models
     public class QuizState : Entity
     {
         public int LastQuestion { get; set; }
-        public DateTime LastTimeStarted { get; set; }        
+        public DateTime LastTimeStarted { get; set; }
+        public int TotalTriviaQuestions { get; set; }
     }
 
     public class TriviaQuestion : Entity

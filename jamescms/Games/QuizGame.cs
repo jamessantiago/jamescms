@@ -45,6 +45,8 @@ namespace jamescms.Games
         private UnitOfWork uow;
         private QuizState quizState;
         private Dictionary<int, string> messages;
+        private Random random = new Random();
+        private const int MAX_MESSAGES = 100;
 
         #endregion private properties
 
@@ -68,52 +70,53 @@ namespace jamescms.Games
                 uow.qg.QuizStates.Add(new QuizState()
                 {
                     LastQuestion = 0,
-                    LastTimeStarted = DateTime.Now
+                    LastTimeStarted = DateTime.Now,
+                    TotalTriviaQuestions = uow.qg.TriviaQuestions.Count()
                 });
+                uow.qg.SaveChanges();
             }
             else
             {
                 quizState = uow.qg.QuizStates.First();
                 quizState.LastTimeStarted = DateTime.Now;
+                quizState.TotalTriviaQuestions = uow.qg.TriviaQuestions.Count();
                 uow.qg.SaveChanges();
             }
 
             if (!uow.qg.TriviaQuestions.Any())
             {
-                messages.AddMessage("There don't seem to be any questions in the database");
+                AddMessage("There don't seem to be any questions in the database");
             }
             else
             {
-                messages.AddMessage("Quiz game is starting");
+                AddMessage("Quiz game is starting");
                 StartQuestion();
             }
         }
 
         private void StartQuestion()
         {
-            var question = uow.qg.TriviaQuestions.OrderBy(d => Guid.NewGuid()).Take(1);
+            var question = uow.qg.TriviaQuestions.Skip(random.Next(quizState.TotalTriviaQuestions)).Take(1);
 
+        }
+
+        private void AddMessage(string message)
+        {
+            int index = 1;
+            if (messages.Any())
+                index = messages.Keys.Max() + 1;
+
+            if (messages.Count > MAX_MESSAGES)
+                messages.Remove(messages.Keys.Min());
+
+            messages.Add(index, message);
+
+            if (MessageArrived != null)
+                MessageArrived(this, new EventArgs());
         }
 
         #endregion private methods
 
     }
 
-    public static class QuizGameExtensions
-    {
-        private const int MAX_MESSAGES = 100;
-
-        public static void AddMessage(this Dictionary<int, string> dic, string message)
-        {
-            int index = 1;
-            if (dic.Any())
-                index = dic.Keys.Max() + 1;
-
-            if (dic.Count > MAX_MESSAGES)
-                dic.Remove(dic.Keys.Min());
-
-            dic.Add(index, message);
-
-        }
-    }
 }
