@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Timers;
+using System.Text.RegularExpressions;
 using jamescms.Models;
 using NLog;
 
@@ -46,6 +49,8 @@ namespace jamescms.Games
         private QuizState quizState;
         private Dictionary<int, string> messages;
         private Random random = new Random();
+        private TriviaQuestion currentQuestion;
+
         private const int MAX_MESSAGES = 100;
 
         #endregion private properties
@@ -94,13 +99,31 @@ namespace jamescms.Games
             }
         }
 
-        private void StartQuestion()
-        {
-            var question = uow.qg.TriviaQuestions.Skip(random.Next(quizState.TotalTriviaQuestions)).Take(1);
-
-        }
+        #region AddMessage
 
         private void AddMessage(string message)
+        {
+            var quizmessage = new QuizMessage()
+            {
+                Message = message,
+                To = "All",
+                Type = "Message"
+            };
+            AddMessage(quizmessage);
+        }
+
+        private void AddMessage(string message, string ToUser)
+        {
+            var quizmessage = new QuizMessage()
+            {
+                Message = message,
+                To = ToUser,
+                Type = "Message"
+            };
+            AddMessage(quizmessage);
+        }
+
+        private void AddMessage(QuizMessage message)
         {
             int index = 1;
             if (messages.Any())
@@ -109,14 +132,73 @@ namespace jamescms.Games
             if (messages.Count > MAX_MESSAGES)
                 messages.Remove(messages.Keys.Min());
 
-            messages.Add(index, message);
+            message.Id = index;
+            var jsonMessage = new JavaScriptSerializer().Serialize(message);
+
+            messages.Add(index, jsonMessage);
 
             if (MessageArrived != null)
                 MessageArrived(this, new EventArgs());
         }
 
+        #endregion AddMessage
+
+        private void StartQuestion()
+        {
+            currentQuestion = uow.qg.TriviaQuestions.Skip(random.Next(quizState.TotalTriviaQuestions)).First();
+            AddMessage(currentQuestion.Question);
+            var firstChanceTimer = new Timer(30000);
+            firstChanceTimer.AutoReset = false;
+            firstChanceTimer.Elapsed += firstChanceTimer_Elapsed;
+        }
+
+        private void firstChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
+        {
+            string hint = Regex.Replace(currentQuestion.Answer, @"\S", "_");
+            AddMessage("Here's a hint: " + hint);
+            if (sender is Timer && sender != null)
+                ((Timer)sender).Dispose();
+            var secondChanceTimer = new Timer(30000);
+            secondChanceTimer.AutoReset = false;
+            secondChanceTimer.Elapsed += secondChanceTimer_Elapsed;
+        }
+
+        private void secondChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
+        {
+            string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
+            AddMessage("Here's another hint: " + hint);
+            if (sender is Timer && sender != null)
+                ((Timer)sender).Dispose();
+            var lastChanceTimer = new Timer(30000);
+            lastChanceTimer.AutoReset = false;
+            lastChanceTimer.Elapsed += lastChanceTimer_Elapsed;
+        }
+
+        private void lastChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
+        {
+            string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
+            AddMessage("Last hint: " + hint);
+            if (sender is Timer && sender != null)
+                ((Timer)sender).Dispose();
+            var sendAnswerTimer = new Timer(30000);
+            sendAnswerTimer.AutoReset = false;
+            sendAnswerTimer.Elapsed += 
+
+
+
+                ///james, just make this a single timer, you'll need to have some class properties for when the question is answered anyway.
+        }
+
         #endregion private methods
 
+    }
+
+    public class QuizMessage
+    {
+        public int Id { get; set; }
+        public string Message { get; set; }
+        public string To { get; set; }
+        public string Type { get; set; }        
     }
 
 }
