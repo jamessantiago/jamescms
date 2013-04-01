@@ -50,6 +50,8 @@ namespace jamescms.Games
         private Dictionary<int, string> messages;
         private Random random = new Random();
         private TriviaQuestion currentQuestion;
+        private bool QuestionAnswered = false;
+        private int hintsGiven = 0;
 
         private const int MAX_MESSAGES = 100;
 
@@ -143,8 +145,12 @@ namespace jamescms.Games
 
         #endregion AddMessage
 
+        #region Start Question and hints
+
         private void StartQuestion()
         {
+            hintsGiven = 0;
+            QuestionAnswered = false;
             currentQuestion = uow.qg.TriviaQuestions.Skip(random.Next(quizState.TotalTriviaQuestions)).First();
             AddMessage(currentQuestion.Question);
             var firstChanceTimer = new Timer(30000);
@@ -154,42 +160,83 @@ namespace jamescms.Games
 
         private void firstChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
         {
-            string hint = Regex.Replace(currentQuestion.Answer, @"\S", "_");
-            AddMessage("Here's a hint: " + hint);
-            if (sender is Timer && sender != null)
-                ((Timer)sender).Dispose();
-            var secondChanceTimer = new Timer(30000);
-            secondChanceTimer.AutoReset = false;
-            secondChanceTimer.Elapsed += secondChanceTimer_Elapsed;
+            if (!QuestionAnswered)
+            {
+                hintsGiven = 1;
+                string hint = Regex.Replace(currentQuestion.Answer, @"\S", "_");
+                AddMessage("Here's a hint: " + hint);
+                if (sender is Timer && sender != null)
+                    ((Timer)sender).Dispose();
+                var secondChanceTimer = new Timer(30000);
+                secondChanceTimer.AutoReset = false;
+                secondChanceTimer.Elapsed += secondChanceTimer_Elapsed;
+            }
         }
 
         private void secondChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
         {
-            string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
-            AddMessage("Here's another hint: " + hint);
-            if (sender is Timer && sender != null)
-                ((Timer)sender).Dispose();
-            var lastChanceTimer = new Timer(30000);
-            lastChanceTimer.AutoReset = false;
-            lastChanceTimer.Elapsed += lastChanceTimer_Elapsed;
+            if (!QuestionAnswered)
+            {
+                hintsGiven = 2;
+                string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
+                AddMessage("Here's another hint: " + hint);
+                if (sender is Timer && sender != null)
+                    ((Timer)sender).Dispose();
+                var lastChanceTimer = new Timer(30000);
+                lastChanceTimer.AutoReset = false;
+                lastChanceTimer.Elapsed += lastChanceTimer_Elapsed;
+            }
         }
 
         private void lastChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
         {
-            string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
-            AddMessage("Last hint: " + hint);
-            if (sender is Timer && sender != null)
-                ((Timer)sender).Dispose();
-            var sendAnswerTimer = new Timer(30000);
-            sendAnswerTimer.AutoReset = false;
-            sendAnswerTimer.Elapsed += 
-
-
-
-                ///james, just make this a single timer, you'll need to have some class properties for when the question is answered anyway.
+            if (!QuestionAnswered)
+            {
+                hintsGiven = 3;
+                string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
+                AddMessage("Last hint: " + hint);
+                if (sender is Timer && sender != null)
+                    ((Timer)sender).Dispose();
+                var sendAnswerTimer = new Timer(30000);
+                sendAnswerTimer.AutoReset = false;
+                sendAnswerTimer.Elapsed += sendAnswerTimer_Elapsed;
+            }
         }
 
+        private void sendAnswerTimer_Elapsed(object sender, ElapsedEventArgs args)
+        {
+            if (!QuestionAnswered)
+            {
+                string answer = currentQuestion.Answer;
+                AddMessage("Times up!  The answer was " + answer);
+                if (sender is Timer && sender != null)
+                    ((Timer)sender).Dispose();
+                StartQuestion();                
+            }
+        }
+
+        #endregion Start Question and hints
+
         #endregion private methods
+
+        #region public methods
+
+        public bool AttemptAnswer(string answer, string user)
+        {
+            AddMessage(answer);
+            if (answer.Equals(currentQuestion.Answer, StringComparison.InvariantCultureIgnoreCase))
+            {
+                QuestionAnswered = true;
+                AddMessage("Congratulations to " + user + " for providing the correct answer of " + currentQuestion.Answer);
+                AddMessage("Get ready for the next question.");
+                StartQuestion();
+                return true;
+            }
+            else
+                return false;
+        }
+
+        #endregion public methods
 
     }
 
