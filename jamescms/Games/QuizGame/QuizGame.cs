@@ -8,6 +8,7 @@ using System.Timers;
 using System.Text.RegularExpressions;
 using jamescms.Models;
 using NLog;
+using Newtonsoft.Json;
 
 namespace jamescms.Games
 {
@@ -32,8 +33,12 @@ namespace jamescms.Games
                 {
                     lock (syncRoot)
                     {
+                        logger.Debug("Initialzing new quiz game instance");
                         if (instance == null)
+                        {
                             instance = new QuizGame();
+                            instance.SetupQuiz();
+                        }
                     }
                 }
                 return instance;
@@ -44,10 +49,10 @@ namespace jamescms.Games
 
         #region private properties
 
-        private Logger logger = LogManager.GetLogger("QuizGame");
+        private static Logger logger = LogManager.GetLogger("QuizGame");
         private UnitOfWork uow;
         private QuizState quizState;
-        private Dictionary<int, string> messages;
+        private Dictionary<int, string> messages = new Dictionary<int,string>();
         private Random random = new Random();
         private TriviaQuestion currentQuestion;
         private bool QuestionAnswered = false;
@@ -151,7 +156,7 @@ namespace jamescms.Games
         {
             hintsGiven = 0;
             QuestionAnswered = false;
-            currentQuestion = uow.qg.TriviaQuestions.Skip(random.Next(quizState.TotalTriviaQuestions)).First();
+            currentQuestion = uow.qg.TriviaQuestions.OrderBy(d => d.Id).Skip(random.Next(quizState.TotalTriviaQuestions)).First();
             AddMessage(currentQuestion.Question);
             var firstChanceTimer = new Timer(30000);
             firstChanceTimer.AutoReset = false;

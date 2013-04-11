@@ -25,9 +25,10 @@ namespace jamescms.Services.WebSocketControllers
 
         public void Start()
         {
-            server = new WebSocketServer("ws://santiagodevelopment.com:8990/quizgame");
+            server = new WebSocketServer("ws://localhost:8990/quizgame");
             try
             {
+                logger.Debug("Initializing quiz game");
                 server.Start(socket =>
                 {
                     socket.OnOpen = () => StartQuizGame(socket);
@@ -46,26 +47,30 @@ namespace jamescms.Services.WebSocketControllers
             socket = Socket;            
             quizGame = QuizGame.Instance;
             quizGame.MessageArrived += quizGame_MessageArrived;
+            quizGame_MessageArrived(null, null);            
         }
 
         private void quizGame_MessageArrived(object sender, EventArgs args)
         {
+            logger.Debug("new message event triggered");
             foreach (var message in quizGame.Messages.Where(d => d.Key > currentMessageIndex))
             {
+                logger.Debug("Sending message to client: " + message);
                 socket.Send(message.Value);
             }
             currentMessageIndex = quizGame.Messages.Last().Key;
         }
 
         public void HandleChatMessage(string message)
-        {   
-            var msg = JsonConvert.DeserializeObject(message) as QuizGameMessage;
+        {
+            logger.Debug("message arrived: " + message);
+            var msg = JsonConvert.DeserializeObject<QuizGameMessage>(message);
             if (msg != null)
             {
                 switch (msg.Type.ToLower())
                 {
                     case "chat":
-                        quizGame.AttemptAnswer(message, msg.User);
+                        quizGame.AttemptAnswer(msg.Message, msg.User);
                         break;
                     case "get":
                         int index = 0;

@@ -1,5 +1,17 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Trivia";
 }
 
-<h2>Index</h2>
+<div>
+    <pre class="prettyprint lang-logfile" id="chatWindow" style="white-space:pre"></pre>
+</div>
+
+<input type="text" id="chatInput" value="" />
+
+<input type="button" id="sendChat" value="send" />
+
+<div id="status"></div>
+
+@section scripts {
+    <script src="@Url.Content("~/Scripts/TriviaWebSocketClient.js")"></script>
+}

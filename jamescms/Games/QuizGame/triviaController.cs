@@ -15,6 +15,7 @@ namespace jamescms.Controllers
         public triviaController()
         {
             webSocketQuizGame = new WebSocketQuizGame();
+            webSocketQuizGame.Start();
         }
 
         public ActionResult Index()

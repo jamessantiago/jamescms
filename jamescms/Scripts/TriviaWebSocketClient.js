@@ -1,9 +1,13 @@
 ﻿var socket;
 var connectionAttempts = 0;
+var MAX_CONNECTIONS = 4
 var user = "";
+
+startGame();
 
 function startGame()
 {
+    $("#status").html("connecting");
     establishConnection();
     user = $("#username").val();
 }
@@ -20,24 +24,33 @@ function MessageReceived(message)
     $("#chatWindow").append(message);
 }
 
+$("#sendChat").click(function() {
+    SendMessage();
+});
 
 function establishConnection() {
     if (socket != null) {
         socket.close();
     }
-    socket = new WebSocket("ws://santiagodevelopment.com:8989/@Html.Raw(Session.SessionID)");
+    socket = new WebSocket("ws://localhost:8990/quizgame");
     socket.onopen = function (connection) {
         $("#status").html("connected");
     };
     socket.onerror = function (error) {
         $("#status").html(error.data);
+        if (connectionAttempts < MAX_CONNECTIONS) {
+            connectionAttempts++;
+            establishConnection();
+        }
     };
     socket.onclose = function () {
-        $("#data").append("closed");
+        $("#status").html("closed");
     };
-    socket.onmessage = function (message) {
-        var data = JSON.par(message.data)
-        data.
-    };
-    
+    socket.onmessage = function (message) {        
+        var data = JSON.parse(message.data);
+        if (data.To.toLowerCase() == "all" || data.To.toLowerCase() == user)
+        {
+            $("#chatWindow").append(data.Message + "\n");
+        }
+        }
 };

@@ -222,7 +222,8 @@
     <Compile Include="Controllers\Portal\photosController.cs" />
     <Compile Include="Controllers\Text Wall\textController.cs" />
     <Compile Include="Controllers\Portal\sdController.cs" />
-    <Compile Include="Games\QuizGame.cs" />
+    <Compile Include="Games\QuizGame\QuizGame.cs" />
+    <Compile Include="Games\QuizGame\triviaController.cs" />
     <Compile Include="Helpers\FilePreview.cs" />
     <Compile Include="Helpers\FileTail.cs" />
     <Compile Include="Helpers\GitHelper.cs" />
@@ -231,10 +232,11 @@
     <Compile Include="Helpers\MarkdownHelper.cs" />
     <Compile Include="Helpers\PicasaHelper.cs" />
     <Compile Include="Helpers\TextFileHelper.cs" />
-    <Compile Include="Migrations\201303011347573_Setting.cs" />
-    <Compile Include="Migrations\201303011347573_Setting.Designer.cs">
-      <DependentUpon>201303011347573_Setting.cs</DependentUpon>
+    <Compile Include="Migrations\201304111034116_Initial.cs" />
+    <Compile Include="Migrations\201304111034116_Initial.Designer.cs">
+      <DependentUpon>201304111034116_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\QuizGameConfiguration.cs" />
     <Compile Include="Models\Database\CompositeInitializer.cs" />
     <Compile Include="Models\Database\SimpleMembershipInitializer.cs" />
     <Compile Include="Models\Database\FullTextIndexInitializer.cs" />
@@ -257,7 +259,7 @@
     <Compile Include="Services\WebSocketControllers\WebSocketFilePreview.cs" />
     <Compile Include="Services\WebSocketControllers\WebSocketFileTail.cs" />
     <Compile Include="Services\WebSocketControllers\WebSocketListener.cs" />
-    <Compile Include="Services\WebSocketControllers\WebSocketQuizGame.cs" />
+    <Compile Include="Games\QuizGame\WebSocketQuizGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Files\hosts.txt" />
@@ -401,6 +403,7 @@
     <Content Include="Scripts\Prettify\lang-xq.js" />
     <Content Include="Scripts\Prettify\lang-yaml.js" />
     <Content Include="Scripts\Prettify\prettify.js" />
+    <Content Include="Scripts\TriviaWebSocketClient.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -476,6 +479,7 @@
     <Content Include="Views\photos\Album.cshtml" />
     <Content Include="Views\guide\_filePreviewChooser.cshtml" />
     <Content Include="Views\guide\_FilePreview.cshtml" />
+    <Content Include="Views\trivia\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -487,8 +491,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201303011347573_Setting.resx">
-      <DependentUpon>201303011347573_Setting.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201304111034116_Initial.resx">
+      <DependentUpon>201304111034116_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
