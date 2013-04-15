@@ -143,7 +143,8 @@
       <xs:enumeration value="Info" />
       <xs:enumeration value="Warn" />
       <xs:enumeration value="Error" />
-      <xs:enumeration value="Fatal" />
+      <xs:enumeration value="
+                      " />
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="NLogLevelList">

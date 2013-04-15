@@ -14,12 +14,14 @@ namespace jamescms.Controllers
 
         public triviaController()
         {
-            webSocketQuizGame = new WebSocketQuizGame();
-            webSocketQuizGame.Start();
+            if (webSocketQuizGame == null)
+                webSocketQuizGame = new WebSocketQuizGame();
         }
 
         public ActionResult Index()
         {
+            //if (!webSocketQuizGame.Users.Contains(Session.SessionID))
+                webSocketQuizGame.Join(Session.SessionID);
             return View();
         }
 

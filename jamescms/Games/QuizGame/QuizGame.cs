@@ -33,7 +33,7 @@ namespace jamescms.Games
                 {
                     lock (syncRoot)
                     {
-                        logger.Debug("Initialzing new quiz game instance");
+                        logger.Debug("Initializing new quiz game instance");
                         if (instance == null)
                         {
                             instance = new QuizGame();
@@ -55,7 +55,6 @@ namespace jamescms.Games
         private Dictionary<int, string> messages = new Dictionary<int,string>();
         private Random random = new Random();
         private TriviaQuestion currentQuestion;
-        private bool QuestionAnswered = false;
         private int hintsGiven = 0;
 
         private const int MAX_MESSAGES = 100;
@@ -114,16 +113,30 @@ namespace jamescms.Games
             {
                 Message = message,
                 To = "All",
+                From = "QuizMaster",
                 Type = "Message"
             };
             AddMessage(quizmessage);
         }
 
-        private void AddMessage(string message, string ToUser)
+        private void AddMessage(string message, string FromUser)
         {
             var quizmessage = new QuizMessage()
             {
                 Message = message,
+                From = FromUser,
+                To = "All",
+                Type = "Message"
+            };
+            AddMessage(quizmessage);
+        }
+
+        private void AddMessage(string message, string FromUser, string ToUser)
+        {
+            var quizmessage = new QuizMessage()
+            {
+                Message = message,
+                From = FromUser,
                 To = ToUser,
                 Type = "Message"
             };
@@ -155,17 +168,17 @@ namespace jamescms.Games
         private void StartQuestion()
         {
             hintsGiven = 0;
-            QuestionAnswered = false;
             currentQuestion = uow.qg.TriviaQuestions.OrderBy(d => d.Id).Skip(random.Next(quizState.TotalTriviaQuestions)).First();
             AddMessage(currentQuestion.Question);
             var firstChanceTimer = new Timer(30000);
             firstChanceTimer.AutoReset = false;
-            firstChanceTimer.Elapsed += firstChanceTimer_Elapsed;
+            firstChanceTimer.Elapsed += firstChanceTimer_Elapsed;            
+            firstChanceTimer.Start();
         }
 
         private void firstChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
         {
-            if (!QuestionAnswered)
+            if (hintsGiven == 0)
             {
                 hintsGiven = 1;
                 string hint = Regex.Replace(currentQuestion.Answer, @"\S", "_");
@@ -175,12 +188,13 @@ namespace jamescms.Games
                 var secondChanceTimer = new Timer(30000);
                 secondChanceTimer.AutoReset = false;
                 secondChanceTimer.Elapsed += secondChanceTimer_Elapsed;
+                secondChanceTimer.Start();
             }
         }
 
         private void secondChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
         {
-            if (!QuestionAnswered)
+            if (hintsGiven == 1)
             {
                 hintsGiven = 2;
                 string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
@@ -190,30 +204,33 @@ namespace jamescms.Games
                 var lastChanceTimer = new Timer(30000);
                 lastChanceTimer.AutoReset = false;
                 lastChanceTimer.Elapsed += lastChanceTimer_Elapsed;
+                lastChanceTimer.Start();
             }
         }
 
         private void lastChanceTimer_Elapsed(object sender, ElapsedEventArgs args)
         {
-            if (!QuestionAnswered)
+            if (hintsGiven == 2)
             {
                 hintsGiven = 3;
-                string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
+                string hint = Regex.Replace(currentQuestion.Answer, @"\B\S\B", "_");
                 AddMessage("Last hint: " + hint);
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();
                 var sendAnswerTimer = new Timer(30000);
                 sendAnswerTimer.AutoReset = false;
                 sendAnswerTimer.Elapsed += sendAnswerTimer_Elapsed;
+                sendAnswerTimer.Start();
             }
         }
 
         private void sendAnswerTimer_Elapsed(object sender, ElapsedEventArgs args)
         {
-            if (!QuestionAnswered)
+            if (hintsGiven == 3)
             {
                 string answer = currentQuestion.Answer;
                 AddMessage("Times up!  The answer was " + answer);
+                AddMessage("Get ready for the next question.");
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();
                 StartQuestion();                
@@ -228,10 +245,9 @@ namespace jamescms.Games
 
         public bool AttemptAnswer(string answer, string user)
         {
-            AddMessage(answer);
+            AddMessage(answer, user);
             if (answer.Equals(currentQuestion.Answer, StringComparison.InvariantCultureIgnoreCase))
             {
-                QuestionAnswered = true;
                 AddMessage("Congratulations to " + user + " for providing the correct answer of " + currentQuestion.Answer);
                 AddMessage("Get ready for the next question.");
                 StartQuestion();
@@ -250,6 +266,7 @@ namespace jamescms.Games
         public int Id { get; set; }
         public string Message { get; set; }
         public string To { get; set; }
+        public string From { get; set; }
         public string Type { get; set; }        
     }
 

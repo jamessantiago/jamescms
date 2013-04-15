@@ -13,5 +13,8 @@
 <div id="status"></div>
 
 @section scripts {
-    <script src="@Url.Content("~/Scripts/TriviaWebSocketClient.js")"></script>
+    <script type="text/javascript">
+        var sessionId = "@Html.Raw(Session.SessionID)";
+    </script>
+    <script src="@Url.Content("~/Games/QuizGame/TriviaWebSocketClient.js")"></script>
 }

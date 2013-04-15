@@ -110,11 +110,15 @@ namespace jamescms
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
-            logger.FatalException(exception.Message, exception);
+
+            
 
             Response.Clear();
 
             HttpException httpException = exception as HttpException;
+
+            
+            
 
             RouteData routeData = new RouteData();
             bool isAjax = false;
@@ -143,6 +147,8 @@ namespace jamescms
                     routeData.Values.Add("action", "Index");
                 }
             }
+            if (Response.StatusCode != 404)
+                logger.FatalException(exception.Message, exception);
 
             routeData.Values.Add("error", exception);
 

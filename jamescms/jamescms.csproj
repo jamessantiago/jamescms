@@ -403,7 +403,7 @@
     <Content Include="Scripts\Prettify\lang-xq.js" />
     <Content Include="Scripts\Prettify\lang-yaml.js" />
     <Content Include="Scripts\Prettify\prettify.js" />
-    <Content Include="Scripts\TriviaWebSocketClient.js" />
+    <Content Include="Games\QuizGame\TriviaWebSocketClient.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
