@@ -31,7 +31,7 @@ namespace jamescms.Services.WebSocketControllers
 
         public void Start()
         {
-            server = new WebSocketServer("ws://santiagodevelopment.com:8990/" + serverName);
+            server = new WebSocketServer("ws://santiagodevelopment.com:8991/" + serverName);
             try
             {                
                 server.Start(socket =>
