@@ -147,8 +147,11 @@ namespace jamescms
                     routeData.Values.Add("action", "Index");
                 }
             }
+
             if (Response.StatusCode != 404)
                 logger.FatalException(exception.Message, exception);
+            else
+                logger.DebugException(exception.Message, exception);
 
             routeData.Values.Add("error", exception);
 
