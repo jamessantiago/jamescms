@@ -1,17 +1,19 @@
 ﻿@{
     ViewBag.Title = "Trivia";
 }
+<section class="standard-form">
+    <form action="javascript:void(0);">
+        <div>
+            <pre class="prettyprint" id="chatWindow"></pre>
+        </div>
 
-<div>
-    <pre class="prettyprint lang-logfile" id="chatWindow" style="white-space:pre"></pre>
-</div>
+        <input type="text" id="chatInput" value="" />
 
-<input type="text" id="chatInput" value="" />
+        <input type="submit" id="sendChat" value="send" />
 
-<input type="button" id="sendChat" value="send" />
-
-<div id="status"></div>
-
+        <span>Status: </span><div id="status">connecting</div>
+    </form>
+</section>
 @section scripts {
     <script type="text/javascript">
         var sessionId = "@Html.Raw(Session.SessionID)";

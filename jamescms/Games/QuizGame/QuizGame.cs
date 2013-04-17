@@ -181,7 +181,7 @@ namespace jamescms.Games
             if (hintsGiven == 0)
             {
                 hintsGiven = 1;
-                string hint = Regex.Replace(currentQuestion.Answer, @"\S", "_");
+                string hint = Regex.Replace(currentQuestion.Answer, @"\S", "-");
                 AddMessage("Here's a hint: " + hint);
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();
@@ -197,7 +197,7 @@ namespace jamescms.Games
             if (hintsGiven == 1)
             {
                 hintsGiven = 2;
-                string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "_");
+                string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "-");
                 AddMessage("Here's another hint: " + hint);
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();
@@ -213,7 +213,7 @@ namespace jamescms.Games
             if (hintsGiven == 2)
             {
                 hintsGiven = 3;
-                string hint = Regex.Replace(currentQuestion.Answer, @"\B\S\B", "_");
+                string hint = Regex.Replace(currentQuestion.Answer, @"\B\S\B", "-");
                 AddMessage("Last hint: " + hint);
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();

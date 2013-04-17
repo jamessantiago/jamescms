@@ -4,6 +4,7 @@ var MAX_CONNECTIONS = 4
 var user = "";
 
 startGame();
+$("#chatInput").focus();
 
 function startGame()
 {
@@ -17,6 +18,10 @@ function SendMessage()
     var message = $("#chatInput").val();
     socket.send("{'Type':'chat', 'User': '"+ user + "', 'Message':'" + message + "'}")
     $("#chatInput").val('');
+}
+
+function htmlEncode(value) {
+    return $("<div/>").text(value).html();
 }
 
 function MessageReceived(message)
@@ -37,7 +42,7 @@ function establishConnection() {
     if (socket != null) {
         socket.close();
     }
-    socket = new WebSocket("ws://santiagodevelopment.com:8990/quizgame" + sessionId);
+    socket = new WebSocket("ws://santiagodevelopment.com:8990/quizgame");
     socket.onopen = function (connection) {
         $("#status").html("connected");
     };
@@ -56,6 +61,7 @@ function establishConnection() {
         if (data.To.toLowerCase() == "all" || data.To.toLowerCase() == user)
         {
             $("#chatWindow").append(data.From + ": " + data.Message + "\n");
+            $("#chatWindow").prop({ scrollTop: $("#chatWindow").prop("scrollHeight") });
         }
         }
 };

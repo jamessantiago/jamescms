@@ -20,64 +20,63 @@ namespace jamescms.Services.WebSocketControllers
 
         private Logger logger = LogManager.GetLogger("WebSocketQuizGame");
         private WebSocketServer server;
-        private Dictionary<string, IWebSocketConnection> sockets;
+        private List<IWebSocketConnection> sockets;
         //private IWebSocketConnection socket;
         private QuizGame quizGame;
         private int currentMessageIndex = 0;
 
-        public string[] Users
+        public bool QuizGameStarted = false;
+
+        public string[] Connections
         {
             get
             {
                 if (sockets != null)
-                    return sockets.Keys.ToArray();
+                    return sockets.Select(d => d.ConnectionInfo.Id.ToString()).ToArray();
                 else
                     return new string[]{""};
             }
         }
 
-        public void Join(string user)
+        public void Start()
         {   
-            server = new WebSocketServer("ws://localhost:8990/quizgame" + user);
+            server = new WebSocketServer("ws://santiagodevelopment.com:8990/quizgame");
             try
             {
                 logger.Debug("Initializing quiz game");                
                 server.Start(socket =>
                 {
-                    socket.OnOpen = () => StartQuizGame(socket, user);
+                    socket.OnOpen = () => StartQuizGame(socket);
                     socket.OnError = error => logger.DebugException("Error occurred establishing new websocket", error);
-                    socket.OnMessage = message => HandleChatMessage(message);                 
+                    socket.OnMessage = message => HandleChatMessage(message);      
                 });
             }
             catch (Exception ex)
             {
-                server.Dispose();
-                try
-                {
-                    server = new WebSocketServer("ws://santiagodevelopment.com:8990/quizgame" + user);                    
-                    server.Start(socket =>
-                    {
-                        socket.OnOpen = () => StartQuizGame(socket, user);
-                        socket.OnError = error => logger.DebugException("Error occurred establishing new websocket", error);
-                        socket.OnMessage = message => HandleChatMessage(message);
-                    });
-                }
-                catch { }
                 logger.DebugException("Failed to establish quiz game socket", ex);
             }
         }
 
-        public void StartQuizGame(IWebSocketConnection Socket, string user)
+        public void StartQuizGame(IWebSocketConnection Socket)
         {
-            if (sockets == null)
-                sockets = new Dictionary<string, IWebSocketConnection>();
-            if (sockets.ContainsKey(user))
+            if (quizGame != null && quizGame.Messages != null && quizGame.Messages.Any())
             {
-                sockets[user].Close();
-                sockets.Remove(user);
+                foreach (var message in quizGame.Messages)
+                {
+                    Socket.Send(message.Value);
+                }
+            }
+            QuizGameStarted = true;
+            if (sockets == null)
+                sockets = new List<IWebSocketConnection>();
+            if (sockets.Any(d => d.ConnectionInfo.Id == Socket.ConnectionInfo.Id))
+            {                
+                var sock = sockets.First(d => d.ConnectionInfo.Id == Socket.ConnectionInfo.Id);
+                sock.Close();
+                sockets.Remove(sock);
             }
                
-            sockets.Add(user, Socket);
+            sockets.Add(Socket);
             quizGame = QuizGame.Instance;
             if (sockets.Count == 1)
             {
@@ -93,7 +92,7 @@ namespace jamescms.Services.WebSocketControllers
             {
                 logger.Debug("Sending message to client: " + message);
                 foreach (var socket in sockets)
-                    socket.Value.Send(message.Value);
+                    socket.Send(message.Value);
             }
             currentMessageIndex = quizGame.Messages.Last().Key;
         }
@@ -102,6 +101,7 @@ namespace jamescms.Services.WebSocketControllers
         {
             logger.Debug("message arrived: " + message);
             var msg = JsonConvert.DeserializeObject<QuizGameMessage>(message);
+            msg.Message = HttpUtility.HtmlEncode(msg.Message);
             if (msg != null)
             {
                 switch (msg.Type.ToLower())
@@ -115,7 +115,7 @@ namespace jamescms.Services.WebSocketControllers
                         {
                             foreach (var oldMessage in quizGame.Messages.Where(d => d.Key > index))
                                 foreach (var socket in sockets)
-                                    socket.Value.Send(oldMessage.Value);
+                                    socket.Send(oldMessage.Value);
                         }
                         break;
                     default:
