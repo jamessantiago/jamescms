@@ -19,6 +19,7 @@ namespace jamescms.Games
 
         private static volatile QuizGame instance;
         private static object syncRoot = new object();
+        private static object syncMessage = new object();
 
         private QuizGame()
         {
@@ -145,20 +146,23 @@ namespace jamescms.Games
 
         private void AddMessage(QuizMessage message)
         {
-            int index = 1;
-            if (messages.Any())
-                index = messages.Keys.Max() + 1;
+            lock (syncMessage)
+            {
+                int index = 1;
+                if (messages.Any())
+                    index = messages.Keys.Max() + 1;
 
-            if (messages.Count > MAX_MESSAGES)
-                messages.Remove(messages.Keys.Min());
+                if (messages.Count > MAX_MESSAGES)
+                    messages.Remove(messages.Keys.Min());
 
-            message.Id = index;
-            var jsonMessage = new JavaScriptSerializer().Serialize(message);
+                message.Id = index;
+                var jsonMessage = new JavaScriptSerializer().Serialize(message);
 
-            messages.Add(index, jsonMessage);
+                messages.Add(index, jsonMessage);
 
-            if (MessageArrived != null)
-                MessageArrived(this, new EventArgs());
+                if (MessageArrived != null)
+                    MessageArrived(this, new EventArgs());
+            }
         }
 
         #endregion AddMessage

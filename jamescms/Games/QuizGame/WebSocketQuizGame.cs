@@ -61,7 +61,7 @@ namespace jamescms.Services.WebSocketControllers
         {
             if (quizGame != null && quizGame.Messages != null && quizGame.Messages.Any())
             {
-                foreach (var message in quizGame.Messages)
+                foreach (var message in quizGame.Messages.OrderBy(d => d.Key))
                 {
                     Socket.Send(message.Value);
                 }
@@ -69,11 +69,11 @@ namespace jamescms.Services.WebSocketControllers
             QuizGameStarted = true;
             if (sockets == null)
                 sockets = new List<IWebSocketConnection>();
-            if (sockets.Any(d => d.ConnectionInfo.Id == Socket.ConnectionInfo.Id))
-            {                
-                var sock = sockets.First(d => d.ConnectionInfo.Id == Socket.ConnectionInfo.Id);
-                sock.Close();
-                sockets.Remove(sock);
+            var duplicateSocket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == Socket.ConnectionInfo.Id);
+            if (duplicateSocket != null)
+            {
+                duplicateSocket.Close();
+                sockets.Remove(duplicateSocket);
             }
                
             sockets.Add(Socket);
@@ -87,10 +87,8 @@ namespace jamescms.Services.WebSocketControllers
 
         private void quizGame_MessageArrived(object sender, EventArgs args)
         {
-            logger.Debug("new message event triggered");
             foreach (var message in quizGame.Messages.Where(d => d.Key > currentMessageIndex))
             {
-                logger.Debug("Sending message to client: " + message);
                 foreach (var socket in sockets)
                     socket.Send(message.Value);
             }
