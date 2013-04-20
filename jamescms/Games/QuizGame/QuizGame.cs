@@ -57,6 +57,8 @@ namespace jamescms.Games
         private Random random = new Random();
         private TriviaQuestion currentQuestion;
         private int hintsGiven = 0;
+        private List<QuizProfile> users = new List<QuizProfile>();
+        private string CurrentLeader;
 
         private const int MAX_MESSAGES = 100;
 
@@ -68,8 +70,11 @@ namespace jamescms.Games
         {
             get { if (messages == null) { messages = new Dictionary<int, string>(); } return messages; }
         }
+        public List<QuizProfile> Users
+        {
+            get { if (users == null) { users = new List<QuizProfile>(); } return users; }
+        }
         public event EventHandler MessageArrived;
-        public event EventHandler QuizStarted;
 
         #endregion public properties
 
@@ -171,6 +176,7 @@ namespace jamescms.Games
 
         private void StartQuestion()
         {
+            uow.qg.SaveChanges();
             hintsGiven = 0;
             currentQuestion = uow.qg.TriviaQuestions.OrderBy(d => d.Id).Skip(random.Next(quizState.TotalTriviaQuestions)).First();
             AddMessage(currentQuestion.Question);
@@ -186,7 +192,7 @@ namespace jamescms.Games
             {
                 hintsGiven = 1;
                 string hint = Regex.Replace(currentQuestion.Answer, @"\S", "-");
-                AddMessage("Here's a hint: " + hint);
+                AddMessage("<span style='color:#2e4272'>Here's a hint:</span> " + hint);
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();
                 var secondChanceTimer = new Timer(30000);
@@ -202,7 +208,7 @@ namespace jamescms.Games
             {
                 hintsGiven = 2;
                 string hint = Regex.Replace(currentQuestion.Answer, @"\B\S", "-");
-                AddMessage("Here's another hint: " + hint);
+                AddMessage("<span style='color:#2e4272'>Here's another hint: </span>" + hint);
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();
                 var lastChanceTimer = new Timer(30000);
@@ -218,7 +224,7 @@ namespace jamescms.Games
             {
                 hintsGiven = 3;
                 string hint = Regex.Replace(currentQuestion.Answer, @"\B\S\B", "-");
-                AddMessage("Last hint: " + hint);
+                AddMessage("<span style='color:#2e4272'>Last hint: </span>" + hint);
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();
                 var sendAnswerTimer = new Timer(30000);
@@ -233,8 +239,8 @@ namespace jamescms.Games
             if (hintsGiven == 3)
             {
                 string answer = currentQuestion.Answer;
-                AddMessage("Times up!  The answer was " + answer);
-                AddMessage("Get ready for the next question.");
+                AddMessage("<span style='color:#c5649b'>Times up!  The answer was </span>" + answer);
+                AddMessage("<span style='color:#d6b26c'>Get ready for the next question.</span>");
                 if (sender is Timer && sender != null)
                     ((Timer)sender).Dispose();
                 StartQuestion();                
@@ -252,13 +258,92 @@ namespace jamescms.Games
             AddMessage(answer, user);
             if (answer.Equals(currentQuestion.Answer, StringComparison.InvariantCultureIgnoreCase))
             {
-                AddMessage("Congratulations to " + user + " for providing the correct answer of " + currentQuestion.Answer);
-                AddMessage("Get ready for the next question.");
+                int points = 5 - hintsGiven;
+                AddMessage("<span style='color:#7b9f35'>Congratulations to </span>" + user + " <span style='color:#7b9f35'>for providing the correct answer of </span>" + currentQuestion.Answer);
+                AwardPoints(user, points);
+                AddMessage("<span style='color:#aa8439'>Get ready for the next question.</span>");
                 StartQuestion();
                 return true;
             }
             else
+            {
                 return false;
+            }
+        }
+
+        public void UserJoin(Guid id, string username)
+        {
+            if (!users.Any(d => d.SocketId == id))
+            {
+                if (!users.Any(d => d.UserName == username))
+                    AddMessage("<span style='color:#a64b3d'>A new player has joined.  Welcome </span>" + username);
+                else 
+                    users.Remove(users.First(d => d.UserName == username));
+
+                QuizProfile newProfile = new QuizProfile()
+                {
+                    SocketId = id,
+                    UserName = username,
+                    Answered = 0,
+                    Attempts = 0,
+                    ThisGamePoints = 0
+                };
+                var userProfile = uow.uc.UserProfiles.FirstOrDefault(d => d.UserName == username);
+                if (userProfile != null)
+                {
+                    var gameProfile = uow.qg.UserGameProfiles.FirstOrDefault(d => d.AccountModelUserId == userProfile.UserId);
+                    if (gameProfile != null)
+                        newProfile.GameProfileId = gameProfile.Id;
+                    else
+                        newProfile.GameProfileId = 0;
+                }
+                else
+                    newProfile.GameProfileId = 0;
+                users.Add(newProfile);
+            }            
+        }
+
+        public void AwardPoints(string user, int points)
+        {
+            var userProfile = users.FirstOrDefault(d => d.UserName == user);
+            if (userProfile != null)
+            {
+                userProfile.Attempts++;
+                userProfile.Answered++;
+                userProfile.ThisGamePoints += points;
+                if (userProfile.GameProfileId != 0)
+                {
+                    var gameProfile = uow.qg.UserGameProfiles.FirstOrDefault(d => d.Id == userProfile.GameProfileId);
+                    if (gameProfile != null)
+                    {
+                        gameProfile.Attempts++;
+                        gameProfile.CorrectAnswers++;
+                        gameProfile.Points += points;
+                        uow.qg.SaveChanges();
+                    }
+                }
+
+                if (userProfile.ThisGamePoints == users.Select(d => d.ThisGamePoints).Max() && CurrentLeader != user)
+                {
+                    CurrentLeader = user;
+
+                }
+            }
+        }
+
+        public void IncrementAttempts(string user)
+        {
+            if (users.Any(d => d.UserName == user))
+            {
+                var userProfile = users.First(d => d.UserName == user);
+                userProfile.Attempts++;
+                if (userProfile.GameProfileId != 0)
+                {
+                    var gameProfile = uow.qg.UserGameProfiles.FirstOrDefault(d => d.Id == userProfile.GameProfileId);
+                    gameProfile.Attempts++;
+                }
+                
+            }
         }
 
         #endregion public methods
@@ -271,7 +356,17 @@ namespace jamescms.Games
         public string Message { get; set; }
         public string To { get; set; }
         public string From { get; set; }
-        public string Type { get; set; }        
+        public string Type { get; set; }
+    }
+
+    public class QuizProfile
+    {
+        public Guid SocketId { get; set; }
+        public string UserName { get; set; }
+        public int GameProfileId { get; set; }
+        public int ThisGamePoints { get; set; }
+        public int Attempts { get; set; }
+        public int Answered { get; set; }
     }
 
 }

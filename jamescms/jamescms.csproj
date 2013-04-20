@@ -251,7 +251,7 @@
     <Compile Include="Models\IPhotoRepository.cs" />
     <Compile Include="Models\Models.cs" />
     <Compile Include="Models\PhotoRepository.cs" />
-    <Compile Include="Models\QuizGameModel.cs" />
+    <Compile Include="Games\QuizGame\QuizGameModel.cs" />
     <Compile Include="Models\TextModels.cs" />
     <Compile Include="Models\UnitOfWork.cs" />
     <Compile Include="NLogRenderers\WebVariablesRenderer.cs" />

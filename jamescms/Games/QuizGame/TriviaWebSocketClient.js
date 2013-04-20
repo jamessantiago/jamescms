@@ -42,7 +42,7 @@ function establishConnection() {
     if (socket != null) {
         socket.close();
     }
-    socket = new WebSocket("ws://santiagodevelopment.com:8990/quizgame");
+    socket = new WebSocket("ws://localhost:8990/quizgame");
     socket.onopen = function (connection) {
         $("#status").html("connected");
     };
@@ -58,10 +58,14 @@ function establishConnection() {
     };
     socket.onmessage = function (message) {        
         var data = JSON.parse(message.data);
-        if (data.To.toLowerCase() == "all" || data.To.toLowerCase() == user)
+        if (data.To == "All" || data.To == user)
         {
-            $("#chatWindow").append(data.From + ": " + data.Message + "\n");
+            $("#chatWindow").append("<span style='color:#2d7b44'>" + data.From + ":</span> " + data.Message + "\n");
             $("#chatWindow").prop({ scrollTop: $("#chatWindow").prop("scrollHeight") });
         }
+        else if (data.Type == "SetName")
+        {
+            user = data.Message;
         }
+    }
 };

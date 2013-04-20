@@ -12,6 +12,7 @@ using NLog;
 using Fleck;
 using System.Net;
 using Newtonsoft.Json;
+using System.Web.Script.Serialization;
 
 namespace jamescms.Services.WebSocketControllers
 {
@@ -20,7 +21,7 @@ namespace jamescms.Services.WebSocketControllers
 
         private Logger logger = LogManager.GetLogger("WebSocketQuizGame");
         private WebSocketServer server;
-        private List<IWebSocketConnection> sockets;
+        private List<IWebSocketConnection> sockets = new List<IWebSocketConnection>();
         //private IWebSocketConnection socket;
         private QuizGame quizGame;
         private int currentMessageIndex = 0;
@@ -40,7 +41,7 @@ namespace jamescms.Services.WebSocketControllers
 
         public void Start()
         {   
-            server = new WebSocketServer("ws://santiagodevelopment.com:8990/quizgame");
+            server = new WebSocketServer("ws://localhost:8990/quizgame");
             try
             {
                 logger.Debug("Initializing quiz game");                
@@ -59,6 +60,7 @@ namespace jamescms.Services.WebSocketControllers
 
         public void StartQuizGame(IWebSocketConnection Socket)
         {
+            //if quiz game already started send messages in memory to new connection
             if (quizGame != null && quizGame.Messages != null && quizGame.Messages.Any())
             {
                 foreach (var message in quizGame.Messages.OrderBy(d => d.Key))
@@ -66,18 +68,11 @@ namespace jamescms.Services.WebSocketControllers
                     Socket.Send(message.Value);
                 }
             }
-            QuizGameStarted = true;
-            if (sockets == null)
-                sockets = new List<IWebSocketConnection>();
-            var duplicateSocket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == Socket.ConnectionInfo.Id);
-            if (duplicateSocket != null)
-            {
-                duplicateSocket.Close();
-                sockets.Remove(duplicateSocket);
-            }
-               
-            sockets.Add(Socket);
             quizGame = QuizGame.Instance;
+            QuizGameStarted = true;
+            if (!sockets.Any(d => d == Socket))
+                sockets.Add(Socket);
+            AuthenticateUser(Socket.ConnectionInfo.Cookies, Socket);
             if (sockets.Count == 1)
             {
                 quizGame.MessageArrived += quizGame_MessageArrived;
@@ -118,6 +113,57 @@ namespace jamescms.Services.WebSocketControllers
                         break;
                     default:
                         break;
+                }
+            }
+        }
+
+        private void AuthenticateUser(IDictionary<string, string> SocketCookies, IWebSocketConnection socket)
+        {
+            if (SocketCookies.Any(d => d.Key == ".ASPXAUTH"))
+            {
+                var userData = System.Web.Security.FormsAuthentication.Decrypt(SocketCookies[".ASPXAUTH"]);
+                if (!userData.Expired)
+                {
+                    QuizGame.Instance.UserJoin(socket.ConnectionInfo.Id, userData.Name);
+                    QuizMessage msg = new QuizMessage()
+                    {
+                        Type = "SetName",
+                        Message = userData.Name
+                    };
+                    string setUser = new JavaScriptSerializer().Serialize(msg);
+                    socket.Send(setUser);
+                    using (UnitOfWork uow = new UnitOfWork())
+                    {
+                        var userProfile = uow.uc.UserProfiles.FirstOrDefault(d => d.UserName == userData.Name);
+                        if (userProfile != null)
+                        {
+                            var gameProfile = uow.qg.UserGameProfiles.FirstOrDefault(d => d.AccountModelUserId == userProfile.UserId);
+                            if (gameProfile == null)
+                            {
+                                UserGameProfile newProfile = new UserGameProfile()
+                                {
+                                    AccountModelUserId = userProfile.UserId,
+                                    Attempts = 0,
+                                    CorrectAnswers = 0,
+                                    LastTimeSeen = DateTime.Now,
+                                    Points = 0
+                                };
+                            }
+                            else
+                            {
+                                gameProfile.LastTimeSeen = DateTime.Now;
+                            }
+                            uow.qg.SaveChanges();
+
+                            QuizMessage points = new QuizMessage()
+                            {
+                                Type = "SetPoints",
+                                Message = gameProfile.Points != null ? gameProfile.Points.ToString() : "0"
+                            };
+                            string setPoints = new JavaScriptSerializer().Serialize(points);
+                            socket.Send(setPoints);
+                        }
+                    }
                 }
             }
         }
