@@ -5,18 +5,39 @@
     <form action="javascript:void(0);">
         <div>
             <pre class="prettyprint" id="chatWindow"></pre>
+            <pre class="prettyprint" id="userList"></pre>
         </div>
 
         <input type="text" id="chatInput" value="" />
 
         <input type="submit" id="sendChat" value="send" />
-
-        <span>Status: </span><div id="status">connecting</div>
     </form>
+    <table class="standard-table" style="margin:auto">
+        <thead>
+            <tr>
+                <th>Connection Status</th>
+                <th>Current Points Leader</th>
+                <th>My Points</th>
+                <th>My Attempts</th>
+                <th>My Correct Answers</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="status">connecting</td>
+                <td id="leader" ></td>
+                <td id="points">0</td>
+                <td id="attempts">0</td>
+                <td id="answered">0</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>@Html.ActionLink("Login",  "Login", "Account") or @Html.ActionLink("register", "register", "Account") to get a custom name and save your scores.</p>
 </section>
+
 @section scripts {
     <script type="text/javascript">
         var sessionId = "@Html.Raw(Session.SessionID)";
     </script>
-    <script src="@Url.Content("~/Games/QuizGame/TriviaWebSocketClient.js")"></script>
+    @Scripts.Render("~/bundles/triviawebsocketclient")
 }

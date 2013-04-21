@@ -16,7 +16,10 @@ function startGame()
 function SendMessage()
 {
     var message = $("#chatInput").val();
-    socket.send("{'Type':'chat', 'User': '"+ user + "', 'Message':'" + message + "'}")
+    if (message.length > 0)
+    {
+        socket.send("{'Type':'chat', 'User': '" + user + "', 'Message':'" + message + "'}");
+    }        
     $("#chatInput").val('');
 }
 
@@ -42,8 +45,10 @@ function establishConnection() {
     if (socket != null) {
         socket.close();
     }
+    $("#chatWindow").append("<span style='color:yellow'>Establishing connection to the game server</span><br/>");
     socket = new WebSocket("ws://localhost:8990/quizgame");
     socket.onopen = function (connection) {
+        $("#chatWindow").append("<span style='color:yellow'>Connection established</span><br/>");
         $("#status").html("connected");
     };
     socket.onerror = function (error) {
@@ -55,9 +60,11 @@ function establishConnection() {
     };
     socket.onclose = function () {
         $("#status").html("closed");
+        $("#chatWindow").append("<span style='color:red'>Connection to the game server has been closed.  Try refreshing the page</span><br/>");
     };
     socket.onmessage = function (message) {        
         var data = JSON.parse(message.data);
+
         if (data.To == "All" || data.To == user)
         {
             $("#chatWindow").append("<span style='color:#2d7b44'>" + data.From + ":</span> " + data.Message + "\n");
@@ -66,6 +73,24 @@ function establishConnection() {
         else if (data.Type == "SetName")
         {
             user = data.Message;
+        }
+        else if (data.Type == "Ping")
+        {
+            socket.send("{'Type':'pong', 'Message':'" + data.Message + "'}");
+        }
+        else if (data.Type == "SetStats")
+        {
+            $("#answered").html(data.Answered);
+            $("#attempts").html(data.Attempts);
+            $("#points").html(data.Points);
+            $("#leader").html(data.Leader);
+        }
+        else if (data.Type == "SetUsers")
+        {
+            $("#userList").html("");
+            $.each(data.Users, function (index, value) {
+                $("#userList").append(value + "<br/>");
+            });
         }
     }
 };

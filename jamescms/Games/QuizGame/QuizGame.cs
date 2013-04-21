@@ -267,6 +267,7 @@ namespace jamescms.Games
             }
             else
             {
+                IncrementAttempts(user);
                 return false;
             }
         }
@@ -300,7 +301,28 @@ namespace jamescms.Games
                 else
                     newProfile.GameProfileId = 0;
                 users.Add(newProfile);
-            }            
+
+                QuizMessage userList = new QuizMessage()
+                {
+                    Type = "SetUsers",
+                    Users = users.Select(d => d.UserName).OrderBy(d => d).ToArray()
+                };
+                AddMessage(userList);
+            }    
+        }
+
+        public void UserQuit(Guid id)
+        {
+            if (users.Any(d => d.SocketId == id))
+            {
+                users.Remove(users.First(d => d.SocketId == id));
+                QuizMessage userList = new QuizMessage()
+                {
+                    Type = "SetUsers",
+                    Users = users.Select(d => d.UserName).OrderBy(d => d).ToArray()
+                };
+                AddMessage(userList);
+            }
         }
 
         public void AwardPoints(string user, int points)
@@ -326,8 +348,9 @@ namespace jamescms.Games
                 if (userProfile.ThisGamePoints == users.Select(d => d.ThisGamePoints).Max() && CurrentLeader != user)
                 {
                     CurrentLeader = user;
-
+                    AddMessage(user + "<span style='color:#a64b3d'> is now the current leader with " + userProfile.ThisGamePoints + " points!</span>");
                 }
+                SendPoints(user);
             }
         }
 
@@ -342,10 +365,28 @@ namespace jamescms.Games
                     var gameProfile = uow.qg.UserGameProfiles.FirstOrDefault(d => d.Id == userProfile.GameProfileId);
                     gameProfile.Attempts++;
                 }
-                
+                SendPoints(user);
             }
         }
 
+        public void SendPoints(string user)
+        {
+            if (users.Any(d => d.UserName == user))
+            {
+                var userProfile = users.First(d => d.UserName == user);
+                QuizMessage message = new QuizMessage()
+                {
+                    SocketId = userProfile.SocketId,
+                    Type = "SetStats",
+                    Answered = userProfile.Answered,
+                    Attempts = userProfile.Attempts,
+                    Points = userProfile.ThisGamePoints,
+                    Leader = CurrentLeader
+                };
+                AddMessage(message);
+            }
+        }
+        
         #endregion public methods
 
     }
@@ -357,6 +398,12 @@ namespace jamescms.Games
         public string To { get; set; }
         public string From { get; set; }
         public string Type { get; set; }
+        public Guid SocketId { get; set; }
+        public string Leader { get; set; }
+        public int Attempts { get; set; }
+        public int Answered { get; set; }
+        public int Points { get; set; }
+        public string[] Users { get; set; }
     }
 
     public class QuizProfile

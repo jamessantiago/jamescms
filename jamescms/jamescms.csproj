@@ -232,9 +232,9 @@
     <Compile Include="Helpers\MarkdownHelper.cs" />
     <Compile Include="Helpers\PicasaHelper.cs" />
     <Compile Include="Helpers\TextFileHelper.cs" />
-    <Compile Include="Migrations\201304111034116_Initial.cs" />
-    <Compile Include="Migrations\201304111034116_Initial.Designer.cs">
-      <DependentUpon>201304111034116_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201304201139120_Initial.cs" />
+    <Compile Include="Migrations\201304201139120_Initial.Designer.cs">
+      <DependentUpon>201304201139120_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\QuizGameConfiguration.cs" />
     <Compile Include="Models\Database\CompositeInitializer.cs" />
@@ -491,8 +491,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201304111034116_Initial.resx">
-      <DependentUpon>201304111034116_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201304201139120_Initial.resx">
+      <DependentUpon>201304201139120_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

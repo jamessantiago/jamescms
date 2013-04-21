@@ -550,6 +550,16 @@ article {
 #chatWindow {
     height: 400px;
     overflow-y:scroll;
+    width:80%;
+    float:left;
+}
+
+#userList {
+    height: 400px;
+    width:11%;
+    float:right;
+    padding: 5px;
+    overflow:hidden;
 }
 
 #chatInput {

@@ -13,6 +13,7 @@ using Fleck;
 using System.Net;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
+using System.Timers;
 
 namespace jamescms.Services.WebSocketControllers
 {
@@ -25,6 +26,8 @@ namespace jamescms.Services.WebSocketControllers
         //private IWebSocketConnection socket;
         private QuizGame quizGame;
         private int currentMessageIndex = 0;
+        private Timer clientPing;
+        private Dictionary<Guid, int> clientConnections = new Dictionary<Guid,int>();
 
         public bool QuizGameStarted = false;
 
@@ -65,7 +68,11 @@ namespace jamescms.Services.WebSocketControllers
             {
                 foreach (var message in quizGame.Messages.OrderBy(d => d.Key))
                 {
-                    Socket.Send(message.Value);
+                    QuizMessage msg = new JavaScriptSerializer().Deserialize<QuizMessage>(message.Value);
+                    if (msg.SocketId == Guid.Empty)
+                    {
+                        Socket.Send(message.Value);
+                    }
                 }
             }
             quizGame = QuizGame.Instance;
@@ -77,6 +84,41 @@ namespace jamescms.Services.WebSocketControllers
             {
                 quizGame.MessageArrived += quizGame_MessageArrived;
                 quizGame_MessageArrived(null, null);
+                clientPing = new Timer(15000);
+                clientPing.Elapsed += clientPing_Elapsed;
+                clientPing.Start();
+            }
+        }
+
+        void clientPing_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            foreach (var conn in clientConnections)
+            {
+                if (conn.Value > 2)
+                {
+                    var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == conn.Key);
+                    if (socket != null)
+                    {
+                        sockets.Remove(socket);
+                        socket.Close();
+                        QuizGame.Instance.UserQuit(socket.ConnectionInfo.Id);
+                    }
+                }
+            }
+
+            foreach (var socket in sockets)
+            {
+                if (!clientConnections.Any(d => d.Key == socket.ConnectionInfo.Id))
+                    clientConnections.Add(socket.ConnectionInfo.Id, 0);
+
+                QuizMessage msg = new QuizMessage()
+                {
+                    Type = "Ping",
+                    Message = socket.ConnectionInfo.Id.ToString()
+                };
+                string pingClient = new JavaScriptSerializer().Serialize(msg);
+                socket.Send(pingClient);
+                clientConnections[socket.ConnectionInfo.Id]++;
             }
         }
 
@@ -84,8 +126,18 @@ namespace jamescms.Services.WebSocketControllers
         {
             foreach (var message in quizGame.Messages.Where(d => d.Key > currentMessageIndex))
             {
-                foreach (var socket in sockets)
-                    socket.Send(message.Value);
+                QuizMessage msg = new JavaScriptSerializer().Deserialize<QuizMessage>(message.Value);
+                if (msg.SocketId != Guid.Empty)
+                {
+                    var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == msg.SocketId);
+                    if (socket != null)
+                        socket.Send(message.Value);
+                }
+                else
+                {
+                    foreach (var socket in sockets)
+                        socket.Send(message.Value);
+                }
             }
             currentMessageIndex = quizGame.Messages.Last().Key;
         }
@@ -111,6 +163,14 @@ namespace jamescms.Services.WebSocketControllers
                                     socket.Send(oldMessage.Value);
                         }
                         break;
+                    case "pong":
+                        Guid sockedId;
+                        if (Guid.TryParse(msg.Message, out sockedId))
+                        {
+                            if (clientConnections.ContainsKey(sockedId))
+                                clientConnections[sockedId] = 0;
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -124,7 +184,7 @@ namespace jamescms.Services.WebSocketControllers
                 var userData = System.Web.Security.FormsAuthentication.Decrypt(SocketCookies[".ASPXAUTH"]);
                 if (!userData.Expired)
                 {
-                    QuizGame.Instance.UserJoin(socket.ConnectionInfo.Id, userData.Name);
+
                     QuizMessage msg = new QuizMessage()
                     {
                         Type = "SetName",
@@ -148,23 +208,35 @@ namespace jamescms.Services.WebSocketControllers
                                     LastTimeSeen = DateTime.Now,
                                     Points = 0
                                 };
+                                uow.qg.UserGameProfiles.Add(newProfile);
+                                uow.qg.SaveChanges();
+                                gameProfile = newProfile;
                             }
                             else
                             {
                                 gameProfile.LastTimeSeen = DateTime.Now;
                             }
                             uow.qg.SaveChanges();
-
-                            QuizMessage points = new QuizMessage()
-                            {
-                                Type = "SetPoints",
-                                Message = gameProfile.Points != null ? gameProfile.Points.ToString() : "0"
-                            };
-                            string setPoints = new JavaScriptSerializer().Serialize(points);
-                            socket.Send(setPoints);
                         }
                     }
+                    QuizGame.Instance.UserJoin(socket.ConnectionInfo.Id, userData.Name);
                 }
+            }
+            else
+            {
+                Random random = new Random();
+                int userid = random.Next(0, 1000);
+                while (QuizGame.Instance.Users.Any(d => d.UserName == "Guest" + userid.ToString()))
+                    userid = random.Next(0, 1000);
+                string username = "Guest" + userid.ToString();
+                QuizMessage msg = new QuizMessage()
+                {
+                    Type = "SetName",
+                    Message = username
+                };
+                string setUser = new JavaScriptSerializer().Serialize(msg);
+                socket.Send(setUser);
+                QuizGame.Instance.UserJoin(socket.ConnectionInfo.Id, username);
             }
         }
         
