@@ -148,8 +148,9 @@ namespace jamescms.Services.WebSocketControllers
                             socket.Send(message.Value);
                     }
                 }
+                currentMessageIndex = quizGame.Messages.Keys.Max();
             }
-            currentMessageIndex = quizGame.Messages.Last().Key;
+            
         }
 
         public void HandleChatMessage(string message)

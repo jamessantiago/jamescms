@@ -16,7 +16,8 @@
         <thead>
             <tr>
                 <th>Connection Status</th>
-                <th>Current Points Leader</th>
+                <th>Points Leader</th>
+                <th>Top Points</th>
                 <th>My Points</th>
                 <th>My Attempts</th>
                 <th>My Correct Answers</th>
@@ -26,6 +27,7 @@
             <tr>
                 <td id="status">connecting</td>
                 <td id="leader" ></td>
+                <td id="toppoints">0</td>
                 <td id="points">0</td>
                 <td id="attempts">0</td>
                 <td id="answered">0</td>
@@ -36,8 +38,6 @@
 </section>
 
 @section scripts {
-    <script type="text/javascript">
-        var sessionId = "@Html.Raw(Session.SessionID)";
-    </script>
-    @Scripts.Render("~/bundles/triviawebsocketclient")
+    <script type="text/javascript" src="@Url.Content("~/Games/QuizGame/TriviaWebSocketClient.js")"></script>
+    @*@Scripts.Render("~/bundles/triviawebsocketclient")*@
 }

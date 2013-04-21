@@ -5,6 +5,7 @@ var user = "";
 
 startGame();
 $("#chatInput").focus();
+setInterval(function () { checkWindowLength(); }, 30000)
 
 function startGame()
 {
@@ -22,6 +23,17 @@ function SendMessage()
     }        
     $("#chatInput").val('');
 }
+
+function checkWindowLength() {
+    var allLines = $("#chatWindow").html().split('\n');
+    var totalLines = allLines.length;
+    if (totalLines > 500)
+    {
+        allLines.splice(0, totalLines - 500);
+        $("#chatWindow").html(allLines.join('\n'));
+    }
+}
+
 
 function htmlEncode(value) {
     return $("<div/>").text(value).html();
@@ -84,6 +96,7 @@ function establishConnection() {
             $("#attempts").html(data.Attempts);
             $("#points").html(data.Points);
             $("#leader").html(data.Leader);
+            $("#toppoints").html(data.TopPoints);
         }
         else if (data.Type == "SetUsers")
         {

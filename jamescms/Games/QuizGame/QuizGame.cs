@@ -59,7 +59,8 @@ namespace jamescms.Games
         private int hintsGiven = 0;
         private List<QuizProfile> users = new List<QuizProfile>();
         private string CurrentLeader;
-
+        private int TopPoints;
+        private object syncAnswer = new object();
         private const int MAX_MESSAGES = 100;
 
         #endregion private properties
@@ -119,7 +120,7 @@ namespace jamescms.Games
             {
                 Message = message,
                 To = "All",
-                From = "QuizMaster",
+                From = "Judge",
                 Type = "Message"
             };
             AddMessage(quizmessage);
@@ -238,11 +239,14 @@ namespace jamescms.Games
         {
             if (hintsGiven == 3)
             {
-                string answer = currentQuestion.Answer;
-                AddMessage("<span style='color:#c5649b'>Times up!  The answer was </span>" + answer);
-                AddMessage("<span style='color:#d6b26c'>Get ready for the next question.</span>");
-                if (sender is Timer && sender != null)
-                    ((Timer)sender).Dispose();
+                lock (syncAnswer)
+                {
+                    string answer = currentQuestion.Answer;
+                    AddMessage("<span style='color:#c5649b'>Times up!  The answer was </span>" + answer);
+                    AddMessage("<span style='color:#d6b26c'>Get ready for the next question.</span>");
+                    if (sender is Timer && sender != null)
+                        ((Timer)sender).Dispose();
+                }
                 StartQuestion();                
             }
         }
@@ -255,20 +259,23 @@ namespace jamescms.Games
 
         public bool AttemptAnswer(string answer, string user)
         {
-            AddMessage(answer, user);
-            if (answer.Equals(currentQuestion.Answer, StringComparison.InvariantCultureIgnoreCase))
+            lock (syncAnswer)
             {
-                int points = 5 - hintsGiven;
-                AddMessage("<span style='color:#7b9f35'>Congratulations to </span>" + user + " <span style='color:#7b9f35'>for providing the correct answer of </span>" + currentQuestion.Answer);
-                AwardPoints(user, points);
-                AddMessage("<span style='color:#aa8439'>Get ready for the next question.</span>");
-                StartQuestion();
-                return true;
-            }
-            else
-            {
-                IncrementAttempts(user);
-                return false;
+                AddMessage(answer, user);
+                if (answer.Equals(currentQuestion.Answer, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    int points = 5 - hintsGiven;
+                    AddMessage("<span style='color:#7b9f35'>Congratulations to </span>" + user + " <span style='color:#7b9f35'>for providing the correct answer of </span>" + currentQuestion.Answer);
+                    AwardPoints(user, points);
+                    AddMessage("<span style='color:#aa8439'>Get ready for the next question.</span>");
+                    StartQuestion();
+                    return true;
+                }
+                else
+                {
+                    IncrementAttempts(user);
+                    return false;
+                }
             }
         }
 
@@ -348,7 +355,12 @@ namespace jamescms.Games
                 if (userProfile.ThisGamePoints == users.Select(d => d.ThisGamePoints).Max() && CurrentLeader != user)
                 {
                     CurrentLeader = user;
+                    TopPoints = userProfile.ThisGamePoints;
                     AddMessage(user + "<span style='color:#a64b3d'> is now the current leader with " + userProfile.ThisGamePoints + " points!</span>");
+                }
+                else if (CurrentLeader == user)
+                {
+                    TopPoints = userProfile.ThisGamePoints;
                 }
                 SendPoints(user);
             }
@@ -381,7 +393,8 @@ namespace jamescms.Games
                     Answered = userProfile.Answered,
                     Attempts = userProfile.Attempts,
                     Points = userProfile.ThisGamePoints,
-                    Leader = CurrentLeader
+                    Leader = CurrentLeader,
+                    TopPoints = TopPoints
                 };
                 AddMessage(message);
             }
@@ -400,6 +413,7 @@ namespace jamescms.Games
         public string Type { get; set; }
         public Guid SocketId { get; set; }
         public string Leader { get; set; }
+        public int TopPoints {get; set;}
         public int Attempts { get; set; }
         public int Answered { get; set; }
         public int Points { get; set; }
