@@ -46,7 +46,7 @@ function establishConnection() {
         socket.close();
     }
     $("#chatWindow").append("<span style='color:yellow'>Establishing connection to the game server</span><br/>");
-    socket = new WebSocket("ws://localhost:8990/quizgame");
+    socket = new WebSocket("ws://santiagodevelopment.com:8990/quizgame");
     socket.onopen = function (connection) {
         $("#chatWindow").append("<span style='color:yellow'>Connection established</span><br/>");
         $("#status").html("connected");

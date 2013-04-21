@@ -23,6 +23,7 @@ namespace jamescms.Services.WebSocketControllers
         private Logger logger = LogManager.GetLogger("WebSocketQuizGame");
         private WebSocketServer server;
         private List<IWebSocketConnection> sockets = new List<IWebSocketConnection>();
+        private object socketSync = new object();
         //private IWebSocketConnection socket;
         private QuizGame quizGame;
         private int currentMessageIndex = 0;
@@ -44,7 +45,7 @@ namespace jamescms.Services.WebSocketControllers
 
         public void Start()
         {   
-            server = new WebSocketServer("ws://localhost:8990/quizgame");
+            server = new WebSocketServer("ws://santiagodevelopment.com:8990/quizgame");
             try
             {
                 logger.Debug("Initializing quiz game");                
@@ -77,8 +78,11 @@ namespace jamescms.Services.WebSocketControllers
             }
             quizGame = QuizGame.Instance;
             QuizGameStarted = true;
-            if (!sockets.Any(d => d == Socket))
-                sockets.Add(Socket);
+            lock (socketSync)
+            {
+                if (!sockets.Any(d => d == Socket))
+                    sockets.Add(Socket);
+            }
             AuthenticateUser(Socket.ConnectionInfo.Cookies, Socket);
             if (sockets.Count == 1)
             {
@@ -99,9 +103,12 @@ namespace jamescms.Services.WebSocketControllers
                     var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == conn.Key);
                     if (socket != null)
                     {
-                        sockets.Remove(socket);
-                        socket.Close();
-                        QuizGame.Instance.UserQuit(socket.ConnectionInfo.Id);
+                        lock (socketSync)
+                        {
+                            sockets.Remove(socket);
+                            socket.Close();
+                            QuizGame.Instance.UserQuit(socket.ConnectionInfo.Id);
+                        }
                     }
                 }
             }
@@ -124,19 +131,22 @@ namespace jamescms.Services.WebSocketControllers
 
         private void quizGame_MessageArrived(object sender, EventArgs args)
         {
-            foreach (var message in quizGame.Messages.Where(d => d.Key > currentMessageIndex))
+            lock (socketSync)
             {
-                QuizMessage msg = new JavaScriptSerializer().Deserialize<QuizMessage>(message.Value);
-                if (msg.SocketId != Guid.Empty)
+                foreach (var message in quizGame.Messages.Where(d => d.Key > currentMessageIndex))
                 {
-                    var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == msg.SocketId);
-                    if (socket != null)
-                        socket.Send(message.Value);
-                }
-                else
-                {
-                    foreach (var socket in sockets)
-                        socket.Send(message.Value);
+                    QuizMessage msg = new JavaScriptSerializer().Deserialize<QuizMessage>(message.Value);
+                    if (msg.SocketId != Guid.Empty)
+                    {
+                        var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == msg.SocketId);
+                        if (socket != null)
+                            socket.Send(message.Value);
+                    }
+                    else
+                    {
+                        foreach (var socket in sockets)
+                            socket.Send(message.Value);
+                    }
                 }
             }
             currentMessageIndex = quizGame.Messages.Last().Key;
