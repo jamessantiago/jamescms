@@ -38,7 +38,8 @@
 
         <div class="footer-container">
             <footer class="wrapper">
-                <p>@Html.ActionLink("Home", "Index", "sd") ▲ @Html.ActionLink("Text Wall", "Index", "text") ▲ @Html.ActionLink("Photos", "Index", "photos")@if (User.IsInRole("Guides")) { @Html.Raw(" ▲ ") @Html.ActionLink("Admin", "Index", "guide") }</p>
+                <p>@Html.ActionLink("Home", "Index", "sd") ▲ @Html.ActionLink("Text Wall", "Index", "text") ▲ @Html.ActionLink("Photos", "Index", "photos") ▲ @Html.ActionLink("Trivia Game", "Index", "trivia")@if (User.IsInRole("Guides"))
+                                                                                                                                                           { @Html.Raw(" ▲ ") @Html.ActionLink("Admin", "Index", "guide") }</p>
             </footer>
         </div>
         
