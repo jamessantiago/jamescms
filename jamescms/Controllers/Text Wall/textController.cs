@@ -31,8 +31,6 @@ namespace jamescms.Controllers
         [OutputCache(Duration = 3600)]
         public ActionResult Index()
         {
-            ViewData["page"] = 1;
-
             var total = uow.tc.Texts.Count();
             var take = (0 * 10 + 10) > total ? total - (0 * 10) : 10;
             return View(uow.tc.Texts.OrderByDescending(d => d.Posted).Skip(0).Take(take));

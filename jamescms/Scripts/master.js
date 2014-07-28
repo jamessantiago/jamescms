@@ -28,20 +28,22 @@ function readyLoad()
     });
 }
 
+var loadingPage;
+
 function textWallInfiniScroll() {
-    
     $(window).scroll(function () {
         if (window.EnableScroll)
         {
             var currentPosition = $(document).scrollTop();
-            var bottom = $(document).height() - 2000;
+            var bottom = $(document).height() - 2000;            
             if (currentPosition > bottom) {
                 
                 var lastPage = $(".page:last").attr("page-number");
-                if (lastPage.length > 0)
+                if (lastPage.length > 0 && lastPage != loadingPage)
                 {
                     window.EnableScroll = false;
-                    $("#textWall").append($("<div>").load("text/p/" + lastPage, function () {                        
+                    loadingPage = lastPage;
+                    $("#textWall").append($("<div>").load("/text/p/" + lastPage, function () {                        
                         if (!window.EndOfPage) {
                             window.EnableScroll = true;                            
                             textWallInfiniScroll();

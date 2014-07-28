@@ -10,12 +10,14 @@
     <span style="float:right">@Html.ActionLink("Pull Text Files", "pulltextfiles")</span>
 }
 
-<section class="page" @if (ViewData["page"] != null) { @Html.Raw("page-number='" + ViewData["page"].ToString() + "'")  } else { @Html.Raw("page-number='1'")  }>
-    @foreach (var text in Model)
-    {
-        @Html.Partial("_SingleText", text)
-    }
-</section>
+<div id="textWall">
+    <section class="page" @if (ViewData["page"] != null) { @Html.Raw("page-number='" + ViewData["page"].ToString() + "'")   } else { @Html.Raw("page-number='1'")   }>
+        @foreach (var text in Model)
+        {
+            @Html.Partial("_SingleText", text)
+        }
+    </section>
+</div>
 
 @section scripts {    
     <script type="text/javascript">
