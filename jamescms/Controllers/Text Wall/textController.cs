@@ -34,8 +34,8 @@ namespace jamescms.Controllers
             ViewData["page"] = 1;
 
             var total = uow.tc.Texts.Count();
-            var take = (1 * 10 + 10) > total ? total - (1 * 10) : 10;
-            return View(uow.tc.Texts.OrderByDescending(d => d.Posted).Skip(10).Take(take));
+            var take = (0 * 10 + 10) > total ? total - (0 * 10) : 10;
+            return View(uow.tc.Texts.OrderByDescending(d => d.Posted).Skip(0).Take(take));
         }
 
         [OutputCache(Duration = 3600)]
