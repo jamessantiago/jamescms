@@ -64,7 +64,7 @@ function establishConnection() {
         $("#status").html("connected");
     };
     socket.onerror = function (error) {
-        $("#status").html(error.data);
+        $("#status").html("Error");
         if (connectionAttempts < MAX_CONNECTIONS) {
             connectionAttempts++;
             establishConnection();

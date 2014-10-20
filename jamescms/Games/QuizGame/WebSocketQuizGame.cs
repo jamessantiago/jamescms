@@ -96,158 +96,186 @@ namespace jamescms.Services.WebSocketControllers
 
         void clientPing_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (var conn in clientConnections)
+            try
             {
-                if (conn.Value > 2)
+                foreach (var conn in clientConnections)
                 {
-                    var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == conn.Key);
-                    if (socket != null)
+                    if (conn.Value > 2)
                     {
-                        lock (socketSync)
+                        var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == conn.Key);
+                        if (socket != null)
                         {
-                            sockets.Remove(socket);
-                            socket.Close();
-                            QuizGame.Instance.UserQuit(socket.ConnectionInfo.Id);
+                            lock (socketSync)
+                            {
+                                sockets.Remove(socket);
+                                socket.Close();
+                                QuizGame.Instance.UserQuit(socket.ConnectionInfo.Id);
+                            }
                         }
                     }
                 }
-            }
 
-            foreach (var socket in sockets)
-            {
-                if (!clientConnections.Any(d => d.Key == socket.ConnectionInfo.Id))
-                    clientConnections.Add(socket.ConnectionInfo.Id, 0);
-
-                QuizMessage msg = new QuizMessage()
+                foreach (var socket in sockets)
                 {
-                    Type = "Ping",
-                    Message = socket.ConnectionInfo.Id.ToString()
-                };
-                string pingClient = new JavaScriptSerializer().Serialize(msg);
-                socket.Send(pingClient);
-                clientConnections[socket.ConnectionInfo.Id]++;
+                    if (!clientConnections.Any(d => d.Key == socket.ConnectionInfo.Id))
+                        clientConnections.Add(socket.ConnectionInfo.Id, 0);
+
+                    QuizMessage msg = new QuizMessage()
+                    {
+                        Type = "Ping",
+                        Message = socket.ConnectionInfo.Id.ToString()
+                    };
+                    string pingClient = new JavaScriptSerializer().Serialize(msg);
+                    socket.Send(pingClient);
+                    clientConnections[socket.ConnectionInfo.Id]++;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.DebugException("clientPing_Elapsed", ex);
             }
         }
 
         private void quizGame_MessageArrived(object sender, EventArgs args)
         {
-            lock (socketSync)
+            try
             {
-                foreach (var message in quizGame.Messages.Where(d => d.Key > currentMessageIndex))
+                lock (socketSync)
                 {
-                    QuizMessage msg = new JavaScriptSerializer().Deserialize<QuizMessage>(message.Value);
-                    if (msg.SocketId != Guid.Empty)
+                    foreach (var message in quizGame.Messages.Where(d => d.Key > currentMessageIndex))
                     {
-                        var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == msg.SocketId);
-                        if (socket != null)
-                            socket.Send(message.Value);
+                        QuizMessage msg = new JavaScriptSerializer().Deserialize<QuizMessage>(message.Value);
+                        if (msg.SocketId != Guid.Empty)
+                        {
+                            var socket = sockets.FirstOrDefault(d => d.ConnectionInfo.Id == msg.SocketId);
+                            if (socket != null)
+                                socket.Send(message.Value);
+                        }
+                        else
+                        {
+                            foreach (var socket in sockets)
+                                socket.Send(message.Value);
+                        }
                     }
-                    else
-                    {
-                        foreach (var socket in sockets)
-                            socket.Send(message.Value);
-                    }
+                    currentMessageIndex = quizGame.Messages.Keys.Max();
                 }
-                currentMessageIndex = quizGame.Messages.Keys.Max();
+            }
+            catch (Exception ex)
+            {
+                logger.DebugException("quizGame_MessageArrived", ex);
             }
             
         }
 
         public void HandleChatMessage(string message)
         {
-            logger.Debug("message arrived: " + message);
-            var msg = JsonConvert.DeserializeObject<QuizGameMessage>(message);
-            msg.Message = HttpUtility.HtmlEncode(msg.Message);
-            if (msg != null)
+            try
             {
-                switch (msg.Type.ToLower())
+                logger.Debug("message arrived: " + message);
+                var msg = JsonConvert.DeserializeObject<QuizGameMessage>(message);
+                msg.Message = HttpUtility.HtmlEncode(msg.Message);
+                if (msg != null)
                 {
-                    case "chat":
-                        quizGame.AttemptAnswer(msg.Message, msg.User);
-                        break;
-                    case "get":
-                        int index = 0;
-                        if (int.TryParse(msg.Message, out index))
-                        {
-                            foreach (var oldMessage in quizGame.Messages.Where(d => d.Key > index))
-                                foreach (var socket in sockets)
-                                    socket.Send(oldMessage.Value);
-                        }
-                        break;
-                    case "pong":
-                        Guid sockedId;
-                        if (Guid.TryParse(msg.Message, out sockedId))
-                        {
-                            if (clientConnections.ContainsKey(sockedId))
-                                clientConnections[sockedId] = 0;
-                        }
-                        break;
-                    default:
-                        break;
+                    switch (msg.Type.ToLower())
+                    {
+                        case "chat":
+                            quizGame.AttemptAnswer(msg.Message, msg.User);
+                            break;
+                        case "get":
+                            int index = 0;
+                            if (int.TryParse(msg.Message, out index))
+                            {
+                                foreach (var oldMessage in quizGame.Messages.Where(d => d.Key > index))
+                                    foreach (var socket in sockets)
+                                        socket.Send(oldMessage.Value);
+                            }
+                            break;
+                        case "pong":
+                            Guid sockedId;
+                            if (Guid.TryParse(msg.Message, out sockedId))
+                            {
+                                if (clientConnections.ContainsKey(sockedId))
+                                    clientConnections[sockedId] = 0;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.DebugException("HandleChatMessage", ex);
             }
         }
 
         private void AuthenticateUser(IDictionary<string, string> SocketCookies, IWebSocketConnection socket)
         {
-            if (SocketCookies.Any(d => d.Key == ".ASPXAUTH"))
+            try
             {
-                var userData = System.Web.Security.FormsAuthentication.Decrypt(SocketCookies[".ASPXAUTH"]);
-                if (!userData.Expired)
+                if (SocketCookies.Any(d => d.Key == ".ASPXAUTH"))
                 {
+                    var userData = System.Web.Security.FormsAuthentication.Decrypt(SocketCookies[".ASPXAUTH"]);
+                    if (!userData.Expired)
+                    {
 
+                        QuizMessage msg = new QuizMessage()
+                        {
+                            Type = "SetName",
+                            Message = userData.Name
+                        };
+                        string setUser = new JavaScriptSerializer().Serialize(msg);
+                        socket.Send(setUser);
+                        using (UnitOfWork uow = new UnitOfWork())
+                        {
+                            var userProfile = uow.uc.UserProfiles.FirstOrDefault(d => d.UserName == userData.Name);
+                            if (userProfile != null)
+                            {
+                                var gameProfile = uow.qg.UserGameProfiles.FirstOrDefault(d => d.AccountModelUserId == userProfile.UserId);
+                                if (gameProfile == null)
+                                {
+                                    UserGameProfile newProfile = new UserGameProfile()
+                                    {
+                                        AccountModelUserId = userProfile.UserId,
+                                        Attempts = 0,
+                                        CorrectAnswers = 0,
+                                        LastTimeSeen = DateTime.Now,
+                                        Points = 0
+                                    };
+                                    uow.qg.UserGameProfiles.Add(newProfile);
+                                    uow.qg.SaveChanges();
+                                    gameProfile = newProfile;
+                                }
+                                else
+                                {
+                                    gameProfile.LastTimeSeen = DateTime.Now;
+                                }
+                                uow.qg.SaveChanges();
+                            }
+                        }
+                        QuizGame.Instance.UserJoin(socket.ConnectionInfo.Id, userData.Name);
+                    }
+                }
+                else
+                {
+                    Random random = new Random();
+                    int userid = random.Next(0, 1000);
+                    while (QuizGame.Instance.Users.Any(d => d.UserName == "Guest" + userid.ToString()))
+                        userid = random.Next(0, 1000);
+                    string username = "Guest" + userid.ToString();
                     QuizMessage msg = new QuizMessage()
                     {
                         Type = "SetName",
-                        Message = userData.Name
+                        Message = username
                     };
                     string setUser = new JavaScriptSerializer().Serialize(msg);
                     socket.Send(setUser);
-                    using (UnitOfWork uow = new UnitOfWork())
-                    {
-                        var userProfile = uow.uc.UserProfiles.FirstOrDefault(d => d.UserName == userData.Name);
-                        if (userProfile != null)
-                        {
-                            var gameProfile = uow.qg.UserGameProfiles.FirstOrDefault(d => d.AccountModelUserId == userProfile.UserId);
-                            if (gameProfile == null)
-                            {
-                                UserGameProfile newProfile = new UserGameProfile()
-                                {
-                                    AccountModelUserId = userProfile.UserId,
-                                    Attempts = 0,
-                                    CorrectAnswers = 0,
-                                    LastTimeSeen = DateTime.Now,
-                                    Points = 0
-                                };
-                                uow.qg.UserGameProfiles.Add(newProfile);
-                                uow.qg.SaveChanges();
-                                gameProfile = newProfile;
-                            }
-                            else
-                            {
-                                gameProfile.LastTimeSeen = DateTime.Now;
-                            }
-                            uow.qg.SaveChanges();
-                        }
-                    }
-                    QuizGame.Instance.UserJoin(socket.ConnectionInfo.Id, userData.Name);
+                    QuizGame.Instance.UserJoin(socket.ConnectionInfo.Id, username);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Random random = new Random();
-                int userid = random.Next(0, 1000);
-                while (QuizGame.Instance.Users.Any(d => d.UserName == "Guest" + userid.ToString()))
-                    userid = random.Next(0, 1000);
-                string username = "Guest" + userid.ToString();
-                QuizMessage msg = new QuizMessage()
-                {
-                    Type = "SetName",
-                    Message = username
-                };
-                string setUser = new JavaScriptSerializer().Serialize(msg);
-                socket.Send(setUser);
-                QuizGame.Instance.UserJoin(socket.ConnectionInfo.Id, username);
+                logger.DebugException("AuthenticateUser", ex);
             }
         }
         
